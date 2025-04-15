@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World 程序编译，烧录</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#process" class="active">总体流程</a></li>
+        <li><a href="#onlineedit">在线编辑，编译，烧录</a></li>
+		<li><a href="#localedit">Windows本地编辑，编译，烧录</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">Hello World 程序编译，烧录</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>总体流程</h6>
+        <p>类似一台手机，硬件设备除了看到的部分，还有看不到的嵌入式软件部分，一般称为固件。固件也是程序，大多数硬件设备用c语言开发，开发好代码要编译，编译好后还要传送到设备上，
+		   这个传送过程叫做烧录，或者下载固件。烧录好后就可以重启设备查看自己的更新了。程序开发涉及到的编辑器和普通开发类似，比如用eclipse，vs code乃至直接用文本编辑器都可以。
+		</p>
+        <p>编译的原理，比如我们开发Java程序需要用到JDK来编译，开发PC机器上的c语言程序，要用PC机器上的c编译器，编译好后就可以运行，因此嵌入式程序就要用嵌入式程序的编译器而不能用PC机的
+			c语言编译器，因为PC机器编译出的指令是无法在硬件设备上运行的，因此开发环境就要用嵌入式程序专门的编译器编译才可以，编译好的固件无法在PC机器上运行，需要烧录到嵌入式设备上才能运行。</p>
+        <p>编译好的固件要烧录到硬件设备上，一般来说都是通过导线把设备的UART端口连接到电脑上，然后在电脑上运行特殊软件把固件通过UART端口传输到设备上，这个过程要专门接线，相对复杂一些，为了简化这个过程，我们也提供一种无线的办法，
+		   具体来说，因为设备出厂时我们都烧录了默认固件，设备是能通过wifi,4g或者网线的方式访问互联网上我们的云端系统，用户可以登录云端系统，通过在线编辑，编译的方法生成固件，然后通过网络的方式自动下载到设备上。</p>
+    </div>
+	<div class="help-item" id="onlineedit">
+	    <h6>在线编辑，编译，烧录</h6>
+	    <p>在线编辑，编译不需要在本地搭建复杂的编译环境，不需要接线烧录，因此新用户可以先通过这种方式尝试。</p>
+		<p><a href="/dc/web/codelist" target="_blank">点击代码</a>，在代码列表中找到自己设备的型号，然后点击右侧的 <span><i class="bi bi-badge-cc"></i></span> 图标，点击后会打开新窗口呈现代码编辑界面，在左侧目录导航中找到"main->app_main.c"，点击后编辑该文件。
+		app_main.c 是入口程序，设备启动后，首先从这个文件的void app_main(void)方法来执行，可以看到我们已经提供了很多程序，用户只要相应做修改即可，比如在合适位置处可以增加一行打印：ESP_LOGI(TAG, "Hello World!"); 如果只是打算尝试下编译，按ctrl+s或者点击左上角的"保存"即可。
+	    保存后可以按ctrl+b或者点击左上角的"构建"开始编译程序，如果打算用于升级设备，还需要设定本次编译的版本号，也就是修改根目录下version.txt，把里面的数字改为和当前设备上的版本(在<a href="/dc/web/devicelist" target="_blank">设备列表</a>中查看设备当前固件版本)不同，比如加1，升级时会比较本次编译时version.txt的数字与设备上的版本是否相同，相同一般不升级。这个编译是在云端进行，如果用的人较多，需要一定时间来排队。点击左上角的"日志"可以查看编译进展，其中的Tail x表示查看日志的最近x行，为了便于查看，日志中，最新日志在上面而不是在下面。
+	    </p>
+		<p>当编译完成，状态为绿色后，表示编译成功，点击"OTA"，把本次编译的固件进行保存。然后点击<a href="/dc/web/otalist" target="_blank">升级</a>可以看到当前用户下的所有可用固件，找到打算用于升级的固件，把范围改为ALL，并且把设备通电开启后即可自动升级，升级完成设备会自动重启。
+		   更详细的OTA升级指导<a href="/dc/pub/doc?page=ota" target="_blank">查看</a>
+		</p>
+	</div>
+	<div class="help-item" id="localedit">
+	    <h6>Windows本地编辑，编译，烧录</h6>
+	    <p>安装编译环境。</p>
+		<p>在 https://dl.espressif.com.cn/dl/esp-idf/ 找到所需版本，如Offline Installer v5.3.2，下载到本地，如d:\temp\esp-idf-tools-setup-offline-5.3.2.exe，双击文件进行安装，安装的目录不要有中文或者空格，路径尽量短，除了选择安装目录，其他都用默认即可，安装大约需要10分钟，过程中不需要访问网络。
+		   安装程序会自动设置windows的环境变量IDF_TOOLS_PATH指向安装目录，并在桌面上生成快捷方式。
+		</p>
+		<p>在文件 Espressif\frameworks\esp-idf-v5.3.2\components\hal\spi_hal.c 中，找到spi_ll_set_mosi_free_level(hw, 0);修改为spi_ll_set_mosi_free_level(hw, 1);</p>
+		<p>安装IDE编辑器</p>
+		<p>下载Windows上用的eclipse编辑器 https://dl.espressif.com/dl/idf-eclipse-plugin/ide/Espressif-IDE-win32.win32.x86_64/latest，下载后文件一般为Espressif-IDE-3.2.0-win32.win32.x86_64.zip，
+		   解压后得到目录Espressif-IDE，在里面双击espressif-ide.exe启动eclipse，启动时会提示选择workspace目录，一般可以在IDF_TOOLS_PATH指向的目录中建一个子目录workspace，然后选择。第一次启动可能会提示
+		   是否要排除Windows的安全扫描，按默认选择排除可以提升性能。在打开的eclipe界面上，在菜单"乐鑫"或者英文"Espressif"下选择"ESP-IDF Manager"，打开管理器，然后点击"Add ESP-IDF"，在添加界面勾选"使用文件系统中现有的idf"，
+		   IDF目录选择IDF安装目录下的Espressif\frameworks\esp-idf-v5.3.2，Git选择Espressif\tools\idf-git\2.44.0\cmd\git.exe (如果本机已经安装其他Git，也可以选择)，Python选择Espressif\tools\idf-python\3.11.2\python.exe (如果本机已经安装其他Python，也可以选择，速度还快些)，点击"Finish"，然后等待安装完成即可，需要10多分钟网络下载和安装。
+		</p>
+		<p>导入项目</p>
+		<p>从<a href="/dc/pub/download/src" target="_blank">这里</a>下载项目，并解压到Espressif\projects目录中，在eclipse中点击File->Import->乐鑫(Espressif)->现有IDF项目，然后选择Espressif\projects\dc01 (项目目录名)目录，点击完成导入成功。</p>
+		<p>在eclipse左上方，点击并选中dc01，然后在上方，菜单栏下on后面的输入框选择esp32s3，然后点击左上角"斧头"图标(build)开始编译项目，编译完成后得到固件 Espressif/projects/dc01/build/usb_cdc_4g_module.bin</p>
+		<p>烧录固件</p>
+		<p>烧录前需要把烧录适配器一端插到电脑上另外一端插到设备PCB线路板上，如下图所示，注意插的顺序和位置，同时把typec电源插到设备上给设备供电：</p>
+		<a href="/dc/image/adapter_connection.jpg" target="_blank">
+		    <img src="/dc/image/adapter_connection.jpg" alt="烧录适配器连接示意图" height="300">
+		</a>
+		<p>首次把适配器插入电脑的USB口时，Windows会自动安装驱动，一般不需要人工干预。右键点击"我的电脑"->管理->设备管理->端口(COM和LPT)，如果如下图所示，没有显示问号，即为正常安装驱动，其中COM42为
+		   串口号，每次插入时可能生成新的串口号，因此每次都要看一下，如果以后串口消失，或者出现问号，可以重启电脑或者拔下来等待几分钟再次插入，或者插入电脑上其他USB口来尝试解决。
+		</p>
+	    <a href="/dc/image/com_check.jpg" target="_blank">
+	        <img src="/dc/image/com_check.jpg" alt="查看串口号示意图" height="200">
+	    </a>
+		<p>安装编译环境时在桌面上生成了一个以CMD结尾的快捷方式，双击它，打开命令行模式，第一次打开速度会慢一点。在命令行窗口执行 cd D:\xxxx\Espressif\projects\dc01，进入你的项目目录，然后执行 
+		   idf.py -p COM42 flash monitor 开始烧录，COM42为上述端口号，要根据实际情况修改，flash表示烧录，monitor表示烧录后启动并打印日志，如果不想烧录，只运行查看日志，可以去掉flash。</p>
+	    <a href="/dc/image/burn_cmd.jpg" target="_blank">
+	        <img src="/dc/image/burn_cmd.jpg" height="200">
+	    </a>
+		<p>显示如下表示开始烧录，如果提示失败，可以断开电源，等待一分钟，再次打开电源尝试，一般不需要按住PCB上的按钮，但如果屡次都失败，可以先按住按钮，再打开电源以增加成功概率。</p>
+		<a href="/dc/image/burn_start.jpg" target="_blank">
+		    <img src="/dc/image/burn_start.jpg" height="200">
+		</a>
+		<p>烧录完成，设备会自动重启运行，并打印日志。</p>
+		<a href="/dc/image/burn_run.jpg" target="_blank">
+		    <img src="/dc/image/burn_run.jpg" height="200">
+		</a>
+		<p>本地编译的固件也可以上传到云端用来远程OTA升级，更详细的OTA升级指导<a href="/dc/pub/doc?page=ota" target="_blank">查看</a></p>
+	</div>
+</div>
+</body>
+</html>

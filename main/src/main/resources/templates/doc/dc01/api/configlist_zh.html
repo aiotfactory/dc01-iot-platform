@@ -1,0 +1,12 @@
+{
+  "params": "fields=config&deviceId=xxxxxxxxxxxx&moduleTypeId=xxx",
+  "inputComments": "指定设备ID和模块类型ID以列出模块的所有可配置元素。",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>设备的ID。</td></tr><tr><td>moduleTypeId</td><td>模块的ID。</td></tr></tbody></table>",
+  "outputComments": "模块的所有可配置元素。",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>如果成功，将返回ok。</td></tr><tr><td>configList</td><td>包含所有配置。</td></tr><tr><td>valueInDb</td><td>云数据库中设置的配置，一旦设备上传任何数据到云端，这个值会被推送到设备。一旦在设备上更新，valueInDevice将在云数据库中相应地设置。</td></tr><tr><td>valueLen</td><td>配置值的最大字节数，1表示1字节（8位）。</td></tr><tr><td>module</td><td>模块名称。</td></tr><tr><td>name</td><td>模块别名。</td></tr><tr><td>id</td><td>此配置的ID。</td></tr><tr><td>type</td><td>数字或字符串。</td></tr><tr><td>valueInDevice</td><td>设备中的值，如果valueInDevice与valueInDb不同，云会推送valueInDb到设备。</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"configList\": [\r\n    {\r\n      \"valueInDb\": \"\",\r\n      \"valueLen\": 1,\r\n      \"module\": \"MODULE_WIFI\",\r\n      \"name\": \"wifi_mode\",\r\n      \"id\": 50,\r\n      \"type\": \"Number\",\r\n      \"valueInDevice\": \"1\"\r\n    }\r\n	...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"configList\": [\r\n    {\r\n      \"valueInDb\": \"\",\r\n      \"valueLen\": 1,\r\n      \"module\": \"MODULE_WIFI\",\r\n      \"name\": \"wifi_mode\",\r\n      \"id\": 50,\r\n      \"type\": \"Number\",\r\n      \"valueInDevice\": \"1\"\r\n    }\r\n	...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

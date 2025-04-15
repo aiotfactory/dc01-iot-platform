@@ -1,0 +1,77 @@
+{
+    "moduleName": "MODULE_GENERAL",
+    "moduleComments": "Used to configure the general information of the device, such as reporting address, port, working hours, etc.",
+    "configInfo": [
+        {
+            "order": 0,
+            "name": "server_host",
+            "sample": "123.123.123.123",
+            "range": "10-49 characters",
+            "comments": "The cloud IP address reported by the device, which can be an IP address or a domain name."
+        },
+        {
+            "order": 1,
+            "name": "server_port",
+            "sample": "8080",
+            "range": "50-65535",
+            "comments": "The cloud port reported by the device."
+        },
+        {
+            "order": 2,
+            "name": "upload_interval_seconds",
+            "sample": "60",
+            "range": "1-0xffffffff seconds",
+            "comments": "Not currently used"
+        },
+        {
+            "order": 3,
+            "name": "upload_retry_times",
+            "sample": "3",
+            "range": "1-20 times",
+            "comments": "Not currently used"
+        },
+        {
+            "order": 4,
+            "name": "upload_timeout_seconds",
+            "sample": "30",
+            "range": "10-300 seconds",
+            "comments": "Timeout setting when sending data to the cloud, also used by other modules for timeout settings."
+        },
+        {
+            "order": 5,
+            "name": "work_start",
+            "sample": "0001",
+            "range": "0000-2400",
+            "comments": "Daily start time for device operation, range from 0000 to 2400, i.e., from 0:00 to 24:00, not currently used."
+        },
+        {
+            "order": 6,
+            "name": "work_end",
+            "sample": "2400",
+            "range": "0000-2400",
+            "comments": "Daily end time for device operation, range from 0000 to 2400, i.e., from 0:00 to 24:00, not currently used."
+        },
+        {
+            "order": 7,
+            "name": "keep_alive_idle",
+            "sample": "60",
+            "range": "0-86400 seconds",
+            "comments": "TCP/IP keep alive setting after connection; if there is no communication within this set time, the system will automatically send probe packets to maintain the connection. Setting it to 0 disables the keep alive function."
+        },
+        {
+            "order": 8,
+            "name": "keep_alive_cnt",
+            "sample": "3",
+            "range": "1-10",
+            "comments": "TCP/IP keep alive setting after connection; if keep_alive_cnt probe packets have been sent without receiving a response, the system considers the other party disconnected and will close the current connection."
+        },
+        {
+            "order": 9,
+            "name": "keep_alive_interval",
+            "sample": "10",
+            "range": "1-120",
+            "comments": "Even without data transmission, if the connection exceeds the idle time specified by keep_alive_idle, the system sends a probe packet every keep_alive_interval to confirm whether the other party is still online."
+        }
+    ],
+    "status": "ok"
+}

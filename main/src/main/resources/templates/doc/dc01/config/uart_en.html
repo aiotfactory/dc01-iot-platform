@@ -1,0 +1,42 @@
+{
+    "moduleName": "MODULE_UART",
+    "moduleComments": "Used to configure related parameters of the UART module, such as on/off status, baud rate, upload interval, etc.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "uart_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "Used for configuring the on/off status of the UART module. 0 indicates off, 1 indicates on."
+        },
+        {
+            "order": 2,
+            "name": "uart_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff seconds",
+            "comments": "Configures the interval time (seconds) for UART data upload."
+        },
+        {
+            "order": 3,
+            "name": "uart_baud_rate",
+            "sample": "115200",
+            "range": "1000-800000",
+            "comments": "Configures the baud rate of UART."
+        },
+        {
+            "order": 4,
+            "name": "uart_tx_pin",
+            "sample": "21",
+            "range": "0-48",
+            "comments": "Configures the transmission pin for UART. Theoretically, any IO pin of the ESP chip can be used, but gpio_esp_21 is easier for wiring and is not usually used for other purposes. When enabling both RS485 and UART, it should be noted that they cannot share the same pins."
+        },
+        {
+            "order": 5,
+            "name": "uart_rx_pin",
+            "sample": "2",
+            "range": "0-28",
+            "comments": "Configures the reception pin for UART. Theoretically, any IO pin of the ESP chip can be used, but gpio_esp_2 is easier for wiring and is not usually used for other purposes. When enabling both RS485 and UART, it should be noted that they cannot share the same pins."
+        }
+    ],
+    "status": "ok"
+}

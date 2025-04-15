@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{firmware_build}">Firmware Build</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .log-text {
+            max-height: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            cursor: pointer;
+        }
+
+        .log-text.expanded {
+            max-height: none;
+            -webkit-line-clamp: unset;
+        }
+
+        .btn-toggle {
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #007bff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-toggle:hover {
+            text-decoration: underline;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: Consolas, "Courier New", monospace;
+        }
+
+        th, td {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .log-text {
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+        th, td {
+            word-wrap: break-word;
+        }
+
+		.dropdown-menu .dropdown-item {
+		    color: #333333;            
+		    background-color: transparent;
+		}
+
+
+		.dropdown-menu .dropdown-item:hover {
+		    background-color: #66b3ff; 
+		    color: #ffffff;            
+		}
+		.no-wrap {
+		    white-space: nowrap;
+		}
+
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white text-uppercase">
+                <span th:text="#{firmware_build}">Firmware Build</span> <span th:text="${projectName}"></span>
+            </div>
+            <div class="card-body">
+				    <div class="row">
+				        <div class="col-md-4 mb-3">
+				            <div class="dropdown">
+				                <button id="buildVersionButton" class="btn btn-secondary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{select_build_version}">
+				                    Select Build Version
+				                </button>
+				                <ul id="buildVersionDropdown" class="dropdown-menu" aria-labelledby="buildVersionDropdown">
+				                </ul>
+				            </div>
+				        </div>
+
+						<div class="col-md-2">
+						    <button type="button" class="btn btn-secondary w-100" onclick="refreshLog(800000)" th:text="#{refresh}">Refresh</button>
+						</div>
+						<div class="col-md-2">
+						    <button type="button" class="btn btn-secondary w-100" onclick="refreshLog(1000)">Tail 1000</button>
+						</div>
+						<div class="col-md-2">
+						    <button type="button" class="btn btn-secondary w-100" onclick="refreshLog(100)">Tail 100</button>
+						</div>
+						<div class="col-md-2">
+						    <button type="button" class="btn btn-secondary w-100" onclick="deleteBuild()" th:text="#{delete}">Delete</button>
+						</div>
+						<div class="col-md-2">
+						    <button type="button" class="btn btn-secondary w-100" onclick="saveBuild()">OTA</button>
+						</div>
+				    </div>
+                <input type="hidden" name="buildId" id="buildIdInput" th:value="${buildId}">
+                <input type="hidden" name="projectId" th:value="${projectId}">
+				
+				<div class="table-responsive mt-4">
+				  <table class="table table-bordered table-hover" id="log-body">
+				  </table>
+				</div>
+				
+            </div>
+        </div>
+		<th:block th:insert="~{fragments/nav :: modalError}"></th:block>
+		<th:block th:insert="~{fragments/nav :: modalConfirm}"></th:block>
+		<th:block th:insert="~{fragments/nav :: modalCreateItem}"></th:block>
+    </div>
+
+    <script src="/dc/js/bootstrap.bundle.min.js"></script>
+	<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+	
+    <script th:inline="javascript">
+		
+		const projectId = /*[[${projectId}]]*/ '';  
+
+		const columns = [
+		    { column: 'time', name: [[#{time}]], width: '15%'},
+			{ column: 'content', name: [[#{content}]], width: '85%'}
+		];
+
+		const tableInput=[{tableData: 'logs', tableBody: 'log-body', tableColumns: columns}];
+		excAction('/dc/web/codelogrefresh?projectId='+projectId,null,tableInput,sectionShow,true);
+		
+		function sectionShow(result)
+		{
+			var builds=result['builds'];
+			var buildId=result['buildId'];
+			if((builds!=undefined)&&(builds!=null)&&(buildId!=undefined)&&(buildId!=null))
+			{
+				initVersions(builds,buildId);
+			}else
+			{
+				const buildVersionButton = document.getElementById('buildVersionButton');
+				buildVersionButton.removeAttribute('data-id');
+				buildVersionButton.innerHTML=[[#{select_build_version}]];
+				buildVersionButton.classList.remove('btn-secondary','btn-warning', 'btn-primary', 'btn-danger', 'btn-success');
+				buildVersionButton.classList.add('btn-secondary');
+			}
+		}
+		function initVersions(builds,buildId)
+		{
+			var buildsContainer = document.getElementById('buildVersionDropdown');
+			var buildVersionButton = document.getElementById('buildVersionButton');
+			buildsContainer.innerHTML = '';
+	        builds.forEach(function(build) {
+	            var listItem = document.createElement('li');
+	            var anchor = document.createElement('a');
+				var content = build.time + ' (VERSION ' + build.codeVersion+" "+build.status;
+	            anchor.classList.add('dropdown-item');
+	            anchor.href = '#';
+	            switch(build.status) {
+	                case 'PENDING':
+	                    anchor.classList.add('text-warning');
+						content = content + ' '+build.pendingNum;
+	                    break;
+	                case 'BUILDING':
+	                    anchor.classList.add('text-primary');
+	                    break;
+	                case 'ERROR':
+	                    anchor.classList.add('text-danger');
+	                    break;
+	                case 'SUCCESS':
+	                    anchor.classList.add('text-success');
+	                    break;
+	                default:
+	                    break;
+	            }
+				content = content + ')';
+				anchor.innerHTML = content;
+	            if (build.id === buildId) {
+	                anchor.classList.add('active');
+					buildVersionButton.innerText = content;
+					updateButtonColor(build.status,buildId);
+					buttonUpdate=true;
+	            }
+	            anchor.onclick = function() {
+	                loadBuild(build.id);
+	            };
+	            listItem.appendChild(anchor);
+	            buildsContainer.appendChild(listItem);
+			});
+		}
+		function updateButtonColor(status,buildId) {
+		       var buildVersionButton = document.getElementById('buildVersionButton');
+		       buildVersionButton.classList.remove('btn-secondary','btn-warning', 'btn-primary', 'btn-danger', 'btn-success');
+			   buildVersionButton.setAttribute('data-id', buildId);
+		       switch (status) {
+		           case 'PENDING':
+		               buildVersionButton.classList.add('btn-warning');
+		               break;
+		           case 'BUILDING':
+		               buildVersionButton.classList.add('btn-primary');
+		               break;
+		           case 'ERROR':
+		               buildVersionButton.classList.add('btn-danger');
+		               break;
+		           case 'SUCCESS':
+		               buildVersionButton.classList.add('btn-success');
+		               break;
+		           default:
+		               buildVersionButton.classList.add('btn-secondary');
+		               break;
+		       }
+		}
+		function refreshLog(topNum) {
+			const buildVersionButton = document.getElementById('buildVersionButton');
+			const buildId=buildVersionButton.getAttribute('data-id');
+			let buildIdStr='';
+			if(buildId!=null)
+				buildIdStr='&buildId='+ buildId;
+			
+		    excAction('/dc/web/codelogrefresh?projectId='+projectId+'&topNum='+topNum+buildIdStr,null,tableInput,sectionShow,true);
+		}
+		function loadBuild(buildId) {
+			excAction('/dc/web/codelogrefresh?buildId=' + buildId+ '&projectId=' + projectId,null,tableInput,sectionShow,true);
+		}
+		function deleteBuild() {
+			const buildVersionButton = document.getElementById('buildVersionButton');
+			const buildId=buildVersionButton.getAttribute('data-id');
+			if((buildId!=undefined)&&(buildId!=null)){
+				showConfirmModal([[#{delete_confirm}]],[[#{confirm_delete_build}]],
+						function() {
+			            	excAction('/dc/web/codelogrefresh?action=delBuild&buildId=' + buildId+ '&projectId='+projectId,null,tableInput,sectionShow,true);
+						}
+				);
+			}
+		}
+		function saveBuild() {
+			const buildVersionButton = document.getElementById('buildVersionButton');
+			const buildId=buildVersionButton.getAttribute('data-id');
+			
+			const modalId=document.getElementById('createItemModal');
+			let createItemModal = bootstrap.Modal.getInstance(modalId);
+			if (!createItemModal) 
+				createItemModal = new bootstrap.Modal(modalId);
+			modalId.querySelector('.modal-title').textContent=[[#{create_ota}]];
+			const fieldDivs = document.querySelectorAll(".field"); 
+			fieldDivs.forEach(function(div) {
+				div.classList.add('d-none');
+			});
+
+			fieldDivs[0].classList.remove('d-none');
+			fieldDivs[0].querySelectorAll(".form-label")[0].textContent =[[#{name_the_firmware}]]; 
+			fieldDivs[0].querySelectorAll(".form-control")[0].value='';
+			fieldDivs[0].querySelectorAll(".form-control")[0].placeholder=[[#{enter_at_least_x_characters}]];
+
+			const confirmButton = modalId.querySelector('.submit');
+			confirmButton.addEventListener('click', function() {
+				const otaName=fieldDivs[0].querySelectorAll(".form-control")[0].value;
+				const jsonSend = {
+					otaName: otaName
+				   };
+				createItemModal.hide();
+					excAction('/dc/web/codelogrefresh?action=saveBuild&buildId=' + buildId+ '&projectId='+projectId,jsonSend,tableInput,sectionShow,true);
+			}, { once: true });
+			createItemModal.show();
+		}
+    </script>
+</body>
+</html>

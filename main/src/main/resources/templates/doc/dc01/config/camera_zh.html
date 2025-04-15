@@ -1,0 +1,42 @@
+{
+    "moduleName": "MODULE_CAMERA",
+    "moduleComments": "用于配置相机模块的相关参数，如开关状态、上传间隔、分辨率、图像质量等。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "camera_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "启用或禁用相机模块。"
+        },
+        {
+            "order": 2,
+            "name": "camera_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff秒",
+            "comments": "相机模块数据上传的时间间隔，单位秒。"
+        },
+        {
+            "order": 3,
+            "name": "camera_size",
+            "sample": "10",
+            "range": "0-21",
+            "comments": "相机图像的大小配置，具体选项如下：\n0=FRAMESIZE_96X96\n1=FRAMESIZE_QQVGA(160x120)\n2=FRAMESIZE_QCIF(176x144)\n3=FRAMESIZE_HQVGA(240x176)\n4=FRAMESIZE_240X240(240x240)\n5=FRAMESIZE_QVGA(320x240)\n6=FRAMESIZE_CIF(400x296)\n7=FRAMESIZE_HVGA(480x320)\n8=FRAMESIZE_VGA(640x480)\n9=FRAMESIZE_SVGA(800x600)\n10=FRAMESIZE_XGA(1024x768)\n11=FRAMESIZE_HD(1280x720)\n12=FRAMESIZE_SXGA(1280x1024)\n13=FRAMESIZE_UXGA(1600x1200)\n14=FRAMESIZE_FHD(1920x1080)\n15=FRAMESIZE_P_HD(720x1280)\n16=FRAMESIZE_P_3MP(864x1536)\n17=FRAMESIZE_QXGA(2048x1536)\n18=FRAMESIZE_QHD(2560x1440)\n19=FRAMESIZE_WQXGA(2560x1600)\n20=FRAMESIZE_P_FHD(1080x1920)\n21=FRAMESIZE_QSXGA(2560x1920)"
+        },
+        {
+            "order": 4,
+            "name": "camera_quality",
+            "sample": "30",
+            "range": "0-63",
+            "comments": "相机图像的质量配置，数字越小，质量越高，文件越大。"
+        },
+        {
+            "order": 5,
+            "name": "camera_aec_gain",
+            "sample": "2000",
+            "range": "0-3000",
+            "comments": "相机自动曝光增益的设置，暂无使用。"
+        }
+    ],
+    "status": "ok"
+}

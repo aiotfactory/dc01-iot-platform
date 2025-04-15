@@ -1,0 +1,98 @@
+{
+    "moduleName": "MODULE_LORA",
+    "moduleComments": "Used to configure related parameters of the LoRa module, such as operating mode, frequency, transmission power, etc.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "lora_mode",
+            "sample": "0",
+            "range": "0-1",
+            "comments": "Operating mode of the LoRa module. 0 indicates off, 1 indicates receive mode."
+        },
+        {
+            "order": 2,
+            "name": "lora_fre",
+            "sample": "442800000",
+            "range": "300000000-990000000",
+            "comments": "Operating frequency of the LoRa module, ranging from 300 MHz to 990 MHz."
+        },
+        {
+            "order": 3,
+            "name": "lora_tx_power",
+            "sample": "2",
+            "range": "0-22",
+            "comments": "Transmission power of the LoRa module in dBm, with a range from 0 to 22."
+        },
+        {
+            "order": 4,
+            "name": "lora_bandwidth",
+            "sample": "1",
+            "range": "0-3",
+            "comments": "Bandwidth of the LoRa module, supporting values 0-3 which represent different bandwidth settings [0: 125 kHz, 1: 250 kHz, 2: 500 kHz, 3: Reserved]."
+        },
+        {
+            "order": 5,
+            "name": "lora_spreading_factor",
+            "sample": "10",
+            "range": "7-12",
+            "comments": "Spreading factor of the LoRa module, ranging from 7 to 12, commonly up to 11."
+        },
+        {
+            "order": 6,
+            "name": "lora_codingrate",
+            "sample": "1",
+            "range": "1-4",
+            "comments": "Coding rate of the LoRa module for error correction, ranging from 1 to 4, indicating different coding methods [1: 4/5, 2: 4/6, 3: 4/7, 4: 4/8]."
+        },
+        {
+            "order": 7,
+            "name": "lora_preamble_len",
+            "sample": "8",
+            "range": "1-100",
+            "comments": "Preamble length of the LoRa module, ranging from 1 to 100."
+        },
+        {
+            "order": 8,
+            "name": "lora_fix_len_payload_on",
+            "sample": "0",
+            "range": "0-1",
+            "comments": "Enable or disable fixed-length payload. 0 for disabled, 1 for enabled."
+        },
+        {
+            "order": 9,
+            "name": "lora_iq_inver_on",
+            "sample": "0",
+            "range": "0-1",
+            "comments": "Enable or disable IQ inversion. 0 for disabled, 1 for enabled, generally set to 0."
+        },
+        {
+            "order": 10,
+            "name": "lora_rx_timeout",
+            "sample": "5000",
+            "range": "100-300000",
+            "comments": "LoRa receiving timeout in milliseconds, ranging from 100 to 300,000."
+        },
+        {
+            "order": 11,
+            "name": "lora_rx_buf_len",
+            "sample": "1024",
+            "range": "16-4096",
+            "comments": "Length of the reception buffer for the LoRa module in bytes, ranging from 16 to 4096."
+        },
+        {
+            "order": 12,
+            "name": "lora_tx_timeout",
+            "sample": "5000",
+            "range": "100-300000",
+            "comments": "LoRa transmission timeout in milliseconds, ranging from 100 to 300,000."
+        },
+        {
+            "order": 13,
+            "name": "lora_upload_interval_seconds",
+            "sample": "50",
+            "range": "1-0xffffffff",
+            "comments": "Upload interval time for the LoRa module in seconds."
+        }
+    ],
+    "status": "ok"
+}

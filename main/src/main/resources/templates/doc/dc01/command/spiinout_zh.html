@@ -1,0 +1,162 @@
+    <h5>说明</h5>
+    <p>对应用程序开发工程师来说，SPI这些概念不容易理解，简单来说，我们写程序时比如调用socket，程序帮我们封装了物理层，但实际物理层肯定是电信号的交换，比如某一时刻，一个引脚是高电平，那么就表示1，否则表示0的意思，硬件就是通过这些高低电平的变化来是实现信息交互。</p>
+    <p>比如我们自己设计一个交互逻辑，用a,b两根线，分别连接到两个芯片的对应引脚，为了交互信息，比如我们约定b这跟线的电压每1ms变化一次，那么a用于数据传输，当b电压变化时，比如高到低变化或者低到高变化，我们接收芯片就测量a线的电压，如果那时是高，就是数据1，如果是低，就是数据0，那么发送芯片只要控制好节奏，在规定的1ms变化间把a线的电压控制为高或者低电平就可以传输数据，这就是一种简单的硬件接口定义，业界实际上定义了很多类似接口，有的用到2根线，有的用到3根线或者更多根线，但实际原理都是大同小异，一般我们也不需要去了解协议的所有细节，因为底层驱动已经实现了这些电平控制。</p>
+	<p>SPI就是其中的一个协议，很多传感器采用SPI协议传输。</p>
+	<p>线路板上用ESP_GPIO_39 (miso)，ESP_GPIO_38 (mosi)，ESP_GPIO_40 (SCLK)这三个引脚作为SPI通讯，SPI是可以连接多个设备的，比如发送芯片A可以发送给其他设备B1，B2，B3，为了避免冲突，SPI协议引入了CS引脚控制，就是比如A通过前面三根线mosi,miso和sclk和B1，B2，B3连接外，还要用第4根线cs1连接B1，第5根线cs2连接B2，第6根线cs3连接B3，这样当要与B1通讯时，芯片A把cs2,cs3设置为高电平，把cs1设置为低电平，那么传输数据时，B2，B3就会忽略数据。</p>
+	<h5>参数说明</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为3</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+            <tr>
+                <td><code>spi_no</code></td>
+                <td>ESP芯片有2个SPI接口，我们一般这里用1，因此固定为1即可。</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+            <tr>
+                <td><code>spi_address</code></td>
+                <td><p>操作的传感器的寄存器地址，这个概念对应用程序开发者来说也较难理解，前面说明里面解释了SPI通讯，但那是硬件协议，保证了数据从ESP芯片传输到比如温湿度传感器芯片，但传过去的只是数据，数据的含义还需要定义，这些数据的含义一般被传感器定义，任何一个传感器都会提供一个他们的数据定义说明，大家经常用寄存器的方式来定义，一个传感器上会有多个寄存器，每个寄存器用地址来区分，比如0x01表示控制寄存器，0x02表示温度寄存器，这样我们通过SPI向传感器的0x01寄存器写入比如0x3C，可能表示通知温湿度传感器准备好数据，传感器就会把数据准备好存在0x02地址的寄存器中，这样接下来ESP芯片通过SPI协议读取0x02地址寄存器内容，就得到了传感器数据，这一切的说明都会定义在传感器的说明书中，说明书一般叫做datasheeet，数据手册。</p>
+				<p>很多支持SPI的传感器，会把软件协议定义的更规范些，分为adderss,command和data，其实都是通过SPI协议，ESP芯片把数据写到传感器的寄存器里。如果需要，这里可以传送地址信息，最多64bits，是否传地址以及传送多少bits，还要结合其他参数看，读完就清除了。</p>
+				</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>8</td>
+                <td>输入</td>
+            </tr>
+			<tr>
+			    <td><code>spi_address_valid</code></td>信息
+			    <td>如果spi_address内的值是0，是否要传呢，因此靠spi_address一个参数无法决定是否传输address内容，所以用到spi_address_valid参数，1表示传输spi_address，0表示bu'chuan'shu。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>spi_command</code></td>
+			    <td>这个类似spi_address，表示要传输的command的值。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>2</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>spi_command_valid</code></td>
+			    <td>这个类似spi_address_valid，表示是否传输command，同样1表示是，0表示不传输。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>data_send</code></td>
+			    <td>这个表示要传输的数据，这里并不再有data_send_len，云端会根据data_send实际设置的数值在传输给设备前补充数据长度。这里用hex表示数值，以0x开头，比如想传输数值3，那就是0x03，其中0表示数值3的高4bits是0，3表示低4bits是3。比如传输小写字母a，那就是0x61，因为十六进制0x61正好是字母a的ascii码。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>x</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>data_recv_len</code></td>
+			    <td>这个表示需要接收的数据长度，也就是ESP从传感器读取到的数据长度。这个长度不能超过data_send的内容长度，这是受限于SPI协议，因此如果的确要超过，那么data_send后面可以补0，做到至少和data_recv_len长度相等。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>4</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>command_bits</code></td>
+			    <td>前面提到spi_command，这个参数最多容纳64bits，但其中多少bits发送给传感器呢，通过command_bits来表示，比如8表示spi_command的最低8bits真正发送给传感器，而且它bits被忽略。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>address_bits</code></td>
+			    <td>也是同样道理，其对应spi_address。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>							
+			<tr>
+			    <td><code>dummy_bits</code></td>
+			    <td>一般设置为0即可，设置非0，在传输data_send的数据前会先传输几个dummy bits。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>clock_speed_hz</code></td>
+			    <td>SPI的时钟频率，ESP手册和传感器手册都会注明自己的SPI支持的频率范围，在两者的交叉区间选定即可，一般选200000也就是200k赫兹。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>4</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>duty_cycle_pos</code></td>
+			    <td>设置为128即可。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>2</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>mode</code></td>
+			    <td>SPI的四种模式定义，可以检索下资料了解，，但一般都设置为0。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>cs_ena_posttrans</code></td>
+			    <td>定义提前多少cycles先拉低cs脚，前面说过，ESP准备通过SPI和那个传感器传输数据，就先拉低下对应的CS引脚，这个表示传输前提前一点时间就拉低CS，一般设置3即可。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>queue_size</code></td>
+			    <td>当来不及传输时，ESP会先把要传输的数据放到一个队列，这个定义队列的大小，一般3即可。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>4</td>
+			    <td>输入</td>
+			</tr>
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>先发送spi_address的值0x11，再发送data_send的值0x64，也就是向寄存器（地址为0x11）写入0x64:</strong>
+        <p><code>operate=3 spi_no=1 spi_address=0x11 spi_address_valid=1 spi_command=0 spi_command_valid=0 data_send=0x64 data_recv_len=0 command_bits=0 address_bits=8 dummy_bits=0 clock_speed_hz=200000 duty_cycle_pos=128 mode=0 cs_ena_posttrans=3 queue_size=3</code></p>
+		<p>返回，status为返回的状态，ok表示成功。</p>
+		<p><code>{"id":"67b5c3aa8aeb1b5ba10e6d73","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":9,"request":{"rawString":"operate=3 spi_no=1 spi_address=0x11 spi_address_valid=1 spi_command=0 spi_command_valid=0 data_send=0x64 data_recv_len=0 command_bits=0 address_bits=8 dummy_bits=0 clock_speed_hz=200000 duty_cycle_pos=128 mode=0 cs_ena_posttrans=3 queue_size=3","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T11:42:34.266618675Z","upload":{"hexContent":""},"uploadTime":"2025-02-19T11:42:34.575329599Z","command":3,"operate":3,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+		<hr>
+        <strong>先发送spi_address的值0x29，等待接收data_recv_len个字节数据，也就是读取寄存器（地址为0x29）的数据:</strong>
+        <p><code>operate=3 spi_no=1 spi_address=0x29 spi_address_valid=1 spi_command=0 spi_command_valid=0 data_send= data_recv_len=1 command_bits=0 address_bits=8 dummy_bits=0 clock_speed_hz=200000 duty_cycle_pos=128 mode=0 cs_ena_posttrans=3 queue_size=3</code></p>
+		<p>返回，cmdResponse内容为读取到值的hex格式。</p>
+		<p><code>{"id":"67b5c3808aeb1b5ba10e6d71","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":9,"request":{"rawString":"operate=3 spi_no=1 spi_address=0x29 spi_address_valid=1 spi_command=0 spi_command_valid=0 data_send= data_recv_len=1 command_bits=0 address_bits=8 dummy_bits=0 clock_speed_hz=200000 duty_cycle_pos=128 mode=0 cs_ena_posttrans=3 queue_size=3","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T11:41:52.400309827Z","upload":{"hexContent":"00"},"uploadTime":"2025-02-19T11:41:52.693195172Z","command":3,"operate":3,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+	</div>

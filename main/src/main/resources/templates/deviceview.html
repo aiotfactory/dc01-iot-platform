@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{fragments/nav :: head(#{device_view})}"></th:block>
+<body>
+ <th:block th:insert="~{fragments/nav :: search}"></th:block>
+<div class="container-fluid">
+  <div class="row">
+   <th:block th:insert="~{fragments/nav :: menu}"></th:block>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+	  <th:block th:insert="~{fragments/nav :: breadcrumb}"></th:block>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2" th:text="#{device_view}">Device view</h1>
+      </div>
+      <h2 th:text="#{module_info}">Module info</h2>
+      <div class="table-responsive small">
+        <table class="table table-striped table-sm" id="module-body">
+        </table>
+      </div>     
+	  <h2><span th:text="#{forward}">Forward</span>
+		  <a href="#" id="forwardEnableButton" class="me-2"><i class="bi bi-caret-right-fill fs-5" data-bs-toggle="tooltip" th:title="#{forward_enable_tip}"></i></a>
+		  <a href="#" id="forwardDisableButton" class="me-2"><i class="bi bi-pause-circle fs-5"  data-bs-toggle="tooltip" th:title="#{forward_disable_tip}"></i></a>
+		  <a href="#" id="forwardStatusButton"><i class="bi fs-5"  data-bs-toggle="tooltip" th:title="#{forward_pause_continue_tip}"></i></a>
+	  </h2>
+	  <div class="table-responsive small">
+	    <table class="table table-striped table-sm" id="log-body">
+	    </table>
+	  </div>   
+    </main>
+   <th:block th:insert="~{fragments/nav :: modalError}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalConfirm}"></th:block>
+  </div>
+</div>
+<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+<script  th:inline="javascript">
+const deviceId = /*[[${deviceId}]]*/ '';
+const colorStatus = {column: 'colorStatus',colors: [{value: 1,color:'yellow'},{value: 2,color:'#00FF00'}]};
+const moduleForwardEnable={ confirmTitle: [[#{confirm}]], confirmDescription: [[#{enable_forwarding_for_module}]], operate: '/dc/web/deviceviewrefresh?action=moduleForwardUpdate&forward=1&deviceId='+deviceId+'&moduleTypeId=', icon: 'bi-caret-right-fill', when: 'allowForward=0', space: 'me-2', isAjax: 'normal' , help: [[#{enable_forwarding_for_module2}]]};
+const moduleForwardDisable={ confirmTitle: [[#{confirm}]], confirmDescription: [[#{disable_forwarding_for_module}]] , operate: '/dc/web/deviceviewrefresh?action=moduleForwardUpdate&forward=0&deviceId='+deviceId+'&moduleTypeId=', icon: 'bi-pause-circle', when: 'allowForward=1', space: 'me-2', isAjax: 'normal', help: [[#{disable_forwarding_for_module2}]]};
+const columnsModule = [
+    { column: 'id', name: 'ID', width: '5%', isId: 1, help: [[#{id_of_module}]] },
+    { column: 'name', name: [[#{name}]], width: '10%', help: [[#{name_of_module}]] },
+    { column: 'description', name: [[#{description}]], width: '10%' },
+    { column: 'modifyTime', name: [[#{modify}]], width: '10%'},
+    { column: 'infoReqTime', name: [[#{req_info}]], width: '10%', help: [[#{time_sending_request}]]},
+    { column: 'uploadTime', name: [[#{latest_upload}]], color: colorStatus, width: '10%', help: [[#{time_uploading_request}]]},
+    { name: [[#{action_tb_device}]], width: '10%', isAction: 1, 
+    	actions: [
+		    moduleForwardEnable,
+			moduleForwardDisable,
+    		{ operate: '/dc/web/devicemodule?deviceId='+deviceId+'&moduleTypeId=', icon: 'bi-eye', space: 'me-2' , help: [[#{view_detail_of_module}]]}
+    	]
+    }
+];
+
+const columnsPostLog = [
+    { column: 'id', name: 'ID', width: '5%', isId: 1, isHidden: 1 },
+    { column: 'pack', name: [[#{seq}]], width: '5%'},
+	{ column: 'moduleName', name: [[#{module}]], width: '5%'},
+	{ column: 'type', name: [[#{type}]], width: '5%'},
+    { column: 'tx', name: [[#{send}]], style: 'width: 60%; word-wrap: break-word; word-break: break-all;' , help: [[#{data_uploaded_from_device}]]},
+    { column: 'rx', name: [[#{receive}]], style: 'width: 20%; word-wrap: break-word; word-break: break-all;', help: [[#{info_recv_from_your_url}]]},
+	{ column: 'error', name: [[#{error}]], width: '3%',help: [[#{error_code_when_forward}]]},
+	{ column: 'createTime', name: [[#{time}]], width: '5%'},
+	{ name: [[#{action_tb_device}]], width: '5%', isAction: 1, 
+		actions: [
+			{ newWindow: 1, operate: '/dc/web/devicepostlog?logId=', icon: 'bi-eye', space: 'me-2' , help: [[#{view_detail_of_log}]] }
+		]
+	}
+];
+const tableInput=[{tableData: 'moduleList', tableBody: 'module-body', tableColumns: columnsModule},{tableData: 'forwardList', tableBody: 'log-body', tableColumns: columnsPostLog}];
+
+document.addEventListener("DOMContentLoaded", function() {
+	excAction('/dc/web/deviceviewrefresh?deviceId='+deviceId, null,tableInput,sectionShow,true);
+});
+function sectionShow(result)
+{
+	const forwardStatusButtonIcon = document.querySelector('#forwardStatusButton i');
+	if(result.forwardStatus){
+		forwardStatusButtonIcon.classList.remove('bi-camera-video-fill'); 
+		forwardStatusButtonIcon.classList.add('bi-camera-video-off-fill');
+	}else{
+		forwardStatusButtonIcon.classList.remove('bi-camera-video-off-fill'); 
+		forwardStatusButtonIcon.classList.add('bi-camera-video-fill');
+	}
+	document.getElementById('forwardDisableButton').addEventListener('click', function() {
+		const tmpMsg=[[#{disable_forward_for_modules}]];
+		showConfirmModal([[#{confirm}]],tmpMsg,function() {
+			excAction('/dc/web/deviceviewrefresh?action=forwardReset&deviceId='+deviceId+'&forward=0',null,tableInput,sectionShow,true);
+		});
+	});
+	document.getElementById('forwardEnableButton').addEventListener('click', function() {
+		const tmpMsg=[[#{enable_forward_for_modules}]] ;
+		showConfirmModal([[#{confirm}]],tmpMsg,function() {
+			excAction('/dc/web/deviceviewrefresh?action=forwardReset&deviceId='+deviceId+'&forward=1',null,tableInput,sectionShow,true);
+		});
+	});
+	document.getElementById('forwardStatusButton').addEventListener('click', function() {
+		const forwardIcon = document.querySelector('#forwardStatusButton i');
+		let tmpMsg= [[#{pause_forwarding_for_device}]] ;
+		let forward=0;
+		if (forwardIcon.classList.contains('bi-camera-video-fill')){
+			tmpMsg= [[#{continue_forwarding_for_device}]] ;
+			forward=1;
+		}
+		showConfirmModal([[#{confirm}]],tmpMsg,function() {
+			excAction('/dc/web/deviceviewrefresh?action=forwardUpdate&deviceId='+deviceId+'&forward='+forward,null,tableInput,sectionShow,true);
+		});
+	});
+}
+</script>
+</body>
+</html>

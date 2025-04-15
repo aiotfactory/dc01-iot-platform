@@ -1,0 +1,128 @@
+<h5>Description</h5>
+<p>There are two types of GPIOs on the circuit board: one is the pin of the ESP32 chip, and the other comes from an expansion module. The reason for adding the expansion module is that the number of ESP32 pins is insufficient. However, the GPIOs of the ESP32 support more functions (refer to other documents for details). Currently, the extended GPIO only supports outputting high or low voltage levels. Fun fact: A pin is a soldering point on the chip, usually a thin metal wire-like structure. These pins are typically connected to terminals, posts, or sockets on the circuit board, making it convenient to connect external devices.</p>
+<!-- Parameter Table -->
+<h5>GPIO Output</h5>
+<p>To control a GPIO pin to output high or low voltage, you must first configure the pin mode via the GPIO page before controlling it.</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 9</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>gpio_esp_no</code></td>
+            <td>ESP GPIO pin number. Possible values are 0, 2, 14, corresponding to gpio_esp_xx in the circuit design diagram, where xx represents these values. Other values also correspond to other pins of the ESP32 chip, which can be controlled as well. However, those pins are already used to connect internal modules on the circuit board, so they cannot be arbitrarily controlled until you are familiar with this internal control logic.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>status</code></td>
+            <td>The switch status of the pin. Setting it to 1 means turning it on, commonly referred to as "pull up" or "output high level." If measured with a multimeter, the voltage of this pin will generally equal the chip's voltage, such as 3.3V. Setting it to 0 turns off the pin, commonly referred to as "pull down" or "output low level." When measured with a multimeter, the voltage will be 0V or close to 0V.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>pull_up</code></td>
+            <td>Pull-up setting. 1 means enabled, 0 means disabled. Pull-up means the chip will default to connecting this pin through a resistor (typically about 10k ohms) to the chip's voltage (usually 3.3V). This ensures the pin is not floating but connected to a high voltage via a resistor, meaning its initial value is high voltage. Even if a pin is pulled up (initially high), it can still be controlled to output a low level.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>pull_down</code></td>
+            <td>Pull-down setting. 1 means enabled, 0 means disabled. Pull-down means the chip will default to connecting this pin through a resistor (typically about 10k ohms) to the chip's ground (GND, representing 0V). This ensures the pin is not floating but connected to 0V via a resistor, meaning its initial value is 0V. Even if a pin is pulled down (initially low), it can still be controlled to output a high level.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Set ESP GPIO 0 to output high level, enable pull-up, and disable pull-down:</strong>
+    <p><code>operate=9 gpio_esp_no=0 status=1 pull_up=1 pull_down=0</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67aae9de64b53b7e99f1facd","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=9 gpio_esp_no=0 status=1 pull_up=1 pull_down=0","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:10:37.901050456Z","upload":{"values":null},"uploadTime":"2025-02-11T06:10:38.832747542Z","command":3,"operate":9,"info":"esp gpio no 0 set to 1 pull up 1, pull down 0","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <hr>
+    <strong>Set ESP GPIO 2 to output low level, disable both pull-up and pull-down, leaving the pin floating (similar to uninitialized variables in C):</strong>
+    <p><code>operate=9 gpio_esp_no=2 status=0 pull_up=0 pull_down=0</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67aaead864b53b7e99f1fad1","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=9 gpio_esp_no=2 status=0 pull_up=0 pull_down=0","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:14:48.185308482Z","upload":{"values":null},"uploadTime":"2025-02-11T06:14:48.907243383Z","command":3,"operate":9,"info":"esp gpio no 2 set to 0 pull up 0, pull down 0","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>
+<h5>GPIO Read</h5>
+<p>The value read is a logical value: high voltage is 1, and low voltage is 0. If set to ADC, the analog value is read, which is the voltage value in mV.</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 16</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>is_esp</code></td>
+            <td>1 indicates an ESP chip GPIO pin, and 0 indicates an EXT GPIO pin.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>gpio_no</code></td>
+            <td>ESP GPIO pin number. Possible values are 0, 2, 14, corresponding to gpio_esp_xx in the circuit design diagram. EXT GPIO pin number. Possible values for EXT GPIO are 0, 1, 2, 3, 21, 22, corresponding to gpio_ext_xx in the circuit design diagram.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Read the logical level of ESP GPIO 14, returning logical high level 1:</strong>
+    <p><code>operate=16 is_esp=1 gpio_no=14</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67aaefbc64b53b7e99f1faf7","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=1 gpio_no=14","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:35:38.887203194Z","upload":{"values":[{"pinValue":1,"pinMode":33,"pinType":"ESP","pin":14,"valueType":"ANALOG"}]},"uploadTime":"2025-02-11T06:35:40.679799242Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <hr>
+    <strong>Read the logical level of ESP GPIO 22. Since it is not configured to be enabled, no data is read:</strong>
+    <p><code>operate=16 is_esp=1 gpio_no=22</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67aaeb6664b53b7e99f1fad7","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=1 gpio_no=22","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:17:09.787376922Z","upload":{"values":[]},"uploadTime":"2025-02-11T06:17:10.779883185Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <hr>
+    <strong>Read the ADC value of ESP GPIO 14, returning a voltage of 1593mV:</strong>
+    <p><code>operate=16 is_esp=1 gpio_no=14</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67aaeb9d64b53b7e99f1fad9","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=1 gpio_no=14","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:18:04.642871086Z","upload":{"values":[{"pinValue":1593,"pinMode":33,"pinType":"ESP","pin":14,"valueType":"ANALOG"}]},"uploadTime":"2025-02-11T06:18:05.359389185Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

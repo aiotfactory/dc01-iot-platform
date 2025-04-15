@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World Program Compilation and Burning</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Left Sidebar -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#process" class="active">Overall Process</a></li>
+        <li><a href="#onlineedit">Online Editing, Compilation, and Burning</a></li>
+		<li><a href="#localedit">Local Editing, Compilation, and Burning on Windows</a></li> 
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">Hello World Program Compilation and Burning</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Overall Process</h6>
+        <p>Similar to a mobile phone, hardware devices have both visible parts and embedded software components, commonly referred to as firmware. Firmware is also a program, mostly developed in C language. After developing the code, it needs to be compiled, and then sent to the device, which is called burning or downloading the firmware. After burning, you can restart the device to see your updates. The editors used for programming are similar to those used in regular development, such as Eclipse, VS Code, or even plain text editors.
+		</p>
+        <p>The principle of compilation: When developing Java programs, we need JDK for compilation; for PC-based C language programs, we use a PC's C compiler. Since embedded programs require an embedded-specific compiler, not a PC's C compiler, because instructions compiled by a PC cannot run on hardware devices. Therefore, the development environment must use a specialized compiler for embedded programs. The compiled firmware cannot run on a PC and needs to be burned onto the embedded device to function.</p>
+        <p>To burn the compiled firmware onto the hardware device, generally, you connect the device’s UART port to a computer via a cable and use special software on the computer to transfer the firmware through the UART port. This process requires specific wiring and is relatively complex. To simplify this, we also provide a wireless method. Since all devices come with default firmware that allows them to access our cloud system via WiFi, 4G, or Ethernet, users can log into the cloud system, use online editing and compilation to generate firmware, and automatically download it to the device over the network.</p>
+    </div>
+	<div class="help-item" id="onlineedit">
+	    <h6>Online Editing, Compilation, and Burning</h6>
+	    <p>Online editing and compilation do not require setting up a complex local compilation environment or physical wiring for burning, making it suitable for new users to try first.</p>
+		<p><a href="/dc/web/codelist" target="_blank">Click here for code</a>, find your device model in the code list, then click the <span><i class="bi bi-badge-cc"></i></span> icon to open a new window with the code editor interface. In the left navigation, find "main->app_main.c", click to edit the file. app_main.c is the entry point where the device starts executing from the void app_main(void) method. We've provided many examples, so users just need to modify accordingly. For instance, add ESP_LOGI(TAG, "Hello World!"); at an appropriate place. If you only want to try compiling, press Ctrl+S or click "Save" in the top-left corner. After saving, press Ctrl+B or click "Build" to start compiling. If you intend to upgrade the device, you also need to set the version number in version.txt under the root directory, ensuring it differs from the current device firmware version (check in <a href="/dc/web/devicelist" target="_blank">Device List</a>). Compilation occurs in the cloud, and during busy times, there may be a queue. Click "Logs" in the top-left corner to view compilation progress, where Tail x shows the last x lines of logs, with the newest logs appearing at the top.
+	    </p>
+		<p>Once compilation is complete and marked green, indicating success, click "OTA" to save the compiled firmware. Then click <a href="/dc/web/otalist" target="_blank">Upgrade</a> to see all available firmwares under your account. Select the intended firmware, change the range to ALL, and once the device is powered on, it will automatically upgrade. Upon completion, the device reboots automatically. More detailed OTA upgrade instructions can be found <a href="/dc/pub/doc?page=ota" target="_blank">here</a>.
+		</p>
+	</div>
+	<div class="help-item" id="localedit">
+	    <h6>Local Editing, Compilation, and Burning on Windows</h6>
+	    <p>Install the compilation environment.</p>
+		<p>Find the required version at https://dl.espressif.com.cn/dl/esp-idf/, such as Offline Installer v5.3.2, download it locally, e.g., d:\temp\esp-idf-tools-setup-offline-5.3.2.exe, and install. Avoid using Chinese characters or spaces in the installation path, and keep it short. Use defaults except for choosing the installation directory. Installation takes about 10 minutes without needing internet access. The installer sets the IDF_TOOLS_PATH environment variable to the installation directory and creates a desktop shortcut.
+		</p>
+		<p>In Espressif\frameworks\esp-idf-v5.3.2\components\hal\spi_hal.c, change spi_ll_set_mosi_free_level(hw, 0); to spi_ll_set_mosi_free_level(hw, 1);</p>
+		<p>Install IDE Editor</p>
+		<p>Download the Eclipse editor for Windows from https://dl.espressif.com/dl/idf-eclipse-plugin/ide/Espressif-IDE-win32.win32.x86_64/latest, typically resulting in Espressif-IDE-3.2.0-win32.win32.x86_64.zip. Unzip it to get the Espressif-IDE directory, double-click espressif-ide.exe to launch Eclipse. Choose a workspace directory under IDF_TOOLS_PATH. Exclude Windows security scanning for better performance. Under the "乐鑫" or "Espressif" menu, select "ESP-IDF Manager", add an existing IDF by selecting the installation directory under Espressif\frameworks\esp-idf-v5.3.2, choose the Git executable under Espressif\tools\idf-git\2.44.0\cmd\git.exe, and Python under Espressif\tools\idf-python\3.11.2\python.exe.
+		</p>
+		<p>Import Project</p>
+		<p>Download the project from <a href="/dc/pub/download/src" target="_blank">here</a>, unzip it to Espressif\projects. In Eclipse, go to File->Import->Espressif->Existing IDF Project, select Espressif\projects\dc01, and finish importing. In the upper-left corner, select dc01, choose esp32s3 in the input box below the menu bar, and click the axe icon (build) to compile the project. The firmware will be located at Espressif/projects/dc01/build/usb_cdc_4g_module.bin.
+		</p>
+		<p>Burning Firmware</p>
+		<p>Connect the burner adapter to the computer and the device PCB board as shown in the image. Ensure correct connection and power supply:</p>
+		<a href="/dc/image/adapter_connection.jpg" target="_blank">
+		    <img src="/dc/image/adapter_connection.jpg" alt="Adapter Connection Diagram" height="300">
+		</a>
+		<p>When first connecting the adapter to the USB port, Windows installs drivers automatically. Check Device Manager -> Ports (COM & LPT) to confirm successful driver installation. COM42 is the serial port number, which may vary each time. Restarting the computer or trying different USB ports can resolve issues.
+		</p>
+	    <a href="/dc/image/com_check.jpg" target="_blank">
+	        <img src="/dc/image/com_check.jpg" alt="Serial Port Check Diagram" height="200">
+	    </a>
+		<p>Use the CMD shortcut created on the desktop after installing the environment. Open the command line, navigate to your project directory, and execute idf.py -p COM42 flash monitor to start burning. Adjust COM42 based on your actual serial port number. Flash indicates burning, monitor enables logging after burning.
+		</p>
+	    <a href="/dc/image/burn_cmd.jpg" target="_blank">
+	        <img src="/dc/image/burn_cmd.jpg" height="200">
+	    </a>
+		<p>If burning fails, disconnect power, wait one minute, reconnect power, and retry. Normally, no need to hold buttons on the PCB unless repeatedly failing, in which case holding the button while powering on increases success chances.</p>
+		<a href="/dc/image/burn_start.jpg" target="_blank">
+		    <img src="/dc/image/burn_start.jpg" height="200">
+		</a>
+		<p>Upon successful burning, the device reboots and prints logs.</p>
+		<a href="/dc/image/burn_run.jpg" target="_blank">
+		    <img src="/dc/image/burn_run.jpg" height="200">
+		</a>
+		<p>Locally compiled firmware can also be uploaded to the cloud for remote OTA upgrades. More details on OTA upgrades can be found <a href="/dc/pub/doc?page=ota" target="_blank">here</a>.</p>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TM7705 Operation Status</title>
+    <style>
+        .badge-required {
+            background-color: red;
+            color: white;
+            padding: 2px 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h5>Description</h5>
+<p>Get the operation status of TM7705.</p>
+
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Necessary</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>In/Out</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed to 5</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5>Example</h5>
+<div>
+    <strong>Get TM7705 operation status:</strong>
+    <p><code>operate=5</code></p>
+    <p>Return:</p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><code>read_times=141</code></td>
+                <td>TM7704 read 141 times.</td>
+            </tr>
+            <tr>
+                <td><code>read_failed_times=1</code></td>
+                <td>Failed once.</td>
+            </tr>
+            <tr>
+                <td><code>reset_times=3</code></td>
+                <td>Resetted 3 times, if reading fails it will be reset.</td>
+            </tr>
+            <tr>
+                <td><code>init_failed_times=2</code></td>
+                <td>Initialization failed twice.</td>
+            </tr>
+            <tr>
+                <td><code>max_value_pin1=0</code></td>
+                <td>The maximum value read from pin 1 after device startup.</td>
+            </tr>
+            <tr>
+                <td><code>max_value_pin2=0</code></td>
+                <td>The maximum value read from pin 2 after device startup.</td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <p><code>{"id":"67ac7f4d8545421273252f44","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":5,"request":{"rawString":"operate=5","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-12T11:00:28.416153435Z","upload":{"max_value_pin1":2026,"read_failed_times":0,"max_value_pin2":0,"read_times":1,"init_failed_times":0,"reset_times":1},"uploadTime":"2025-02-12T11:00:29.378588907Z","command":3,"operate":5,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>
+
+</body>
+</html>

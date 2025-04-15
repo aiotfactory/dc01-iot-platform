@@ -1,0 +1,56 @@
+   <h5>说明</h5>
+    <p>当设备通过电池供电时，需要检测电池电量，如果低电量要提醒充电或者更换电池，比较简单的做法是检测电池的电压，比如普通聚合物锂电池，电压低于3.5V就要充电了，通过实验，也可以制定一个电压与剩余电量的关系表。</p>
+    <!-- Parameter Table -->
+    <h5>参数说明</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为12</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>获取电池电压:</strong>
+        <p><code>operate=12</code></p>
+        <p>返回，正常</p>
+		<table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td><code>adcTimes</code></td>
+                    <td>表示开机后测量了多次电池电压。</td>
+                </tr>
+				<tr>
+				    <td><code>adcTimesFailed</code></td>
+				    <td>表示开机后测量失败次数。</td>
+				</tr>
+				<tr>
+				    <td><code>adcPinOnoff</code></td>
+				    <td>测量电压需要把电池分压后，接到ESP的引脚，这会导致几个微安的电流损失，在极度苛求省电的场景，我们通过一个开关来控制这个连接，如果开关断开，就不会消耗这几个微安的电流。</td>
+				</tr>
+				<tr>
+				    <td><code>adcValue</code></td>
+				    <td>这是mV乘以10000的结果，因此该值除以10000所得值的单位为mV。</td>
+				</tr>
+			</tbody>
+		</table>	
+		<p>返回正常</p>											
+        <p><code>{"id":"67aee3f35820a82f992fef25","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":11,"request":{"rawString":"operate=12","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-14T06:34:26.714554677Z","upload":{"adcValue":8940000,"adcTimes":7,"adcTimesFailed":0,"adcPinOnoff":1},"uploadTime":"2025-02-14T06:34:27.016364458Z","command":3,"operate":12,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+		<p>返回，电压测量未开启，adcPinOnoff=0表示引脚断开</p>
+		<p><code>{"id":"67b6f2abce367f5034a00858","deviceId":"67b6f1a4ce367f5034a00513","deviceNo":"24587cd6ef0c","moduleTypeId":11,"request":{"rawString":"operate=12","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-20T09:15:20.694627771Z","upload":{"adcValue":0,"adcTimes":36,"adcTimesFailed":0,"adcPinOnoff":0},"uploadTime":"2025-02-20T09:15:23.260335790Z","command":3,"operate":12,"deviceRequestPack":5,"deviceUploadPack":5,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    </div>

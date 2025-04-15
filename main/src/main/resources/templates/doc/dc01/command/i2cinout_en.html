@@ -1,0 +1,82 @@
+<h5>Description</h5>
+<p>For application developers, concepts like I2C can be difficult to understand. Simply put, when we write programs, such as calling a socket, the program abstracts the physical layer for us. However, at the physical level, it is actually the exchange of electrical signals. For example, at a certain moment, if a pin is at a high voltage level, it represents 1; otherwise, it represents 0. Hardware achieves information exchange through these changes in high and low voltage levels.</p>
+<p>For instance, if we design our own interaction logic using two wires, "a" and "b," connected to corresponding pins on two chips, we might agree that the voltage on wire "b" changes every 1ms. Wire "a" would then be used for data transmission. When the voltage on "b" changes—either from high to low or low to high—the receiving chip measures the voltage on wire "a." If it's high, it represents data 1; if it's low, it represents data 0. Thus, the sending chip only needs to control the timing and adjust the voltage on wire "a" to high or low within the specified 1ms interval to transmit data. This is a simple definition of a hardware interface. The industry has defined many similar interfaces, some using two wires, others using three or more wires, but the underlying principles are largely the same. Generally, we don’t need to understand all the details of the protocol because the underlying drivers have already implemented these voltage controls.</p>
+<p>I2C is one such protocol, and many sensors use I2C for data transmission.</p>
+<p>On the circuit board, GPIO_ESP_42 (sda) and GPIO_ESP_41 (scl) are used as the I2C communication pins. I2C can connect multiple devices. For example, transmitting chip A can send data to other devices B1, B2, and B3. To avoid conflicts, the I2C protocol introduces the concept of device physical addresses. Unlike SPI, which selects a sensor by pulling the CS pin low, I2C includes an address byte during both sending and receiving operations. For example, if B1’s address is 0x10, B2’s is 0x11, and B3’s is 0x12, communication with a specific device is distinguished by its address. Each sensor supporting I2C will specify its address in its manual. Could there be conflicts between devices from different manufacturers? Yes, it’s possible. There is no international organization responsible for coordinating address allocation. To solve this issue, a sensor often provides two addresses, selectable via hardware connections, such as connecting a specific pin of the sensor to GND or power supply voltage to choose the desired address.</p>
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 11</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>clock_speed_hz</code></td>
+            <td>The clock frequency of I2C. Both the ESP manual and the sensor manual will specify the supported I2C frequency range. Select a value within the overlapping range. Typically, 100000 (100 kHz) is chosen.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>4</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>flag</code></td>
+            <td>1 indicates a write operation, and 0 indicates a read operation.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>addr</code></td>
+            <td>The I2C address of the sensor.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>rx_data_len</code></td>
+            <td>The number of bytes to read in this operation.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>4</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>tx_data</code></td>
+            <td>This represents the data to be transmitted. There is no separate field for tx_data_len; the cloud will calculate and append the data length based on the actual value set in tx_data before sending it to the device. Hexadecimal notation is used here, prefixed with 0x. For example, to transmit the value 3, it would be represented as 0x03, where 0 represents the upper 4 bits of the value being 0, and 3 represents the lower 4 bits being 3. For example, transmitting the lowercase letter "a" would be represented as 0x61, since hexadecimal 0x61 corresponds exactly to the ASCII code for "a."</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>x</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Write data 0x2c0d to the sensor with I2C address 0x44:</strong>
+    <p><code>operate=11 clock_speed_hz=100000 addr=0x44 flag=1 tx_data=0x2c0d</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67b593ec64c9f35cc7bf5260","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":10,"request":{"rawString":"operate=11 clock_speed_hz=100000 addr=0x44 flag=1 tx_data=0x2c0d","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T08:18:51.312693111Z","upload":null,"uploadTime":"2025-02-19T08:18:52.905734597Z","command":3,"operate":11,"info":"i2c write addr 0x44 size 2 success","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <hr>
+    <strong>Read 6 bytes of data from the sensor with I2C address 0x44:</strong>
+    <p><code>operate=11 clock_speed_hz=100000 addr=0x44 flag=0 rx_data_len=6</code></p>
+    <p>Response, cmdResponse content is the returned value in hex format</p>
+    <p><code>{"id":"67b593ec64c9f35cc7bf5260","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":10,"request":{"rawString":"operate=11 clock_speed_hz=100000 addr=0x44 flag=0 rx_data_len=6","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T08:18:51.312693111Z","upload":{"hexContent":"63ca65cc8421"},"uploadTime":"2025-02-19T08:18:52.905734597Z","command":3,"operate":11,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <p>Response, failure</p>
+    <p><code>{"id":"67b593ec64c9f35cc7bf5260","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":10,"request":{"rawString":"operate=11 clock_speed_hz=100000 addr=0x44 flag=1 tx_data=0x30a2","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T08:18:51.312693111Z","upload":null,"uploadTime":"2025-02-19T08:18:52.905734597Z","command":3,"operate":11,"info":"i2c write addr 0x44 size 2 failed due to 0xffffffff","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

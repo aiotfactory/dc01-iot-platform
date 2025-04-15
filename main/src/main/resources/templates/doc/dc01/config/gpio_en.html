@@ -1,0 +1,42 @@
+{
+    "moduleName": "MODULE_GPIO",
+    "moduleComments": "Used to configure related parameters of the GPIO module, such as on/off status, upload interval, pin selection, etc.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "gpio_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "Used for configuring the on/off status of the GPIO module. 0 indicates off, 1 indicates on."
+        },
+        {
+            "order": 2,
+            "name": "gpio_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff seconds",
+            "comments": "Configures the interval time (seconds) for GPIO data upload."
+        },
+        {
+            "order": 3,
+            "name": "gpio_esp_1 gpio_esp_2 gpio_esp_3 gpio_esp_4 gpio_esp_5 gpio_esp_6 gpio_esp_7 gpio_esp_8 gpio_esp_9 gpio_esp_10 gpio_esp_11 gpio_esp_14 gpio_esp_15 gpio_esp_16 gpio_esp_17 gpio_esp_18",
+            "sample": "1",
+            "range": "1,2,30,31,32,33,40,41,42,50,51,52,60,61,62,70,71,72",
+            "comments": "Configure ESP pins. 1: output low, 2: output high, 30(ADC_ATTEN_DB_0, no gain ADC measurement), 31(ADC_ATTEN_DB_2_5, 2.5dB gain ADC measurement), 32(ADC_ATTEN_DB_6, 6dB gain ADC measurement), 33(ADC_ATTEN_DB_12, 12dB gain ADC measurement), 40(set rising edge interrupt trigger, initial floating pin), 41(set rising edge interrupt trigger, initial pull-down pin), 42(set rising edge interrupt trigger, initial pull-up pin), 50(set falling edge interrupt trigger, initial floating pin), 51(set falling edge interrupt trigger, initial pull-down pin), 52(set falling edge interrupt trigger, initial pull-up pin), 60(set both rising and falling edge interrupt triggers, initial floating pin), 61(set both rising and falling edge interrupt triggers, initial pull-down pin), 62(set both rising and falling edge interrupt triggers, initial pull-up pin), 70(no interrupt, input only, initial floating pin), 71(no interrupt, input only, initial pull-down pin), 72(no interrupt, input only, initial pull-up pin). All mentioned pins support ADC."
+        },
+        {
+            "order": 4,
+            "name": "gpio_esp_0 gpio_esp_21 gpio_esp_38 gpio_esp_39 gpio_esp_40 gpio_esp_41 gpio_esp_42 gpio_esp_45 gpio_esp_46 gpio_esp_48",
+            "sample": "71",
+            "range": "1,2,40,41,42,50,51,52,60,61,62,70,71,72",
+            "comments": "Configure ESP pins without ADC functionality. 1: output low, 2: output high, 40(set rising edge interrupt trigger, initial floating pin), 41(set rising edge interrupt trigger, initial pull-down pin), 42(set rising edge interrupt trigger, initial pull-up pin), 50(set falling edge interrupt trigger, initial floating pin), 51(set falling edge interrupt trigger, initial pull-down pin), 52(set falling edge interrupt trigger, initial pull-up pin), 60(set both rising and falling edge interrupt triggers, initial floating pin), 61(set both rising and falling edge interrupt triggers, initial pull-down pin), 62(set both rising and falling edge interrupt triggers, initial pull-up pin), 70(no interrupt, input only, initial floating pin), 71(no interrupt, input only, initial pull-down pin), 72(no interrupt, input only, initial pull-up pin)."
+        },
+        {
+            "order": 5,
+            "name": "gpio_ext_io7 gpio_ext_oc1 gpio_ext_oc5 gpio_ext_oc6 gpio_ext_oc9 gpio_ext_oc10 gpio_ext_oc11 gpio_ext_oc12 gpio_ext_oc13 gpio_ext_oc14 gpio_ext_io0 gpio_ext_io1 gpio_ext_io2 gpio_ext_io3",
+            "sample": "2",
+            "range": "1,2",
+            "comments": "Configure EXT extension pins. 1: output low, 2: output high. No ADC or interrupt support."
+        }
+    ],
+    "status": "ok"
+}

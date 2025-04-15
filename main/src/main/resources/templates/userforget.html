@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="#{iot_factory}">IOT Factory</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .form-signin {
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+        .form-floating > label {
+            pointer-events: none;
+        }
+		.legal-info {
+		    color: #6c757d; /* Bootstrap 默认的灰色 */
+		    font-size: 0.875rem; /* 较小的字体 */
+		}
+    </style>
+</head>
+<body class="d-flex align-items-center min-vh-100 bg-body-tertiary">
+    <main class="form-signin w-100 m-auto"> 
+        <form id="loginForm">
+           <h1 class="h3 mb-3 fw-normal" th:text="#{enter_your_email}">Enter your email</h1>
+            <div class="form-floating">
+                <input type="email" class="form-control" name="email" id="floatingEmail" placeholder="name@example.com">
+                <label for="floatingEmail" th:text="#{email_address}">Email address</label>
+            </div>
+			<div id="captchaDiv" class="form-group my-3">
+			    <div class="d-flex">
+			        <input type="text" class="form-control" id="captcha" name="captcha" th:placeholder="#{captcha}" required>
+			        <img id="captchaImage" src="/dc/pub/captcha" alt="captcha" class="ml-2" style="cursor: pointer;" onclick="refreshCaptcha()">
+			    </div>
+			</div>
+			<div id="codeDiv" class="form-floating d-none">
+			    <input type="text" class="form-control" name="code" id="floatingCode" placeholder="123456">
+			    <label for="floatingCode" th:text="#{verification_code}">Verification code</label>
+			</div>
+			<div id="password1Div" class="form-floating d-none">
+			    <input type="password" class="form-control" name="password1" id="floatingPassword1" th:placeholder="#{new_password}">
+			    <label for="floatingPassword1" th:text="#{new_password}">New password</label>
+			</div>
+			<div id="password2Div" class="form-floating d-none">
+			    <input type="password" class="form-control" name="password2" id="floatingPassword2" th:placeholder="#{new_password_again}">
+			    <label for="floatingPassword2" th:text="#{new_password_again}">New password again</label>
+			</div>
+			<input type="hidden" name="step" id="floatingStep" value="1">
+            <button class="btn btn-primary w-100 py-2  my-3" id="submitButton" type="button" th:text="#{next}">Next</button>
+            <div id="responseMessage" class="mt-3"></div>
+            <div id="loadingSpinner" class="spinner-border text-primary d-none" role="status">
+                <span class="visually-hidden" th:text="#{loading}">Loading...</span>
+            </div>
+        </form>
+    </main>
+    <script src="/dc/js/bootstrap.bundle.min.js"></script>
+	<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+    <script th:inline="javascript">
+
+	    document.querySelector('#submitButton').addEventListener('click', async () => {
+	    	event.preventDefault(); 
+	        const formData = new FormData(document.querySelector('#loginForm'));
+	        const data = Object.fromEntries(formData);
+	        document.getElementById('loadingSpinner').classList.remove('d-none');
+	        const responsemsg=document.querySelector('#responseMessage');
+	        try {
+				const result = await (await makeRequest('POST','/dc/pub/userforgetrefresh',data,true)).json();
+				refreshCaptcha();
+	            if(result.status)
+				{
+					if(result.step)
+					{
+						if(result.step>1)
+							document.getElementById('codeDiv').classList.remove('d-none');
+						if(result.step>2)
+						{
+							document.getElementById('password1Div').classList.remove('d-none');	
+							document.getElementById('password2Div').classList.remove('d-none');	
+						}
+						if(result.step==4)
+						{
+							setTimeout(function() {
+							    window.location.href = '/dc/';
+							}, 2000);
+						}
+						document.getElementById('floatingStep').value = result.step;
+					}
+					if(result.status=="ok")
+					{
+						responsemsg.innerHTML = `<div class="alert alert-danger" role="alert">${result.info}</div>`;
+					}else
+					{
+						responsemsg.innerHTML = `<div class="alert alert-danger" role="alert">${result.status}</div>`;
+					}
+				}
+	        } catch (error) {
+	        	responsemsg.innerHTML = `<div class="alert alert-danger" role="alert">Error: ${error.message}</div>`;
+	        } finally {
+	            document.querySelector('#loadingSpinner').classList.add('d-none');
+	        }
+	    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_LORA Module Introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#periodupload">Automatic Data Reporting</a></li>
+        <li><a href="#interruptupload">Interrupt Data Reporting</a></li>
+        <li><a href="#commandupload">Command Data Reporting</a></li>
+        <li><a href="#forward">Data Forwarding</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_LORA Module Introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>The DC01 product has an LORA module that can be set to either transmit or receive data. For more details, please refer to the <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">LORA section</a>.</p>
+    </div>
+    <div class="help-item" id="periodupload">
+        <h6>Automatic Data Reporting</h6>
+        <p>Automatically reported data includes the status information of the LORA operation. This mainly refers to the number of times Tx and Rx have occurred as well as the number of errors encountered. Interrupt reporting actually means that when the LORA is in listening mode and receives information, it automatically reports it. For more details, please refer to the <a href="/pub/doc?page=command_index&deviceType=dc01" target="_blank">LORA section</a>.</p>
+    </div>
+    <div class="help-item" id="interruptupload">
+        <h6>Interrupt Data Reporting</h6>
+        <p>Interrupt reporting actually means that when the LORA is in listening mode and receives information, it automatically reports it. For more details, please refer to the <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">LORA section</a>.</p>
+    </div>
+    <div class="help-item" id="commandupload">
+        <h6>Command Data Reporting</h6>
+        <p>Data can be triggered for transmission by sending commands to the device. Please refer to the <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">LORA section</a> to understand which commands can be executed and the format of the reported data.</p>
+    </div>
+    <div class="help-item" id="forward">
+        <h6>Data Forwarding</h6>
+        <p>To view how to configure the module's data forwarding, please click <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">here</a>. To view the format of forwarded data, please click <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">here</a>.</p>
+    </div>
+</div>
+</body>
+</html>

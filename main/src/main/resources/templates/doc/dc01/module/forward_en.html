@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_FORWARD module introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#periodupload">Automatic Data Reporting</a></li>
+        <li><a href="#commandupload">Command Data Reporting</a></li>
+        <li><a href="#forward">Data Forwarding</a></li>
+        <li><a href="#runtimeinfo">Runtime Information</a></li>
+    </ul>
+</div>
+
+<!-- Main content area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_FORWARD module introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>To facilitate customer expansion functions, this module is provided. Users can execute commands through the WEB page or API call methods. The command text will be sent to the device. Currently, there is no processing on the device. Customers can modify the C language code (forward_util.c) on the device to process it and then return custom content. After the returned content is reported to the cloud, the cloud does not perform any business processing but only forwards it to the caller.</p>
+    </div>
+    <div class="help-item" id="periodupload">
+        <h6>Automatic Data Reporting</h6>
+        <p>The information can be configured for automatic reporting. <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">Click here</a> to view the configuration of the MODULE_FORWARD module.
+        </p>
+    </div>
+    <div class="help-item" id="commandupload">
+        <h6>Command Data Reporting</h6>
+        <p>Sending commands to the device will also trigger data reporting from the device. <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">Click here</a> to view the related chapters of the MODULE_FORWARD module to understand which commands can be executed and the format of the reported data.
+        </p>
+    </div>
+    <div class="help-item" id="forward">
+        <h6>Data Forwarding</h6>
+        <p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">Click here</a> to see how to configure the data forwarding of the module.
+           <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">Click here</a> to see the format of the forwarded data.
+        </p>
+    </div>
+    <div class="help-item" id="runtimeinfo">
+        <h6>Runtime Information</h6>
+        <p><a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">Click here</a> to view the related chapters of the MODULE_FORWARD module to understand the meanings of various fields.
+        </p>
+    </div>
+</div>
+</body>
+</html>

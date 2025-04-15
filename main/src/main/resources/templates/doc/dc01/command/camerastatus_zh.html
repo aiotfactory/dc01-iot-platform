@@ -1,0 +1,49 @@
+   <h5>说明</h5>
+    <p>获取相机模块的运行状态。</p>
+    <!-- Parameter Table -->
+    <h5>参数说明</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为6</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>获取运行状态:</strong>
+        <p><code>operate=6</code></p>
+        <p>返回</p>
+		<table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td><code>times_inited=0</code></td>
+                    <td>相机初始化次数，如果一次初始化不成功，会重试，这里记录次数。</td>
+                </tr>
+				<tr>
+				    <td><code>times_take=0</code></td>
+				    <td>照片拍摄次数。</td>
+				</tr>
+				<tr>
+				    <td><code>times_failed=0</code></td>
+				    <td>拍摄失败次数。</td>
+				</tr>
+			</tbody>
+		</table>												
+        <p><code>{"id":"67b4559f4db5084335f3d457","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":6,"request":{"rawString":"operate=6","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-18T09:40:44.637306668Z","upload":{"times_failed":0,"times_inited":1,"times_take":10},"uploadTime":"2025-02-18T09:40:47.851490120Z","command":3,"operate":6,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    </div>

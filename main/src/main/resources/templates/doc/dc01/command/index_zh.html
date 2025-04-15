@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帮助 - 命令使用说明</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	    .command-intro {
+	        background-color: #f8f9fa;
+	        padding: 20px;
+	        border-radius: 8px;
+	        margin-bottom: 30px;
+	        border-left: 4px solid #007bff;
+	    }
+	    .command-intro h5 {
+	        margin-bottom: 15px;
+	    }
+	    .badge-required {
+	        background-color: #dc3545;
+	    }
+	    .badge-optional {
+	        background-color: #28a745;
+	    }
+	</style>
+</head>
+<body>
+
+<div class="container my-5">
+    <!-- Page Title -->
+    <div class="text-center mb-4">
+        <h1>帮助 - 如何在设备上运行命令</h1>
+        <p class="text-muted">数据流: 你的应用 → 云服务器 → 设备 → 云服务器 → 你的应用</p>
+    </div>
+    <div class="command-intro">
+        <h5>命令运行机制说明</h5>
+        <p>你的应用，云服务器，设备之间交互:</p>
+        <ul>
+            <li><strong>你的应用:</strong> 你的应用向云服务器发送JSON调用，包含具体命令。</li>
+            <li><strong>云服务器:</strong> 命令被云服务器接收和检查，符合规范的命令会被发送给设备，如果设备不在线，云服务器也会知晓并返回告知你的应用。</li>
+            <li><strong>设备:</strong> 设备接收云服务器命令，并执行，然后把执行结果返回给云服务器。</li>
+            <li><strong>你的应用:</strong> 最后云服务器把设备返回的结果返回给你的调用，如果过程中产生任何错误，云服务器也会返回错误给你的应用。</li>
+        </ul>
+        <p>有三种方式发送命令到设备：</p>
+        <p>1) 在模块展示页面的下方，有黑色的执行命令窗口，可以直接输入命令,如 <code>operate=2 gpio_ext_no=8 status=1</code> 然后按回车执行，可以通过上下箭头查找历史命令。</p>
+        <p>2) 类似这样的http请求，其中命令用引号括起来作为cmd的参数 <code>/dc/api/call?key=e8e46491a218c1445d352490addbaabc&api=cmd&deviceId=672d80d52108ac717734bb4e&cmd="operate=2 gpio_ext_no=8 status=1"</code>
+        	实际上是调用平台的API，输入需要执行的命令，平台会负责推送命令到设备，API的详细使用<a href="/dc/web/doc?page=api_index&deviceType=dc01" target="_blank">点击</a>查看。
+        </p>
+        <p>3) 在模块展示页面的中部靠上位置，'运行状态'区域的右侧有刷新按钮，点击会发送刷新命令到设备。</p>
+    </div>
+    <div class="accordion" id="commandAccordion">
+    </div>
+</div>
+<script src="/dc/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+	window.onload = function() {
+		let i=1;
+	    createAccordionItem(i++, 'EXT GPIO 控制', '/dc/pub/doc?page=command_extgpio&deviceType=dc01');
+	    createAccordionItem(i++, 'ESP GPIO 控制', '/dc/pub/doc?page=command_espgpio&deviceType=dc01');
+		createAccordionItem(i++, 'GPIO 状态', '/dc/pub/doc?page=command_gpiostatus&deviceType=dc01');
+		createAccordionItem(i++, 'SPI 传输', '/dc/pub/doc?page=command_spiinout&deviceType=dc01');
+		createAccordionItem(i++, 'SPI 状态', '/dc/pub/doc?page=command_spistatus&deviceType=dc01');
+		createAccordionItem(i++, 'I2C 传输', '/dc/pub/doc?page=command_i2cinout&deviceType=dc01');
+		createAccordionItem(i++, 'UART 传输', '/dc/pub/doc?page=command_uartinout&deviceType=dc01');
+		createAccordionItem(i++, 'RS485 传输', '/dc/pub/doc?page=command_rs485inout&deviceType=dc01');
+		createAccordionItem(i++, 'TM7705 传输', '/dc/pub/doc?page=command_tm7705inout&deviceType=dc01');
+		createAccordionItem(i++, 'TM7705 状态', '/dc/pub/doc?page=command_tm7705status&deviceType=dc01');
+		createAccordionItem(i++, 'CAMERA 相机拍照', '/dc/pub/doc?page=command_camerainout&deviceType=dc01');
+		createAccordionItem(i++, 'CAMERA 相机状态', '/dc/pub/doc?page=command_camerastatus&deviceType=dc01');
+		createAccordionItem(i++, 'LORA 传输', '/dc/pub/doc?page=command_lorainout&deviceType=dc01');
+		createAccordionItem(i++, 'BATADC 电池电压', '/dc/pub/doc?page=command_batadc&deviceType=dc01');
+		createAccordionItem(i++, 'META 设备状态', '/dc/pub/doc?page=command_metastatus&deviceType=dc01');
+		createAccordionItem(i++, 'CONFIG 配置信息', '/dc/pub/doc?page=command_config&deviceType=dc01');
+		createAccordionItem(i++, 'AHT20 传输', '/dc/pub/doc?page=command_aht20&deviceType=dc01');
+	}
+	function createAccordionItem(index, title, url) {
+		 const id = String(index).padStart(2, '0');
+	     const accordion = document.getElementById('commandAccordion');
+	     const accordionItem = document.createElement('div');
+	     accordionItem.className = 'accordion-item';
+	     accordionItem.id = `item${id}`;
+
+	     const headerHtml = `
+	         <h2 class="accordion-header" id="heading${id}">
+	             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+	                 data-bs-target="#collapse${id}" aria-expanded="false" aria-controls="collapse${id}" 
+	                 onclick="loadAccordionContent('${id}', '${url}')">
+	                 <span class="me-2 badge bg-primary">${id}</span> ${title}
+	             </button>
+	         </h2>
+	     `;
+
+	     const contentHtml = `
+	         <div id="collapse${id}" class="accordion-collapse collapse" aria-labelledby="heading${id}" data-bs-parent="#commandAccordion">
+	             <div class="accordion-body">Loading...</div>
+	         </div>
+	     `;
+
+	     accordionItem.innerHTML = headerHtml + contentHtml;
+	     accordion.appendChild(accordionItem);
+	 }
+
+	 function loadAccordionContent(id, url) {
+	     const accordionBody = document.querySelector(`#collapse${id} .accordion-body`);
+	     if (accordionBody.dataset.loaded === 'true') return;
+
+	     fetch(url)
+	         .then((response) => response.ok ? response.text() : Promise.reject('Failed to load content'))
+	         .then((content) => {
+	             accordionBody.innerHTML = content;
+	             accordionBody.dataset.loaded = 'true';
+	         })
+	         .catch(() => {
+	             accordionBody.innerHTML = 'Error loading content.';
+	         });
+	 }
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+{
+    "moduleName": "MODULE_LORA",
+    "moduleComments": "用于配置LoRa模块的相关参数，如工作模式、频率、传输功率等。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "lora_mode",
+            "sample": "0",
+            "range": "0-1",
+            "comments": "LoRa模块工作模式，0表示关闭，1表示接收模式。"
+        },
+        {
+            "order": 2,
+            "name": "lora_fre",
+            "sample": "442800000",
+            "range": "300000000-990000000",
+            "comments": "LoRa模块工作频率，范围为300MHz到990MHz。"
+        },
+        {
+            "order": 3,
+            "name": "lora_tx_power",
+            "sample": "2",
+            "range": "0-22",
+            "comments": "LoRa模块的传输功率，单位为dBm，取值范围为0到22。"
+        },
+        {
+            "order": 4,
+            "name": "lora_bandwidth",
+            "sample": "1",
+            "range": "0-3",
+            "comments": "LoRa模块的带宽，支持的值为0-3，分别代表不同的带宽设置，[0: 125 kHz,1: 250 kHz,2: 500 kHz,3: Reserved]。"
+        },
+        {
+            "order": 5,
+            "name": "lora_spreading_factor",
+            "sample": "10",
+            "range": "7-12",
+            "comments": "LoRa模块的扩频因子，取值范围为7到12，一般最大用到11。"
+        },
+        {
+            "order": 6,
+            "name": "lora_codingrate",
+            "sample": "1",
+            "range": "1-4",
+            "comments": "LoRa模块的纠错编码率，取值范围为1到4，表示不同的编码方式，[1: 4/5,2: 4/6,3: 4/7,4: 4/8]。"
+        },
+        {
+            "order": 7,
+            "name": "lora_preamble_len",
+            "sample": "8",
+            "range": "1-100",
+            "comments": "LoRa模块的前导码长度，取值范围为1到100。"
+        },
+        {
+            "order": 8,
+            "name": "lora_fix_len_payload_on",
+            "sample": "0",
+            "range": "0-1",
+            "comments": "启用或禁用固定长度载荷。0为禁用，1为启用。"
+        },
+        {
+            "order": 9,
+            "name": "lora_iq_inver_on",
+            "sample": "0",
+            "range": "0-1",
+            "comments": "启用或禁用IQ反转。0为禁用，1为启用，一般为0。"
+        },
+        {
+            "order": 10,
+            "name": "lora_rx_timeout",
+            "sample": "5000",
+            "range": "100-300000",
+            "comments": "LoRa接收超时，单位为毫秒，范围为100到300,000。"
+        },
+        {
+            "order": 11,
+            "name": "lora_rx_buf_len",
+            "sample": "1024",
+            "range": "16-4096",
+            "comments": "LoRa模块的接收缓冲区长度，单位字节，范围为16到4096。"
+        },
+        {
+            "order": 12,
+            "name": "lora_tx_timeout",
+            "sample": "5000",
+            "range": "100-300000",
+            "comments": "LoRa传输超时，单位为毫秒，范围为100到300,000。"
+        },
+        {
+            "order": 13,
+            "name": "lora_upload_interval_seconds",
+            "sample": "50",
+            "range": "1-0xffffffff",
+            "comments": "LoRa模块的上传间隔时间，单位为秒。"
+        }
+    ],
+    "status": "ok"
+}

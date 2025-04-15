@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{fragments/nav :: head(#{api_setting})}"></th:block>
+<body>
+ <th:block th:insert="~{fragments/nav :: search}"></th:block>
+ 
+<div class="container-fluid">
+  <div class="row">
+   <th:block th:insert="~{fragments/nav :: menu}"></th:block>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+	  <th:block th:insert="~{fragments/nav :: breadcrumb}"></th:block>
+	  <div class="d-flex align-items-center">
+	      <h2 class="me-2" th:text="#{api_setting}">API Setting</h2>
+		  <a href="/dc/pub/doc?page=interface#c1" target="_blank"><i class="bi bi-question-circle fs-6 me-2"></i></a> 
+	      <a class="icon-link mb-1" href="javascript:void(0);" onclick="showCreateItemModal()" rel="noopener" th:text="#{reset_key}">
+	          Reset Key
+	      </a>
+	  </div>
+      <div class="table-responsive small">
+        <table class="table table-striped table-sm" id="apiBody">
+        </table>
+      </div>
+
+	  <div class="d-flex align-items-center">
+	      <h2 class="me-2" th:text="#{forward}">Forward</h2>
+		  <a href="/dc/pub/doc?page=interface#c2" target="_blank"><i class="bi bi-question-circle fs-6 me-2"></i></a> 
+		  <a class="icon-link mb-1 me-3" href="javascript:void(0);" onclick="testURL()" rel="noopener" th:text="#{test}">
+		      Test
+		  </a>
+		  <a class="icon-link mb-1  me-3" href="javascript:void(0);" onclick="updateURL()" rel="noopener" th:text="#{update}">
+		      Update
+		  </a>
+		  <a id="forwardStatusButton" class="icon-link mb-1  me-3"  href="javascript:void(0);" th:text="#{continue}">
+		      Continue
+		  </a>
+	  </div>
+	  <div class="row mb-3">
+	      <div class="col-12 col-md-8 col-lg-6">
+	          <input type="url" class="form-control" id="forwardUrl" th:placeholder="#{enter_url_recv_msg}">
+	      </div>
+	  </div>
+	  
+	  <div class="d-flex align-items-center">
+	    <h2 class="me-2" th:text="#{email_inform}">Email Inform</h2>
+		<a href="/dc/pub/doc?page=interface#c3" target="_blank"><i class="bi bi-question-circle fs-6 me-2"></i></a> 
+	    <a class="icon-link mb-1  me-3" href="javascript:void(0);" onclick="updateEmail()" rel="noopener" th:text="#{update}">
+	        Update
+	    </a>
+	    <a id="forwardEmailStatusButton" class="icon-link mb-1  me-3"  href="javascript:void(0);" th:text="#{continue}">
+	        Continue
+	    </a>
+	  </div>
+	  <div class="row mb-3">
+	      <div class="col-12 col-md-8 col-lg-6">
+			  <label for="forwardEmail" class="form-label" th:text="#{email_comma}">Email:</label>
+	          <input type="email" class="form-control" id="forwardEmail" th:placeholder="#{enter_email_and_recv_msg}">
+			  <input type="number" class="form-control" id="forwardEmailVerificationCode" th:placeholder="#{enter_verification_code_and_update}">
+			  <label for="forwardEmailRule" class="form-label" id="forwardEmailRuleLabel" th:text="#{match_words}"></label>
+			  <input type="text" class="form-control" id="forwardEmailRule" th:placeholder="#{enter_content_match_upload_notify}">
+	      </div>
+	  </div>
+
+	  <div class="d-flex align-items-center">
+	    <h2 class="me-2" th:text="#{email_smtp}">Email SMTP</h2>
+	  <a href="/dc/pub/doc?page=interface#c3" target="_blank"><i class="bi bi-question-circle fs-6 me-2"></i></a> 
+	    <a class="icon-link mb-1  me-3" href="javascript:void(0);" onclick="updateSmtp()" rel="noopener" th:text="#{update}">
+	        Update
+	    </a>
+	  </div>
+	  <div class="row mb-3">
+	      <div class="col-12 col-md-8 col-lg-6">
+		  	  <label for="smtpServer" class="form-label" th:text="#{smtp_server}">SMTP Server:</label>
+	          	<input type="text" class="form-control" id="smtpServer" th:placeholder="#{enter_smtp_server}">
+			  <label for="smtpPort" class="form-label" th:text="#{smtp_port}">SMTP Port:</label>
+		      	<input type="number" class="form-control" id="smtpPort" th:placeholder="#{enter_smtp_port}">
+			  <label for="smtpUserName" class="form-label" th:text="#{smtp_user_name}">SMTP User Name:</label>
+			  	<input type="text" class="form-control" id="smtpUserName" th:placeholder="#{enter_smtp_user_name}">
+			  <label for="smtpPassword" class="form-label" th:text="#{smtp_user_password}">SMTP User Password:</label>
+				<input type="text" class="form-control" id="smtpPassword" th:placeholder="#{enter_smtp_user_password}">
+			  <label for="smtpAuth" class="form-label" th:text="#{smtp_auth}">SMTP Auth:</label>
+				<input type="number" class="form-control" id="smtpAuth" th:placeholder="#{enter_smtp_auth}">
+			  <label for="smtpTls" class="form-label" th:text="#{smtp_tls}">SMTP TLS:</label>
+				<input type="number" class="form-control" id="smtpTls" th:placeholder="#{enter_smtp_tls}">
+			  <label for="smtpSsl" class="form-label" th:text="#{smtp_ssl}">SMTP SSL:</label>
+				<input type="number" class="form-control" id="smtpSsl" th:placeholder="#{enter_smtp_ssl}">		  	
+	      </div>
+	  </div>
+	  	  
+      <h2 th:text="#{api_doc}">API Doc</h2>
+      	<p><a href="/dc/web/doc?page=api&deviceType=dc01" target="_blank" th:text="#{docs}">docs</a></p>
+      </div>
+	  
+    </main>
+   <th:block th:insert="~{fragments/nav :: modalError}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalConfirm}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalCreateItem}"></th:block>
+  </div>
+</div>
+
+<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+<script  th:inline="javascript">
+
+let forwardEmailStatus=0;
+
+function forwardStatusButtonInit(result)
+{
+	const forwardStatusButton = document.getElementById('forwardStatusButton');
+	if((result.allowForward)&&(result.allowForward==true))
+	    forwardStatusButton.textContent=[[#{pause}]];
+	else
+		forwardStatusButton.textContent=[[#{continue}]];
+	forwardStatusButton.addEventListener('click', function() {
+		let tmpMsg=[[#{pause_forwarding}]]; 
+		let resultLabel=[[#{continue}]];
+		let forward=0;
+		if(forwardStatusButton.textContent==[[#{continue}]]){
+			tmpMsg=[[#{continue_forwarding}]] ;
+			forward=1;
+			resultLabel=[[#{pause}]];
+		}
+		showConfirmModal([[#{confirm}]],tmpMsg,function() {
+			(async () => {
+				const result2 = await (await makeRequest('POST','/dc/web/apisettingrefresh?action=updateForward&forward='+forward,null,false)).json();
+				if(result2.status)
+				{
+					if(result2.status=="ok")
+						forwardStatusButton.textContent=resultLabel;
+					else
+						showErrorModal(result2.status);
+				}
+			})();
+		});
+	});
+}
+function forwardEmailStatusButtonInit(result)
+{
+	//0:no email, 1:pending verification, 2: normal work, 3:pause
+	const forwardEmailStatusButton = document.getElementById('forwardEmailStatusButton');
+	if((result.forwardEmailStatus==undefined)||(result.forwardEmailStatus<2))
+	{
+		forwardEmailStatusButton.style.display = "none";
+		return;
+	}
+	forwardEmailStatusButton.style.display = "block";
+	if(result.forwardEmailStatus==2)
+	    forwardEmailStatusButton.textContent=[[#{pause}]];
+	else
+		forwardEmailStatusButton.textContent=[[#{continue}]];
+	forwardEmailStatusButton.addEventListener('click', function() {
+		let tmpMsg=[[#{pause_forwarding}]];
+		let resultLabel=[[#{continue}]];
+		let forward=3;
+		if(forwardEmailStatusButton.textContent==[[#{continue}]]){
+			tmpMsg=[[#{continue_forwarding}]] ;
+			forward=2;
+			resultLabel=[[#{pause}]];
+		}
+		showConfirmModal([[#{confirm}]],tmpMsg,function() {
+			(async () => {
+				const result2 = await (await makeRequest('POST','/dc/web/apisettingrefresh?action=updateForwardEmail&forwardEmailStatus='+forward,null,false)).json();
+				if(result2.status)
+				{
+					if(result2.status=="ok")
+						forwardEmailStatusButton.textContent=resultLabel;
+					else
+						showErrorModal(result2.status);
+				}
+			})();
+		});
+	});
+}
+
+
+function updateSmtp() {
+    const smtpServer = document.getElementById('smtpServer').value.trim();
+    const smtpPort = document.getElementById('smtpPort').value.trim();
+    const smtpUserName = document.getElementById('smtpUserName').value.trim();
+    const smtpPassword = document.getElementById('smtpPassword').value.trim();
+    const smtpAuth = document.getElementById('smtpAuth').value.trim();
+    const smtpTls = document.getElementById('smtpTls').value.trim();
+    const smtpSsl = document.getElementById('smtpSsl').value.trim();
+    if (!smtpServer || !smtpPort || !smtpUserName || !smtpPassword || !smtpAuth || !smtpTls || !smtpSsl) {
+        showErrorModal([[#{error_smtp_enter_all}]]);
+        return;
+    }
+    if (!['0', '1'].includes(smtpAuth)) {
+        showErrorModal([[#{error_smtp_auth}]]);
+        return;
+    }
+    if (!['0', '1'].includes(smtpTls)) {
+        showErrorModal([[#{error_smtp_tls}]]);
+        return;
+    }
+    if (!['0', '1'].includes(smtpSsl)) {
+        showErrorModal([[#{error_smtp_ssl}]]);
+        return;
+    }
+    (async () => {
+        const requestBody = {
+            smtpServer: smtpServer,
+            smtpPort: parseInt(smtpPort, 10), 
+            smtpUserName: smtpUserName,
+            smtpPassword: smtpPassword,
+            smtpAuth: smtpAuth,
+            smtpTls: smtpTls,
+            smtpSsl: smtpSsl
+        };
+		
+		const result = await (await makeRequest('POST', '/dc/web/apisettingrefresh?action=updateSmtp', requestBody, false)).json();
+		if(result.status)
+		{
+			if(result.status=="ok")
+				showErrorModal(result.info);
+			else
+				showErrorModal(result.status);
+		}
+    })();
+}
+
+function updateEmail()
+{
+	const forwardEmailInput=document.getElementById('forwardEmail');
+	const forwardEmailVerificationCodeInput=document.getElementById('forwardEmailVerificationCode');
+	const forwardEmailRuleInput=document.getElementById('forwardEmailRule');
+	
+	let forwardEmail=forwardEmailInput.value;
+	let forwardEmailVerificationCode=forwardEmailVerificationCodeInput.value;
+	let forwardEmailRule=forwardEmailRuleInput.value;
+	
+	if((forwardEmailVerificationCode!=null)&&(forwardEmailVerificationCode.length==0))
+		forwardEmailVerificationCode=null;
+		
+	if((forwardEmail!=null)&&(forwardEmail.length>0)&&(!isValidEmail(forwardEmail))){
+		showErrorModal([[#{not_valid_email}]]);
+		return;
+	}
+
+	if((forwardEmailRule!=null)&&(forwardEmailRule.length==0))
+		forwardEmailRule=null;
+		
+		
+	const jsonContent={'forwardEmailRule':forwardEmailRule,'forwardEmail':forwardEmail,'forwardEmailStatus':forwardEmailStatus,'forwardEmailVerificationCode':forwardEmailVerificationCode};
+	(async () => {
+		await excAction('/dc/web/apisettingrefresh?action=updateEmail',jsonContent,tableInput,displayApi,false);
+	})();
+	
+}
+function testURL(){
+	const forwardUrlInput=document.getElementById('forwardUrl');
+	const url=forwardUrlInput.value;
+	if(isValidUrl(url))
+	{
+		(async () => {
+		    const result = await (await makeRequest('POST',"/dc/web/apisettingrefresh?action=testUrl",{'url':url},false)).json();
+			if(result.status)
+			{
+				if(result.status=="ok")
+					showErrorModal(result.info);
+				else
+					showErrorModal(result.status);
+			}
+		})();
+	}else
+		showErrorModal([[#{not_valid_email}]]);
+}
+function updateURL(){
+	const forwardUrlInput=document.getElementById('forwardUrl');
+	let url=forwardUrlInput.value;
+	if((url!=null)&&(url.length==0))
+		url=null;
+	if((url==null)||isValidUrl(url))
+	{
+		(async () => {
+		     const result = await (await makeRequest('POST',"/dc/web/apisettingrefresh?action=updateUrl",{'url':url},false)).json();
+			 if(result.status)
+			 {
+				if(result.status=="ok")
+					showErrorModal(result.info);
+				else
+					showErrorModal(result.status);
+			 }
+		})();
+	}else
+		showErrorModal([[#{not_valid_url}]]);
+}
+const columns = [
+    { column: 'name', name: [[#{name}]], width: '5%'},
+	{ column: 'key', name: [[#{key}]], width: '20%'},
+    { column: 'timesPerMinute', name: [[#{calls_per_minute}]], width: '5%'},
+    { column: 'limitPerMinute', name: [[#{limit_per_minute}]], width: '5%' },
+	{ column: 'timesPerDay', name: [[#{calls_per_day}]], width: '5%' },
+	{ column: 'limitPerDay', name: [[#{limit_per_day}]], width: '5%' },
+	{ column: 'calls', name: [[#{calls_total}]], width: '5%' },
+	{ column: 'emailTimesPerDay', name: [[#{times_email_per_day}]], width: '5%' },
+	{ column: 'emailLimitPerDay', name: [[#{limit_email_per_day}]], width: '5%' },
+	{ column: 'createTime', name: [[#{create_time}]], width: '8%' },
+	{ column: 'refreshTime', name: [[#{refresh_time}]], width: '8%' },
+	{ column: 'latestCallTime', name: [[#{latest_call}]], width: '8%' }
+];
+
+const tableInput=[{tableData: 'apiSetting', tableDataMeta: null, tableBody: 'apiBody', tableColumns: columns}];
+excAction('/dc/web/apisettingrefresh',null,tableInput,displayApi,true);
+
+function displayApi(result)
+{
+	//smtp
+	if(result.smtpServer!=undefined) document.getElementById('smtpServer').value=result.smtpServer;
+	if(result.smtpPort!=undefined) document.getElementById('smtpPort').value=result.smtpPort;
+	if(result.smtpUserName!=undefined) document.getElementById('smtpUserName').value=result.smtpUserName;
+	if(result.smtpPassword!=undefined) document.getElementById('smtpPassword').value=result.smtpPassword;
+	if(result.smtpAuth!=undefined) document.getElementById('smtpAuth').value=result.smtpAuth;
+	if(result.smtpTls!=undefined) document.getElementById('smtpTls').value=result.smtpTls;
+	if(result.smtpSsl!=undefined) document.getElementById('smtpSsl').value=result.smtpSsl;
+
+	if(result.forwardUrl){
+		const forwardUrlInput=document.getElementById('forwardUrl');
+		forwardUrlInput.value=result.forwardUrl;
+	}
+	if(result.forwardEmail){
+		const forwardEmailInput=document.getElementById('forwardEmail');
+		forwardEmailInput.value=result.forwardEmail;
+	}
+	forwardEmailStatus=result.forwardEmailStatus;
+	
+	const forwardEmailVerificationCodeInput=document.getElementById('forwardEmailVerificationCode');
+	if((forwardEmailStatus!=null)&&(forwardEmailStatus!=1)){
+		forwardEmailVerificationCodeInput.style.display = "none";
+		forwardEmailVerificationCodeInput.value=null;
+	}else if(forwardEmailStatus==1){
+		forwardEmailVerificationCodeInput.style.display = "block";
+	}
+	
+	const forwardEmailRuleInput=document.getElementById('forwardEmailRule');
+	const forwardEmailRuleLabel=document.getElementById('forwardEmailRuleLabel');
+	if((forwardEmailStatus!=null)&&(forwardEmailStatus<2)){
+		forwardEmailRuleInput.style.display = "none";
+		forwardEmailRuleInput.value=null;
+		forwardEmailRuleLabel.style.display = "none";
+	}else if(forwardEmailStatus>=2){
+		forwardEmailRuleInput.style.display = "block";
+		forwardEmailRuleInput.value=result.forwardEmailRule;
+		forwardEmailRuleLabel.style.display = "block";
+	}
+	
+	forwardStatusButtonInit(result);
+	forwardEmailStatusButtonInit(result);
+}
+function showCreateItemModal() {
+	const modalId=document.getElementById('createItemModal');
+	let createItemModal = bootstrap.Modal.getInstance(modalId);
+	if (!createItemModal) 
+		createItemModal = new bootstrap.Modal(modalId);
+    modalId.querySelector('.modal-title').textContent=[[#{reset_api_key}]] ;
+	const fieldDivs = document.querySelectorAll(".field"); 
+	fieldDivs.forEach(function(div) {
+		div.classList.add('d-none');
+	});
+
+	fieldDivs[0].classList.remove('d-none');
+	fieldDivs[0].querySelectorAll(".form-label")[0].textContent =[[#{key_name}]]; 
+	fieldDivs[0].querySelectorAll(".form-control")[0].value='';
+	fieldDivs[0].querySelectorAll(".form-control")[0].placeholder=[[#{enter_key_name}]];
+	
+	const confirmButton = modalId.querySelector('.submit');
+	confirmButton.addEventListener('click', function() {
+		const keyName=fieldDivs[0].querySelectorAll(".form-control")[0].value;
+		const jsonSend = {
+		       name: keyName
+		   };
+		createItemModal.hide();
+		excAction("/dc/web/apisettingrefresh?action=keyAdd",jsonSend,tableInput,null,true);		
+	}, { once: true });
+	createItemModal.show();
+}
+</script>
+</body>
+</html>

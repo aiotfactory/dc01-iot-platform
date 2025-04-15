@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .help-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .help-item:hover {
+            background-color: #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .help-item h5 {
+            margin-bottom: 10px;
+        }
+        .help-item a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .help-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1>Help Center</h1>
+        <p class="text-muted">Select the help item you need to learn more detailed information.</p>
+    </div>
+    <div class="help-item">
+        <h5><a href="/dc/pub/doc?page=toappdeveloper" target="_blank">How Internet Software Developers Understand IoT Development</a></h5>
+        <p>Application software developers, such as those who develop for the internet, may be unfamiliar with IoT development which includes hardware components. Through this chapter, gain a foundational understanding of various aspects of IoT.</p>
+    </div>
+    <div class="help-item">
+        <h5><a href="/dc/pub/doc?page=helloworld" target="_blank">Starting with Hello World</a></h5>
+        <p>Just like learning other programming languages, we start with "Hello World", and see how to modify, compile, and flash hardware devices.</p>
+    </div>
+    <div class="help-item">
+        <h5><a href="/dc/pub/doc?page=dataflow&deviceType=dc01" target="_blank">Data Flow</a></h5>
+        <p>Understanding how data flows between sensors, PCB devices, cloud platforms, and customer servers helps grasp what the system can do for us.</p>
+    </div>
+    <div class="help-item">
+        <h5><a href="/dc/web/doc?page=api_index&deviceType=dc01" target="_blank">Public APIs Provided</a></h5>
+        <p>Registered users can click on the API menu in the navigation bar, then reset the API Key to generate a key. Using this key, they can call APIs on the cloud. The API content is extensive.</p>
+    </div>
+    <div class="help-item">
+        <h5><a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">Sending Commands to Devices</a></h5>
+        <p>By making API calls to the cloud, commands can be executed on devices. After receiving a user's API call, the cloud pushes commands to the device and forwards the result back to the user program. This greatly reduces development complexity; users do not need to modify embedded C code or re-flash the device to execute different commands.</p>
+    </div>
+    <div class="help-item">
+        <h5><a href="/dc/pub/doc?page=config_index&deviceType=dc01" target="_blank">How to Configure Devices</a></h5>
+        <p>Configure parameters through the cloud page. When the device reports data next time, the configuration parameters will be pushed to the device as part of the response. The device updates its local configuration and reports the latest configuration back to the cloud.</p>
+    </div>
+    <div class="help-item">
+        <h5><a href="/dc/pub/doc?page=ota" target="_blank">OTA Remote Upgrade</a></h5>
+        <p>Push new firmware to devices remotely via the cloud for over-the-air (OTA) upgrades.</p>
+    </div>
+</div>
+</body>
+</html>

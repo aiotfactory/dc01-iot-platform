@@ -1,0 +1,49 @@
+{
+    "moduleName": "MODULE_TM7705",
+    "moduleComments": "Used to configure related parameters of the TM7705 module, such as on/off status, upload interval, number of initializations, etc.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "tm7705_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "Enable or disable the TM7705 module."
+        },
+        {
+            "order": 2,
+            "name": "tm7705_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff seconds",
+            "comments": "The time interval for data upload from the TM7705 module, in seconds."
+        },
+        {
+            "order": 3,
+            "name": "tm7705_pins_onoff",
+            "sample": "3",
+            "range": "0-3",
+            "comments": "Pin enable configuration. 0: all pins off, 1: pin 1 enabled, 2: pin 2 enabled, 3: both pins enabled."
+        },
+        {
+            "order": 4,
+            "name": "tm7705_init_times",
+            "sample": "5",
+            "range": "1-300",
+            "comments": "Maximum number of initialization attempts for the TM7705 module."
+        },
+        {
+            "order": 5,
+            "name": "tm7705_reg_freq",
+            "sample": "4",
+            "range": "0-255",
+            "comments": "Output data frequency. 4: 50Hz, 5: 60Hz, 6: 250Hz, 7: 500Hz."
+        },
+        {
+            "order": 6,
+            "name": "tm7705_reg_config",
+            "sample": "100",
+            "range": "0-255",
+            "comments": "Input signal amplification factor. 4: no amplification, 20: 2x, 36: 4x, 52: 8x, 68: 16x, 84: 32x, 100: 64x, 116: 128x. The module amplifies the signal by the specified factor before sampling but divides it back by the same factor before reporting to the cloud, hence it does not affect the reported results; mainly used for interference control."
+        }
+    ],
+    "status": "ok"
+}

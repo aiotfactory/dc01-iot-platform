@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线编写，编译，升级代码</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#c1">原理</a></li>
+		<li><a href="#c2">编辑代码</a></li>
+		<li><a href="#c3">编译代码</a></li>
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+	<div class="text-center mb-4">
+	    <h1 class="display-4 font-weight-bold">在线编写，编译，升级代码</h1>
+	</div>
+	<div class="help-item" id="c1">
+	    <h6>原理</h6>
+	    <p>尝试一个新领域时，搭建环境往往是费时费力，而且容易出错的，要安装编辑器，编译器还要学习怎么接线和烧录。为了简化这些过程，推出了在线方式，用户不需要在本地做任何的准备工作。
+		   系统的云端已经预先装了编辑器，用户通过web页面修改代码，然后点击提交就可以在线编译，当然人多的时候可能需要排队，一般在线编译一次需要几分钟。
+		   编译结果也通过页面查看，也可以看出错信息，如果没有出错可以把编译结果保存为新固件，当然也可以弃之不用。
+		   编译好，转存为新固件后就可以开始<a href="/dc/pub/doc?page=ota#c4" target="_blank">升级</a>	
+		</p>
+	 </div>
+	 <div class="help-item" id="c2">
+	     <h6>编辑代码</h6>
+	     <p>点击<a href="/dc/web/codelist" target="_blank">代码</a>	可以看到当前用户能够在线编辑的项目，点击项目右侧图标<span><i class="bi bi-badge-cc"></i></span>可以打开代码web编辑器，
+			代码编辑器左侧目录树是可以编辑的文件，上面有"保存"，"构建"和"日志"按钮，分别对应文件保存，提交编译和查看编译日志。
+	 	</p>
+	 </div>	
+	 <div class="help-item" id="c3">
+	     <h6>编译代码</h6>
+	     <p>在上面的代码编辑器点击"构建"即可提交编译，然后点击"日志"可以查看编译进展，在"日志"页面的左上角下拉列表可以看到最近的构建记录。
+			绿色表示成功，红色表示失败，选择每一个可以看到具体的日志信息。
+			Tail 1000和Tail 100表示可以查看日志的最近1000和100行，尤其在编译过程中，可以通过Tail 100频繁查看进展。
+			"删除"按钮可以删除本次日志。如果下拉列表最新记录显示"pending"表示需要等待其他人完成。
+	 	</p>
+		<p>针对成功的编译，可以点击"OTA"按钮，把固件进行保存，用于远程升级。更详细的OTA升级指导<a href="/dc/pub/doc?page=ota" target="_blank">查看</a>。</p>
+	 </div>	
+</div>
+</body>
+</html>

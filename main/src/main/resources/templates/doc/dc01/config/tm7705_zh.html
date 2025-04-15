@@ -1,0 +1,49 @@
+{
+    "moduleName": "MODULE_TM7705",
+    "moduleComments": "用于配置TM7705模块的相关参数，如开关状态、上传间隔、初始化次数等。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "tm7705_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "启用或禁用TM7705模块。"
+        },
+        {
+            "order": 2,
+            "name": "tm7705_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff秒",
+            "comments": "TM7705模块数据上传的时间间隔，单位秒。"
+        },
+        {
+            "order": 3,
+            "name": "tm7705_pins_onoff",
+            "sample": "3",
+            "range": "0-3",
+            "comments": "引脚开启配置, 0：都关闭,1：开启引脚1,2：开启引脚2,3：两个引脚都开启"
+        },
+        {
+            "order": 4,
+            "name": "tm7705_init_times",
+            "sample": "5",
+            "range": "1-300",
+            "comments": "TM7705模块初始化的最大次数。"
+        },
+        {
+            "order": 5,
+            "name": "tm7705_reg_freq",
+            "sample": "4",
+            "range": "0-255",
+            "comments": "输出数据的频率，4：50Hz, 5：60Hz, 6：250Hz, 7：500Hz。"
+        },
+        {
+            "order": 6,
+            "name": "tm7705_reg_config",
+            "sample": "100",
+            "range": "0-255",
+            "comments": "对输入信号放大倍数，4：不放大，20：2倍，36：4倍，52：8倍，68：16倍，84：32倍，100：64倍，116：128倍，模块根据该配置对信号先放大指定倍数，然后再采样，但上报云端前会再除以该倍数，因此不影响上报结果，主要是对干扰的控制。"
+        }
+    ],
+    "status": "ok"
+}

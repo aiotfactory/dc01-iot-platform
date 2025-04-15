@@ -1,0 +1,33 @@
+    <h5>说明</h5>
+    <p>一次读取所有GPIO的值。</p>
+    <!-- Parameter Table -->
+    <h5>参数说明</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为7</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>读取运行状态，只返回配置为开启的引脚，配置为0的不返回:</strong>
+        <p><code>operate=7</code></p>
+        <p>返回</p>									
+        <p><code>{"id":"67aaebef64b53b7e99f1fadc","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=7","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:19:25.970685959Z","upload":{"values":[{"pinValue":0,"pinMode":33,"pinType":"ESP","pin":14,"valueType":"ANALOG"},{"pinValue":0,"pinMode":60,"pinType":"ESP","pin":21,"valueType":"DIGITAL"}]},"uploadTime":"2025-02-11T06:19:27.398332674Z","command":3,"operate":7,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    </div>

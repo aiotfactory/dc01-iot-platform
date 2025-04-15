@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{ota_view}">OTA View</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .log-text {
+            max-height: 10000px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 10;
+            -webkit-box-orient: vertical;
+        }
+
+        .log-text.expanded {
+            max-height: none;
+            -webkit-line-clamp: unset;
+        }
+
+        .btn-toggle {
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: Consolas, "Courier New", monospace;
+        }
+
+        /* 样式调整：使说明内容看起来更精致 */
+        .description {
+            font-size: 0.9rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        .description-title {
+            font-weight: bold;
+            color: #495057;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white text-uppercase" th:text="#{ota_details}">
+                OTA Details
+            </div>
+            <div class="card-body">
+                <p><strong th:text="#{id_comma}">ID:</strong> <span th:text="${id}"></span></p>
+                <p class="description" th:text="#{id_comma2}">The unique identifier for this OTA firmware record.</p>
+
+                <p><strong th:text="#{ota_name_comma}">Name:</strong> <span th:text="${name}"></span></p>
+                <p class="description" th:text="#{ota_name_comma2}">The name of the firmware update, typically representing the purpose.</p>
+
+                <p><strong th:text="#{ota_comments_comma}">Comments:</strong> <span th:text="${comments}"></span></p>
+                <p class="description" th:text="#{ota_comments_comma2}">The name of the firmware update, typically representing the purpose.</p>
+                
+                
+                <p><strong th:text="#{ota_target_device_type}">OTA Target Device Type:</strong> <span th:text="${deviceType}"></span></p>
+                <p class="description" th:text="#{ota_target_device_type2}">The type of device targeted by this firmware update, e.g., "DC01".</p>
+
+                <p><strong th:text="#{ota_target_versoins}">OTA Target Versions:</strong> <span th:text="${deviceFirmWareTargetVersion}"></span></p>
+                <p class="description" th:text="#{ota_target_versoins2}">The specific version(s) of the firmware that the devices will be upgraded to.</p>
+
+                <p><strong th:text="#{ota_versoin}">OTA Version:</strong> <span th:text="${deviceFirmWareVersion}"></span></p>
+                <p class="description" th:text="#{ota_versoin2}">The current version of the firmware to be deployed.</p>
+
+                <p><strong th:text="#{ota_create_time}">OTA Create Time:</strong> <span th:text="${createTime}"></span></p>
+                <p class="description" th:text="#{ota_create_time2}">The timestamp indicating when the OTA record was created.</p>
+
+                <p><strong th:text="#{ota_modify_time}">OTA Modify Time:</strong> <span th:text="${modifyTime}"></span></p>
+                <p class="description" th:text="#{ota_modify_time2}">The timestamp indicating when the OTA record was last modified.</p>
+
+                <p><strong th:text="#{ota_upgrade_scope}">OTA Upgrade Scope:</strong> <span th:text="${upgradeScope}"></span></p>
+                <p class="description" th:text="#{ota_upgrade_scope2}">Defines the scope of devices to which the firmware will be applied, e.g., "ALL (Update regardless of whether the device No is in the include or exclude list.)", "NONE (Won't upgrade)", "INCLUDE ONLY (Only upgrade device in the 'include' list)", "EXCEPT EXCLUDE (Update all devices except those in the exclude list)".</p>
+
+                <p><strong th:text="#{ota_upgrade_strategy}">OTA Upgrade Strategy:</strong> <span th:text="${upgradeStrategy}"></span></p>
+                <p class="description" th:text="#{ota_upgrade_strategy2}">The strategy for upgrading devices, such as "IGNORE SAME (it won't upgrade if version of firmware in the device is same as the OTA version')", "FORCE SAME (it will upgrade if version of firmware in the device is same as the OTA version')".</p>
+
+                <p><strong th:text="#{ota_download_times}">OTA Download Times:</strong> <span th:text="${downloadTimes}"></span></p>
+                <p class="description" th:text="#{ota_download_times2}">The number of times the firmware has been downloaded by devices.</p>
+
+                <p><strong th:text="#{ota_firmware_name}">Firmware Name:</strong> <span th:text="${firmWareName}"></span></p>
+                <p class="description" th:text="#{ota_firmware_name2}">The name of the firmware file.</p>
+
+                <p><strong th:text="#{ota_firmware_original_name}">Firmware Original Name:</strong> <span th:text="${firmWareOriginalName}"></span></p>
+                <p class="description" th:text="#{ota_firmware_original_name2}">The original name of the firmware when user uploads.</p>
+
+                <p><strong th:text="#{ota_firmware_file_id}">Firmware File ID:</strong> <span th:text="${firmWareId}"></span></p>
+                <p class="description" th:text="#{ota_firmware_file_id2}">A unique identifier for the firmware file in the system.</p>
+
+                <p><strong th:text="#{ota_firmware_size}">Firmware Size:</strong> <span th:text="${firmWareSize}"></span></p>
+                <p class="description" th:text="#{ota_firmware_size2}">The size of the firmware file in bytes.</p>
+
+                <p><strong th:text="#{ota_firmware_md5}">Firmware MD5:</strong> <span th:text="${firmWareMd5}"></span></p>
+                <p class="description" th:text="#{ota_firmware_md52}">The MD5 hash of the firmware file, used for integrity verification.</p>
+
+                <p><strong th:text="#{ota_firmware_upload_time}">Firmware Upload Time:</strong> <span th:text="${firmwareTime}"></span></p>
+                <p class="description" th:text="#{ota_firmware_upload_time2}">The timestamp when the firmware file was uploaded to the server.</p>
+
+                <p><strong th:text="#{ota_include_devices}">Included Devices:</strong> <pre><code th:text="${deviceNoListInclude}"></code></pre></p>
+                <p class="description" th:text="#{ota_include_devices2}">The list of device IDs that are included in the firmware update.</p>
+
+                <p><strong th:text="#{ota_exclude_devices}">Excluded Devices:</strong> <pre><code th:text="${deviceNoListExclude}"></code></pre></p>
+                <p class="description" th:text="#{ota_exclude_devices2}">The list of device IDs that are excluded from this firmware update.</p>
+            </div>
+        </div>
+    </div>
+    <script src="/dc/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

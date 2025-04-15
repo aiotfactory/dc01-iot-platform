@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{fragments/nav :: head(#{device_module})}"></th:block>
+<body>
+ <th:block th:insert="~{fragments/nav :: search}"></th:block>
+     
+<div class="container-fluid">
+  <div class="row">
+   <th:block th:insert="~{fragments/nav :: menu}"></th:block>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+	  <th:block th:insert="~{fragments/nav :: breadcrumb}"></th:block>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-1 pb-2 mb-3 border-bottom">
+        <h1 class="h1"><span th:text="#{breadcrumb_module}">Module</span> <span th:text="${moduleName}">Name</span>
+			<a th:href="@{/pub/doc(page=${moduleDoc}, deviceType=${deviceType})}" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+		</h1>
+		
+      </div>
+	  
+	  <div id="configContainer" style="display: none;">
+	      <h2><span th:text="#{device_config}">Device config</span>		
+			<a th:href="@{/pub/doc(page='config_index', deviceType=${deviceType})}" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+			<button class="btn btn-link p-0" type="button" data-bs-toggle="collapse" data-bs-target="#configContainerWrapper" aria-expanded="true" aria-controls="configContainerWrapper">
+			    <i class="bi bi-chevron-up"></i> 
+			</button>
+		  </h2>
+          <div class="table-responsive small collapse show" id="configContainerWrapper">
+	        <table class="table table-striped table-sm" id="config-body"></table>
+	      </div>
+	  </div>
+	  
+	  <div id="runtimeContainer" style="display: none;">
+	      <h2><span th:text="#{runtime_info}">Runtime info</span>
+			<a th:href="@{'/pub/doc?page='+${moduleDoc}+'&deviceType='+${deviceType}+'#runtimeinfo'}" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+		    <a href="#" id="runtimeRefreshInfoButton"><i class="bi bi-arrow-repeat fs-6" ></i></a>
+			<button class="btn btn-link p-0" type="button" data-bs-toggle="collapse" data-bs-target="#runtimeContainerWrapper" aria-expanded="true" aria-controls="runtimeContainerWrapper">
+			    <i class="bi bi-chevron-up"></i> 
+			</button>
+		  </h2>
+	      <div class="table-responsive small collapse show" id="runtimeContainerWrapper">
+	        <table class="table table-striped table-sm" id="info-body"></table>
+	      </div>  
+	  </div>
+ 
+  	  <div id="alertInfoContainer" style="display: none;">
+	      <h2><span th:text="#{alert_info}">Alert info</span>
+			<a th:href="@{'/dc/pub/doc?page='+${moduleDoc}+'&deviceType='+${deviceType}+'#alertinfo'}" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+		    <button class="btn btn-link p-0" type="button" data-bs-toggle="collapse" data-bs-target="#alertInfoContainerWrapper" aria-expanded="true" aria-controls="alertInfoContainerWrapper">
+		        <i class="bi bi-chevron-up"></i> 
+		    </button>
+		  </h2>
+		  <div class="table-responsive small collapse show" id="alertInfoContainerWrapper">
+	        <table class="table table-striped table-sm" id="alert-body"></table>
+	      </div>  
+	  </div>
+	  
+	  
+	  <div id="aggChartContainer" style="display: none;">
+	      <h2 class="my-4" th:text="#{agg_data_analysis}"><span>Agg Data Analysis</span>
+			  <button class="btn btn-link p-0" type="button" data-bs-toggle="collapse" data-bs-target="#aggChartContainerWrapper" aria-expanded="true" aria-controls="aggChartContainerWrapper">
+			      <i class="bi bi-chevron-up"></i> 
+			  </button>
+		   </h2>
+		  <div class="collapse show" id="aggChartContainerWrapper">
+		      <div class="mb-3">
+		          <span class="chart-icon bi bi-graph-up" id="lineChart"></span>
+		          <span class="chart-icon bi bi-bar-chart" id="barChart"></span>
+		          <span class="chart-icon bi bi-dot chart-active" id="scatterChart"></span>
+		      </div>
+		      <div class="row">
+		          <div class="col-md-6 d-flex">
+		              <!-- Start Date Icon -->
+		              <div class="input-group">
+		                  <span class="input-group-text startIcon">
+		                      <i class="bi bi-calendar"></i>
+		                  </span>
+		                  <input type="text" class="form-control startDate" th:placeholder="#{select_start_date}">
+		              </div>
+		              <!-- End Date Icon -->
+		              <div class="input-group ms-3">
+		                  <span class="input-group-text endIcon">
+		                      <i class="bi bi-calendar"></i>
+		                  </span>
+		                  <input type="text" class="form-control endDate" th:placeholder="#{select_end_date}">
+		              </div>
+		          </div>
+		      </div>
+		      <div class="card">
+		          <div class="card-body">
+		              <div id="aggChart" style="height: 400px;"></div>
+		          </div>
+		      </div>
+		   </div>
+	  </div>
+	 
+	 <div id="imageGalleryContainer" style="display: none;">
+		 <h2 class="my-4"><span th:text="#{image_gallery}">Image gallery</span>
+		   <button class="btn btn-link p-0" type="button" data-bs-toggle="collapse" data-bs-target="#imageGalleryContainerWrapper" aria-expanded="true" aria-controls="imageGalleryContainerWrapper">
+		       <i class="bi bi-chevron-up"></i> 
+		   </button>
+		  </h2>
+		 <div class="collapse show" id="imageGalleryContainerWrapper">
+		     <div class="mb-3">
+		         <span class="chart-icon bi bi-2-circle" id="no2PerRowGallery"></span>
+		         <span class="chart-icon bi bi-4-circle chart-active" id="no4PerRowGallery"></span>
+		         <span class="chart-icon bi bi-6-circle" id="no6PerRowGallery"></span>
+		     </div>
+		     
+		     <div class="row">
+		         <div class="col-md-6 d-flex">
+		             <!-- Start Date Icon -->
+		             <div class="input-group">
+		                 <span class="input-group-text startIcon">
+		                     <i class="bi bi-calendar"></i>
+		                 </span>
+		                 <input type="text" class="form-control startDate" th:placeholder="#{select_start_date}">
+		             </div>
+		             <!-- End Date Icon -->
+		             <div class="input-group ms-3">
+		                 <span class="input-group-text endIcon">
+		                     <i class="bi bi-calendar"></i>
+		                 </span>
+		                 <input type="text" class="form-control endDate" th:placeholder="#{select_end_date}">
+		             </div>
+		         </div>
+		     </div>
+	
+		     <div id="imageGallery"></div>
+	
+			 
+			 <nav class="mt-2" th:aria-label="#{page_navigation}">
+			     <ul class="pagination" data-current-page="0">
+			         <li class="page-item disabled">
+			             <a class="page-link" href="#" data-action="previous" th:aria-label="#{previous}">
+			                 <span aria-hidden="true">&laquo;</span> <span th:text="#{previous}"> Previous</span>
+			             </a>
+			         </li>
+			         <li class="page-item">
+			             <a class="page-link" href="#" data-action="next" th:aria-label="#{next_page}">
+			                 <span aria-hidden="true" th:text="#{next_page}">Next</span> <span>&raquo;</span>
+			             </a>
+			         </li>
+			     </ul>
+			 </nav>
+			 
+	 	 </div>
+	 </div>
+
+	 <div id="historyDataContainer" style="display: none;">
+	     <h2 class="my-4"><span th:text="#{upload_data}">Upload data</span>
+			<a th:href="@{'/dc/pub/doc?page='+${moduleDoc}+'&deviceType='+${deviceType}+'#periodupload'}" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+			 <a href="#" id="historyDataDownload"><i class="bi bi-download fs-6"></i></a> 
+			 <button class="btn btn-link p-0" type="button" data-bs-toggle="collapse" data-bs-target="#historyDataContainerWrapper" aria-expanded="true" aria-controls="historyDataContainerWrapper">
+			     <i class="bi bi-chevron-up"></i> 
+			 </button>
+		 </h2>
+		 <div class="collapse show" id="historyDataContainerWrapper">	
+		     <div class="row">
+		         <div class="col-md-6 d-flex">
+		             <!-- Start Date Icon -->
+		             <div class="input-group">
+		                 <span class="input-group-text startIcon">
+		                     <i class="bi bi-calendar"></i>
+		                 </span>
+		                 <input type="text" class="form-control startDate" th:placeholder="#{select_start_date}">
+		             </div>
+		             <!-- End Date Icon -->
+		             <div class="input-group ms-3">
+		                 <span class="input-group-text endIcon">
+		                     <i class="bi bi-calendar"></i>
+		                 </span>
+		                 <input type="text" class="form-control endDate" th:placeholder="#{select_end_date}">
+		             </div>
+		         </div>
+		     </div>
+			 
+			 <div id="historyData" class="mt-4"></div> 
+		     
+			 <nav class="mt-2" th:aria-label="#{page_navigation}">
+		         <ul class="pagination" data-current-page="0">
+		             <li class="page-item disabled">
+		                 <a class="page-link" href="#" data-action="previous" th:aria-label="#{previous}">
+		                     <span aria-hidden="true">&laquo;</span> <span th:text="#{previous}"> Previous</span>
+		                 </a>
+		             </li>
+		             <li class="page-item">
+		                 <a class="page-link" href="#" data-action="next" th:aria-label="#{next_page}">
+		                     <span aria-hidden="true" th:text="#{next_page}">Next</span> <span>&raquo;</span>
+		                 </a>
+		             </li>
+		         </ul>
+		     </nav>
+		  </div>
+	 </div>
+	 
+	 <div id="forwardContainer" style="display: none;">		
+		 <h2><span th:text="#{forward}">Forward</span>
+		   <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+		   <a href="#" id="forwardButton"><i class="bi bi-pause-circle fs-6" ></i></a>
+		   <button class="btn btn-link p-0 ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#forwardContainerWrapper" aria-expanded="true" aria-controls="forwardContainerWrapper">
+		   	<i class="bi bi-chevron-up"></i> 
+		   </button>
+		 </h2>
+	 	 <div class="table-responsive small collapse show" id="forwardContainerWrapper">
+	    	<table class="table table-striped table-sm" id="forward-body"></table>
+	     </div>  
+	 </div>
+	 	 
+	 <div id="cmdContainer" style="display: none;">
+		<h2><span th:text="#{command_exe}">Command</span>
+		  <a th:href="@{/pub/doc(page='command_index', deviceType=${deviceType})}" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+		  <button class="btn btn-link p-0" type="button" data-bs-toggle="collapse" data-bs-target="#cmdContainerWrapper" aria-expanded="true" aria-controls="cmdContainerWrapper">
+		  	<i class="bi bi-chevron-up"></i> 
+		  </button>
+		</h2>
+	    <div class="table-responsive small collapse show" id="cmdContainerWrapper">
+	       <div class="cmd-window" id="cmdWindow">
+	          <div id="cmdOutput" class="cmd-output"></div>
+	          <div style="display: flex;">
+	            <span id="cmdPrompt" class="cmd-prompt">[Device]#</span>
+	            <input type="text" class="cmd-input" id="cmdInput" th:placeholder="#{enter_command}" style="flex: 1;" autofocus>
+	        </div>
+	    </div>
+	  </div>
+	 </div> 
+	 
+    </main>
+   <th:block th:insert="~{fragments/nav :: modalError}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalConfirm}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalImagePreview}"></th:block>
+   
+  </div>
+</div>
+<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+
+<script  th:inline="javascript">
+
+const deviceId = /*[[${deviceId}]]*/ '';
+const moduleTypeId = /*[[${moduleTypeId}]]*/ '';
+
+const columnsConfig = [
+    { column: 'id', name: [[#{index}]], width: '5%', isId: 1, help: [[#{index_of_config_element}]] , valueHelp: 'help' },
+    { column: 'module', name: [[#{module}]], width: '3%', help: [[#{module_name_of_config_element}]], valueHelp: 'help'  },
+    { column: 'name', name: [[#{name}]], width: '10%', help: [[#{name_of_config}]], valueHelp: 'help'},
+    { column: 'type', name: [[#{type}]], width: '10%', help: [[#{type_of_config}]], valueHelp: 'help' },
+    { column: 'valueLen', name: [[#{max_bytes}]], width: '10%' , help: [[#{max_bytes_of_config}]], valueHelp: 'help' },
+    { column: 'valueInDevice', name: [[#{in_device}]], width: '20%', help: [[#{value_in_device_of_config}]], valueHelp: 'help'},
+    { column: 'valueInDb', name: [[#{to_config}]], valueHelp: 'help', help: [[#{value_in_cloud_of_config}]], width: '20%', editable: [], fieldType: 'string', updateAction:'/dc/web/devicemodulerefresh?action=configUpdate&deviceId='+deviceId+'&moduleTypeId='+moduleTypeId+'&index='}
+];
+
+		
+const columnsInfo = [
+    { column: 'name', name: [[#{name}]], width: '20%'},
+    { column: 'value', name: [[#{content}]], width: '80%' , style: 'width: 60%; word-wrap: break-word; word-break: break-all;'}
+];
+
+
+const alertOk={ confirmTitle:[[#{confirm_done}]] , confirmDescription: [[#{mark_alert_done}]],operate: '/dc/web/devicemodulerefresh?action=alertOk&deviceId='+deviceId+'&moduleTypeId='+moduleTypeId+'&alertId=', icon: 'bi-check-circle-fill', isAjax: 'normal', space: 'me-2', help: [[#{module_alert_confirm}]] };
+const alertCancel={ confirmTitle: [[#{confirm_cancel}]], confirmDescription: [[#{mark_alert_canceled}]],operate: '/dc/web/devicemodulerefresh?action=alertDel&deviceId='+deviceId+'&moduleTypeId='+moduleTypeId+'&alertId=', icon: 'bi-trash', isAjax: 'normal' , space: 'me-2', help: [[#{module_alert_cancel}]]};
+const alertProcess={ confirmTitle: [[#{confirm_in_progress}]], confirmDescription: [[#{mark_alert_in_progress}]],operate: '/dc/web/devicemodulerefresh?action=alertProcess&deviceId='+deviceId+'&moduleTypeId='+moduleTypeId+'&alertId=', icon: 'bi-arrow-down-circle', isAjax: 'normal' , space: 'me-2', help: [[#{module_alert_process}]]};
+const columnsAlert = [
+	{ column: 'id', name: 'ID', width: '3%', isId: 1, isHidden: 1 },
+    { column: 'ruleId', name: [[#{rule}]], width: '3%'},
+    { column: 'ruleName', name: [[#{name}]], width: '5%'},
+    { column: 'ruleOperator', name: [[#{operator}]], width: '5%'},
+    { column: 'reasonId', name: [[#{reason}]], width: '5%'},
+    { column: 'reasonContent', name: [[#{content}]], width: '40%'},
+    { column: 'status', name: [[#{status_tb_device}]], width: '5%'},
+    { column: 'uploadTime', name: [[#{time}]], width: '8%'},
+    { name: [[#{action_tb_device}]], width: '10%', isAction: 1, actions: [alertCancel,alertProcess,alertOk]},
+];
+const columnsPostLog = [
+    { column: 'id', name: 'ID', width: '1%', isId: 1, isHidden: 1 },
+    { column: 'pack', name: [[#{seq}]], width: '5%'},
+	{ column: 'type', name:[[#{type}]] , width: '5%'},
+    { column: 'tx', name:[[#{send}]], style: 'width: 60%; word-wrap: break-word; word-break: break-all;' },
+    { column: 'rx', name:[[#{receive}]] , style: 'width: 20%; word-wrap: break-word; word-break: break-all;'},
+	{ column: 'error', name:[[#{error}]], width: '3%'},
+	{ column: 'createTime', name: [[#{time}]], width: '5%'},
+	{ name: [[#{action_tb_device}]], width: '5%', isAction: 1, 
+		actions: [
+			{ newWindow: 1, operate: '/dc/web/devicepostlog?logId=', icon: 'bi-eye', space: 'me-2' }
+		]
+	}
+];
+
+const tableInput=[{tableData: 'forwardList', tableBody: 'forward-body', tableColumns: columnsPostLog},{tableData: 'alertList', tableBody: 'alert-body', tableColumns: columnsAlert}, {tableData: 'configList', tableBody: 'config-body', tableColumns: columnsConfig}, {tableData: 'infoList', tableBody: 'info-body', tableColumns: columnsInfo}];
+document.addEventListener("DOMContentLoaded", function() {
+	excAction('/dc/web/devicemodulerefresh?deviceId='+deviceId+'&moduleTypeId='+moduleTypeId, null,tableInput,sectionShow,true);	
+});
+
+function sectionShow(result)
+{
+	var sectionMap=result['sectionMap'];
+	if((sectionMap!=undefined)&&(sectionMap!=null))
+	{
+		for (const key in sectionMap) {
+			document.getElementById(key).style.display = 'block';
+		    switch (key) {
+				case 'forwardContainer':
+					const forwardIcon = document.querySelector('#forwardButton i');
+					if(result.forward){
+						forwardIcon.classList.remove('bi-caret-right-fill'); 
+						forwardIcon.classList.add('bi-pause-circle');
+					}else{
+						forwardIcon.classList.remove('bi-pause-circle'); 
+						forwardIcon.classList.add('bi-caret-right-fill');
+					}
+					document.getElementById('forwardButton').addEventListener('click', function() {
+						const forwardIcon = document.querySelector('#forwardButton i');
+						let tmpMsg=[[#{confirm_sto_forward}]] ;
+						let forward=0;
+						if (forwardIcon.classList.contains('bi-caret-right-fill')){
+							tmpMsg=[[#{confirm_enable_forward}]] ;
+							forward=1;
+						}
+						showConfirmModal([[#{confirm}]],tmpMsg,function() {
+							excAction('/dc/web/devicemodulerefresh?action=forwardUpdate&deviceId='+deviceId+'&moduleTypeId='+moduleTypeId+'&forward='+forward,null,tableInput,sectionShow,true);
+						});
+					});
+					break;
+				case 'runtimeContainer':
+					document.getElementById('runtimeRefreshInfoButton').addEventListener('click', function() {
+						excAction('/dc/web/devicemodulerefresh?action=infoRefresh&deviceId='+deviceId+'&moduleTypeId='+moduleTypeId, null,tableInput,null,true);
+					});
+					break;
+		        case 'aggChartContainer':
+				    const chartParams={actionSend: '/dc/web/devicemodulerefresh?action=chartRefresh&deviceId='+deviceId+'&moduleTypeId='+moduleTypeId,containerDiv: key,tableDiv:'aggChart',tableData:null,callback: aggReportChartDraw,hasIcon:1};
+		            aggReportInit(chartParams);
+		            break;
+		        case 'imageGalleryContainer':
+					const imageParams={actionSend: '/dc/web/devicemodulerefresh?action=historyRefresh&deviceId='+deviceId+'&moduleTypeId='+moduleTypeId,containerDiv: key,tableDiv:'imageGallery',tableData:null,callback: aggReportGalleryDraw,hasIcon:1};
+					aggReportInit(imageParams);					
+					break;					
+				case 'historyDataContainer':
+				    const historyParams={actionSend: '/dc/web/devicemodulerefresh?action=historyRefresh&deviceId='+deviceId+'&moduleTypeId='+moduleTypeId,containerDiv: key,tableDiv:'historyData',tableData:'dataList',callback: aggReportHistoryDataDraw};
+					aggReportInit(historyParams);
+					document.getElementById('historyDataDownload').addEventListener('click', function() {
+						let newHistoryParams = Object.assign({}, historyParams);
+						newHistoryParams.actionSend='/dc/web/export/excelupload?deviceId='+deviceId+'&moduleTypeId='+moduleTypeId;
+						newHistoryParams.download='upload_excel';
+						aggReportSubmit(newHistoryParams,0);
+					});
+				    break;						
+				case 'cmdContainer':
+					cmdInput.addEventListener('keydown', function(e) {
+						commandExe(e);
+					});
+					break;
+		        default:
+		            break;
+		    }
+		}
+	}
+}
+</script>
+</body>
+</html>

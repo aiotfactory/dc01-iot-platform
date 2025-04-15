@@ -1,0 +1,42 @@
+{
+    "moduleName": "MODULE_UART",
+    "moduleComments": "用于配置UART模块的相关参数，如开关状态、波特率、上传间隔等。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "uart_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "用于配置UART模块的开关状态。0表示关闭，1表示开启。"
+        },
+        {
+            "order": 2,
+            "name": "uart_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff秒",
+            "comments": "配置UART数据上传的间隔时间（秒）。"
+        },
+        {
+            "order": 3,
+            "name": "uart_baud_rate",
+            "sample": "115200",
+            "range": "1000-800000",
+            "comments": "配置UART的波特率。"
+        },
+        {
+            "order": 4,
+            "name": "uart_tx_pin",
+            "sample": "21",
+            "range": "0-48",
+            "comments": "配置UART的传输引脚，理论上ESP芯片的IO都可以用，但容易接线的是gpio_esp_21，默认没用于其他目的，当要同时开启485，需要注意不能和485同时共用。"
+        },
+        {
+            "order": 5,
+            "name": "uart_rx_pin",
+            "sample": "2",
+            "range": "0-28",
+            "comments": "配置UART的接收引脚，理论上ESP芯片的IO都可以用，但容易接线的是gpio_esp_2，默认没用于其他目的，当要同时开启485，需要注意不能和485同时共用。"
+        }
+    ],
+    "status": "ok"
+}

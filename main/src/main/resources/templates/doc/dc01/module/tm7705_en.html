@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_TM7705 Module Introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#periodupload">Data Upload - Automatic</a></li>
+        <li><a href="#commandupload">Data Upload - Command</a></li>
+        <li><a href="#forward">Data Forwarding</a></li>
+        <li><a href="#runtimeinfo">Runtime Information</a></li>
+        <li><a href="#alertinfo">Alert Information</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_TM7705 Module Introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>The DC01 product has an TM7705 high-precision 16-bit A/D conversion chip with two pins that can simultaneously collect data from two channels. Click <a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">here</a> to view the MODULE_TM7705 chapter for pin configuration.
+           If the pin is configured to enable collection but not actually connected to the object being collected, it will still collect values, and these values will randomly change due to floating voltage.
+        </p>
+    </div>
+    <div class="help-item" id="periodupload">
+        <h6>Data Upload - Automatic</h6>
+        <p>pin1Value and pin2Value represent the sampling values of pins 1 and 2 respectively. If this pin is not enabled, they will be null. The value unit is 10uV. For example, 2050 means 2050 * 10uV = 205000uV = 20.500mV = 0.0205V. If the voltage value is -100, it indicates a read error.
+        </p>
+        <pre><code>
+{
+	"pin1Value": 2050,
+	"pin2Value": null
+}
+        </code></pre>
+    </div>
+    <div class="help-item" id="commandupload">
+        <h6>Data Upload - Command</h6>
+        <p>By sending commands to the device, data upload will also be triggered. Click <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">here</a> to view the TM7705-related chapters to understand which commands can be executed and the format of the uploaded data.
+        </p>
+    </div>
+    <div class="help-item" id="forward">
+        <h6>Data Forwarding</h6>
+        <p>Click <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">here</a> to view how to configure the module's data forwarding.
+           Click <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">here</a> to view the format of forwarded data.
+        </p>
+    </div>
+    <div class="help-item" id="runtimeinfo">
+        <h6>Runtime Information</h6>
+        <p>Spi Host, host=2, miso=gpio_esp_39, mosi=gpio_esp_38, sclk=gpio_esp_40, indicates the Spi Host number used by the ESP chip when reading this module, as well as the pins.</p>
+        <p>Spi TM7705, device=1, cs=gpio_ext_io5, reset=gpio_ext_oc0, power=gpio_ext_oc15 (shared with I2C power), indicates the Spi device number on the ESP chip, as well as the cs, reset, and power pins.</p>
+        <p>TM7705 Status {"max_value_pin1":2169,"read_failed_times":0,"max_value_pin2":0,"read_times":19,"init_failed_times":0,"reset_times":1} indicates the maximum values read from pin1/2 since the module was powered on, the number of failed reads, the total number of reads, the number of initialization failures, and the number of resets.
+        </p>
+    </div>
+    <div class="help-item" id="alertinfo">
+        <h6>Alert Information</h6>
+        <p>When the value of a pin changes abruptly, alert information will be generated. The principle is that each new data point is compared with the previous 10 data points. Once there is a significant increase or decrease, alert information will be generated. The module page displays the most recent 10 alert information.
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<h5>Description</h5>
+<p>In order to facilitate users in extending functionality, this module is provided. Users can execute commands through a WEB interface or API calls. The raw command will be sent to the device. Currently, the device does not process any commands. Customers can modify the C language code (forward_util.c) on the device to handle the commands and return custom content. The returned content will be reported to the cloud, but the cloud will not perform any business processing and will only forward it to the caller.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 17</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>hex_input</code></td>
+            <td>The hexadecimal value of the data sent to the device. Since it may contain non-printable characters, it is transmitted as a hex string (e.g., 0x303132). The receiving end needs to decode the hex string.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Send 0x303132 (corresponding to the ASCII codes of visible characters 012):</strong>
+    <p><code>operate=17 hex_input=0x303132</code></p>
+    <p>Response, normal</p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><code>base64Data</code></td>
+                <td>The device can report binary data to the cloud. The cloud will encode the received binary content in Base64 to facilitate transmission via JSON.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><code>{"id":"67b58cf24b64812e70c5c8f1","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":15,"request":{"rawString":"operate=17 hex_input=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T07:49:06.322604263Z","upload":{"base64Data":"aGVsbG8sIHJlc3BvbnNlIHRoIHlvdXIgcmVxdWVzdCAwLg=="},"uploadTime":"2025-02-19T07:49:06.589931883Z","command":3,"operate":17,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

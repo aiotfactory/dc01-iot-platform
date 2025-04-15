@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>I2C and UART Communication</title>
+</head>
+<body>
+	<h5>Description</h5>
+	<p>For application development engineers, concepts like I2C can be
+		difficult to understand. Simply put, when we write programs such as
+		calling socket, the program helps us encapsulate the physical layer.
+		However, in reality, the physical layer is about the exchange of
+		electrical signals. For example, at any given moment, if one pin is
+		high voltage, it represents '1', otherwise it represents '0'. Hardware
+		achieves information interaction through these changes in high and low
+		voltages.</p>
+	<p>For instance, if we design our own communication logic using two
+		wires, A and B, connecting them to corresponding pins on two chips,
+		for information exchange, let's say we agree that wire B will change
+		its voltage every 1ms. Wire A will then be used for data transmission.
+		When the voltage on wire B changes (either from high to low or from
+		low to high), the receiving chip measures the voltage on wire A. If it
+		is high, it means data '1'; if it is low, it means data '0'. The
+		sending chip only needs to control the rhythm within the specified 1ms
+		interval to set the voltage on wire A to either high or low, thus
+		transmitting data. This defines a simple hardware interface. In fact,
+		the industry has defined many similar interfaces; some use 2 wires,
+		others use 3 or more wires, but the actual principle remains largely
+		the same. Generally, we don't need to know all the details of the
+		protocol because the underlying driver already implements these level
+		controls.</p>
+	<p>UART is one of these protocols. Many devices use UART protocol
+		for data transmission. Compared to SPI or I2C, UART is a peer-to-peer
+		relationship between the two communicating ends. As mentioned above,
+		with SPI or I2C, writing or reading data to or from sensors is
+		initiated by ESP, meaning that unless ESP initiates it, the sensor
+		will not actively send data. Therefore, ESP is the master, and the
+		sensor is the slave. However, UART is a peer-to-peer protocol where
+		both devices A and B can actively send data. Additionally, UART can
+		only transmit point-to-point, meaning that two devices must be
+		connected together; they cannot connect three or more devices.</p>
+	<p>UART typically uses two lines for transmission, called TX
+		(transmit) and RX (receive). Therefore, the pins of the two devices
+		should be reversed, i.e., A device's TX connects to B device's RX, and
+		A device's RX connects to B device's TX. If you just want to read or
+		send, one line can also be used. Moreover, the GND (ground) lines of
+		the two devices should be connected.</p>
+	<h5>Receiving Data</h5>
+	<p>Because the devices are in a peer-to-peer relationship, the
+		other device may send data to this device's RX pin at any time. This
+		device is always ready according to predefined configurations, and
+		after receiving the data, it reports it to the cloud. The cloud stores
+		and forwards the data accordingly. Therefore, there are two ways to
+		obtain data: one is to query the latest received data via API, and
+		another better way is to register a third-party system URL in advance
+		so that the cloud can push the data to the specified URL upon receipt.</p>
+	<p>
+		To query, click <a href="/dc/web/doc?page=api&deviceType=dc01"
+			target="_blank">here</a>. Through the API "Data Forward List", you
+		can query the reported data.
+	</p>
+	<p>
+		To push and forward, click <a href="/dc/web/apisetting"
+			target="_blank">here</a> to configure your receiving URL. The UART
+		message received will be forwarded to your URL via HTTP POST.
+	</p>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Parameter</th>
+				<th>Description</th>
+				<th>Necessary</th>
+				<th>Type</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>deviceId</code></td>
+				<td>The ID of the device reporting the data.</td>
+				<td><span class="badge badge-required">Yes</span></td>
+				<td>String</td>
+			</tr>
+			<tr>
+				<td><code>deviceNo</code></td>
+				<td>The encoding of the device reporting the data, usually
+					pasted on the surface of the device.</td>
+				<td><span class="badge badge-required">Yes</span></td>
+				<td>String</td>
+			</tr>
+			<tr>
+				<td><code>protocolType</code></td>
+				<td>Distinguishes whether it is UART or RS485.</td>
+				<td><span class="badge badge-required">Yes</span></td>
+				<td>String</td>
+			</tr>
+			<tr>
+				<td><code>dataType</code></td>
+				<td>The type of data reported by UART, DTU rx receives data,
+					PROPERTY is the status information reported by the device via UART.</td>
+				<td><span class="badge badge-required">Yes</span></td>
+				<td>String</td>
+			</tr>
+			<tr>
+				<td><code>rxData</code></td>
+				<td>The hexadecimal value of the reported data, since it may
+					contain invisible characters, it is all transmitted as hex, and the
+					receiving end needs to decode the hex string.</td>
+				<td><span class="badge badge-required">Yes</span></td>
+				<td>String</td>
+			</tr>
+		</tbody>
+	</table>
+	<h5>Example</h5>
+	<div>
+		<p>
+			<strong>Your server will receive UART-reported data via HTTP
+				POST:</strong>
+		</p>
+		<code>{ "key": "f402afaa0f9ceeeb230ce6291c95c306", "content": {
+			"id": "67b69eff87025163883ee59e", "deviceId":
+			"67b460755a961507ca44bc0d", "moduleTypeId": 8, "request": null,
+			"requestTime": null, "upload": { "protocolType": "UART", "dataType":
+			"DTU", "rxData": "61616161610d0a", "rxTimes": 0, "rxLength": 14,
+			"rxTimesFailed": 0, "rxUploadFailed": 0, "rxFifoOverTimes": 0,
+			"rxBufFullTimes": 0, "rxBreakTimes": 0, "rxParityErrTimes": 0,
+			"rxFrameErrTimes": 0, "txLength": 0, "txTimes": 0, "txTimesFailed": 0
+			}, "uploadTime": "2025-02-20T03:18:23.789719945Z", "command": 6,
+			"operate": null, "info": null, "errorType": "OK", "dataCommType":
+			"INTERRUPT_UPLOAD", "dataCommSource": "DEVICE_AUTO" } }</code>
+	</div>
+
+	<h5>Sending Data</h5>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>Parameter</th>
+				<th>Description</th>
+				<th>Necessary</th>
+				<th>Type</th>
+				<th>Bytes</th>
+				<th>In/Out</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><code>operate</code></td>
+				<td>Fixed to 8</td>
+				<td><span class="badge badge-required">Yes</span></td>
+				<td>Number</td>
+				<td>1</td>
+				<td>Input</td>
+			</tr>
+			<tr>
+				<td><code>tx_data</code></td>
+				<td>This indicates the data to be transmitted. There is no
+					longer an tx_data_len here; the cloud will supplement the length
+					before transmitting the data to the device based on the actual
+					number of tx_data. Here, the value is represented in hex, starting
+					with 0x. For example, to transmit the number 3, it would be 0x03,
+					where 0 represents the high 4 bits of the number 3 being 0, and 3
+					represents the low 4 bits being 3. To transmit lowercase letter
+					'a', it would be 0x61, because the hexadecimal 0x61 corresponds
+					exactly to the ASCII code of letter 'a'.</td>
+				<td><span class="badge badge-required">Yes</span></td>
+				<td>Number</td>
+				<td>X</td>
+				<td>Input</td>
+			</tr>
+			<tr>
+				<td><code>tx_pin</code></td>
+				<td>GPIO number, for example, if gpio_esp_21 is used as the tx
+					pin, then write 21 here. If this parameter is not transmitted, the
+					device will use a predefined one which can be checked on the UART
+					module configuration page. Transmitting this parameter will
+					override and modify the default configuration, so if you want to
+					change the configuration, you only need to transmit it once.</td>
+				<td><span class="badge badge-optional">No</span></td>
+				<td>Number</td>
+				<td>1</td>
+				<td>Input</td>
+			</tr>
+			<tr>
+				<td><code>rx_pin</code></td>
+				<td>GPIO number, for example, if gpio_esp_2 is used as the rx
+					pin, then write 2 here. If this parameter is not transmitted, the
+					device will use a predefined one which can be checked on the UART
+					module configuration page. Transmitting this parameter will
+					override and modify the default configuration, so if you want to
+					change the configuration, you only need to transmit it once.</td>
+				<td><span class="badge badge-optional">No</span></td>
+				<td>Number</td>
+				<td>1</td>
+				<td>Input</td>
+			</tr>
+			<tr>
+				<td><code>baud_rate</code></td>
+				<td>Baud rate, indicating the speed of transmission and
+					reception, should match the baud rate supported by the device you
+					are connecting to. Commonly used values include 115200. If this
+					parameter is not transmitted, the device will use a predefined one
+					which can be checked on the UART module configuration page.
+					Transmitting this parameter will override and modify the default
+					configuration, so if you want to change the configuration, you only
+					need to transmit it once.</td>
+				<td><span class="badge badge-optional">No</span></td>
+				<td>Number</td>
+				<td>4</td>
+				<td>Input</td>
+			</tr>
+		</tbody>
+	</table>
+	<h5>Examples</h5>
+	<div>
+		<strong>Using GPIO 2 for tx, GPIO 14 for rx, baud rate
+			115200, transmitting 0x303132, the receiver actually receives ASCII
+			characters '012':</strong>
+		<p>
+			<code>operate=8 tx_data=0x303132 tx_pin=2 rx_pin=14
+				baud_rate=115200</code>
+		</p>
+		<p>Returns:</p>
+		<p>
+			<code>{"id":"67b69a9c87025163883ee51a","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":8,"request":{"rawString":"operate=8
+				tx_data=0x303132 tx_pin=2 rx_pin=14
+				baud_rate=115200","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-20T02:59:40.371935775Z","upload":null,"uploadTime":"2025-02-20T02:59:40.682589016Z","command":3,"operate":8,"info":"tx
+				done","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code>
+		</p>
+		<hr>
+		<strong>Transmit using default configurations:</strong>
+		<p>
+			<code>operate=8 tx_data=0x303132</code>
+		</p>
+		<p>Returns:</p>
+		<p>
+			<code>{"id":"67b69a6987025163883ee513","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":8,"request":{"rawString":"operate=8
+				tx_data=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-20T02:58:48.159729956Z","upload":null,"uploadTime":"2025-02-20T02:58:49.072281797Z","command":3,"operate":8,"info":"tx
+				done","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code>
+		</p>
+	</div>

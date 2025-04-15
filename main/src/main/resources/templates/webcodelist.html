@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{fragments/nav :: head(#{code_list})}"></th:block>
+<body>
+ <th:block th:insert="~{fragments/nav :: search}"></th:block>
+<div class="container-fluid">
+  <div class="row">
+   <th:block th:insert="~{fragments/nav :: menu}"></th:block>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+	  <th:block th:insert="~{fragments/nav :: breadcrumb}"></th:block>
+	  <div class="d-flex align-items-center">
+	      <h2 class="me-2" th:text="#{code_list}">Codes list</h2>
+		  <a th:href="@{/pub/doc(page='onlinecoding')}" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+	  </div>
+      <div class="table-responsive small">
+        <table class="table table-striped table-sm" id="codes-body">
+        </table>
+      </div>
+    </main>
+   <th:block th:insert="~{fragments/nav :: modalError}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalConfirm}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalCreateItem}"></th:block>
+  </div>
+</div>
+
+<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+<script th:inline="javascript">
+const actionCodes = { newWindow: 1, operate: '/dc/web/code?projectId=', icon: 'bi-badge-cc', space: 'me-2', help: [[#{edit_codes}]] };
+const actionLog = { newWindow: 1, operate: '/dc/web/codelog?projectId=', icon: 'bi-binoculars', space: 'me-2', help: [[#{check_build_log}]] };
+const columns = [
+    { column: 'id', name: [[#{id_no_comma}]], width: '1%', isId: 1, isHidden: 1},
+	{ column: 'name', name: [[#{name_tb_device}]], width: '15%'},
+	{ column: 'access', name: [[#{access}]], width: '15%'},
+	{ column: 'fileModifyTime', name: [[#{codes_update}]], width: '15%'},
+	{ column: 'buildUpdateTime', name: [[#{build_time}]], width: '15%'},
+	{ column: 'buildResultType', name: [[#{build_status}]], width: '15%'},
+	{ column: 'buildBinVersion', name: [[#{firmware}]], width: '15%'},
+    { name: [[#{action_tb_device}]], width: '10%', isAction: 1, actions: [actionCodes,actionLog]},
+];
+
+const tableInput=[{tableData: 'codeslist', tableBody: 'codes-body', tableColumns: columns}];
+excAction('/dc/web/codelistrefresh',null,tableInput,null,true);
+
+
+// 等待页面完全加载后初始化 Tooltip
+document.addEventListener('DOMContentLoaded', function () {
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  tooltipTriggerList.forEach(tooltipTriggerEl => {
+    new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+});
+
+
+</script>
+</body>
+</html>

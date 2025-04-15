@@ -1,0 +1,45 @@
+<h5>Description</h5>
+<p>After configuring the TM7705, the device will periodically report data, and you can also read data at any time through commands; these two methods do not conflict.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Necessary</th>
+            <th>Type</th>
+			<th>Bytes</th>
+            <th>In/Out</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed to 14</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+			<td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>pin</code></td>
+            <td>1 indicates reading the value of pin 1, 2 indicates reading the value of pin 2, 3 indicates reading both values simultaneously.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+			<td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Example</h5>
+<div>
+    <strong>Read the value of pin 1 amplified by 10^7 times, so divide by 10^7 to get the voltage value in units of volts, if the voltage value is -100, it indicates an error in reading:</strong>
+    <p><code>operate=14 pin=1</code></p>
+    <p>Return</p>
+    <p><code>{"id":"67ac7dda8545421273252f37","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":5,"request":{"rawString":"operate=14 pin=1","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-12T10:54:17.230674654Z","upload":{"pin1Value":2145,"pin2Value":null},"uploadTime":"2025-02-12T10:54:18.076961433Z","command":3,"operate":14,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <strong>Read the values of pins 1 and 2 amplified by 10^7 times, so divide by 10^7 to get the voltage value in units of volts, if the voltage value is -100, it indicates an error in reading:</strong>
+    <p><code>operate=14 pin=3</code></p>
+    <p>Return</p>
+    <p><code>{"id":"67ac7e048545421273252f3d","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":5,"request":{"rawString":"operate=14 pin=3","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-12T10:54:58.815282294Z","upload":{"pin1Value":2193,"pin2Value":5245},"uploadTime":"2025-02-12T10:55:00.020887917Z","command":3,"operate":14,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

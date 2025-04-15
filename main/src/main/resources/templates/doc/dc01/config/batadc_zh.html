@@ -1,0 +1,28 @@
+{
+    "moduleName": "MODULE_BATADC",
+    "moduleComments": "用于配置电池检测模块的参数。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "adc_bat_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "用于配置电池检测模块开关状态。0表示关闭，1表示开启。"
+        },
+        {
+            "order": 2,
+            "name": "adc_bat_partial_pressure",
+            "sample": "5000",
+            "range": "0-0xffffffff",
+            "comments": "如果电池的电压比较高，不能直接接到ESP引脚进行电压测量，需要分压后测量，比如两个10k的电阻串联，电池正负极接在两个串联电阻两端，这时我们测两个电阻连接处得到的电压就是电池电压的一半，这就是所谓分压，这里存的是分压系数的10000倍，比如50%分压，分压系数就是0.5，那么这里存0.5*10000=5000。"
+        },
+        {
+            "order": 3,
+            "name": "adc_bat_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff秒",
+            "comments": "配置电池检测模块数据上传的间隔时间（秒）。"
+        }
+    ],
+    "status": "ok"
+}

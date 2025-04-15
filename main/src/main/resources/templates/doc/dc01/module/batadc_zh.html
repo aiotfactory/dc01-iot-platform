@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_BATADC模块介绍</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#description" class="active">模块说明</a></li>
+        <li><a href="#periodupload">数据上报-自动</a></li>
+		<li><a href="#commandupload">数据上报-命令</a></li> 
+		<li><a href="#forward">数据转发</a></li> 
+		<li><a href="#runtimeinfo">运行状态</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_BATADC模块介绍</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>模块说明</h6>
+        <p>设备可以自动测量输入电池电压，电压高低可以用来评估电池剩余电量，支持数据自动上报，通过命令请求上报和点击'运行状态'旁边刷新来上报，三种上报形式的数据格式一样。
+		</p>
+    </div>
+	<div class="help-item" id="periodupload">
+	    <h6>数据上报-自动</h6>
+		<p>字段意思比较明确，也可以<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看MODULE_BATADC模块，里面介绍了上报的数据字段含义。
+		</p>
+	</div>
+	<div class="help-item" id="commandupload">
+	    <h6>数据上报-命令</h6>
+		<p>通过向设备发送命令也会触发设备上报数据，<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看MODULE_BATADC模块相关章节了解可以执行那些命令，以及上报的数据格式。
+		</p>
+	</div>
+	<div class="help-item" id="forward">
+	    <h6>数据转发</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">点击</a>查看如何配置模块的数据转发。
+		   <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">点击</a>查看转发的数据格式。
+		</p>
+	</div>	
+	<div class="help-item" id="runtimeinfo">
+	    <h6>运行状态</h6>
+		<p><a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看MODULE_BATADC模块相关章节可以了解各个字段含义。
+		</p>
+	</div>	
+</div>
+</body>
+</html>

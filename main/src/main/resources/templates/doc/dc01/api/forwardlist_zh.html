@@ -1,0 +1,12 @@
+{
+  "params": "fields=forward&from=0&to=50&deviceId=xxxxxxxxxxxx&moduleTypeId=xxxxxx",
+  "inputComments": "指定设备ID和API以列出转发数据日志。",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>用于列出转发数据日志的设备ID。</td></tr><tr><td>moduleTypeId</td><td>用于列出转发数据日志的模块类型ID，如果不指定，则返回所有类型。</td></tr><tr><td>from to</td><td>从'from'开始到'to'结束返回行。'from'从0开始。如果没有填写，只返回前10条记录，最多不超过1000条记录。</td></tr></tbody></table>",
+  "outputComments": "云会将数据转发到您的服务器，您也可以通过此API查询日志。它仅返回前50条记录。",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>如果成功，状态为ok。</td></tr><tr><td>forwardList</td><td>容器。</td></tr><tr><td>createTime</td><td>格式为11-14 19:01:28。</td></tr><tr><td>rx</td><td>从您的服务器获取的响应，并且是URL编码的。</td></tr><tr><td>tx</td><td>发送到您的服务器的JSON内容。</td></tr><tr><td>error</td><td>当数据成功转发时，值为0；-1表示由于创建数据时未配置转发URL而未被转发；其他负数代码表示不同的错误。</td></tr><tr><td>pack</td><td>云中的日志ID。</td></tr><tr><td>url</td><td>云将数据转发到的URL。</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"forwardList\": [\r\n    {\r\n      \"tx\": \"{\\\"key\\\":\\\"4931c2a2b5b349d013e42a56bf5094e9\\\",\\\"content\\\":{...}}\",\r\n      \"createTime\": \"02-20 13:48:47\",\r\n      \"rx\": \"4xx+or+5xx+error\",\r\n      \"moduleName\": \"MODULE_GPIO\",\r\n      \"id\": \"67b6c23ff444022e96a01a54\",\r\n      \"type\": \"LOG\",\r\n      \"error\": \"-2\",\r\n      \"pack\": \"e21d36\",\r\n      \"url\": \"http://www.abc.com\"\r\n    }\r\n  ],\r\n  \"forwardStatus\": true,\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"forwardList\": [\r\n    {\r\n      \"tx\": \"{\\\"key\\\":\\\"4931c2a2b5b349d013e42a56bf5094e9\\\",\\\"content\\\":{...}}\",\r\n      \"createTime\": \"02-20 13:48:47\",\r\n      \"rx\": \"4xx+or+5xx+error\",\r\n      \"moduleName\": \"MODULE_GPIO\",\r\n      \"id\": \"67b6c23ff444022e96a01a54\",\r\n      \"type\": \"LOG\",\r\n      \"error\": \"-2\",\r\n      \"pack\": \"e21d36\",\r\n      \"url\": \"http://www.abc.com\"\r\n    }\r\n  ],\r\n  \"forwardStatus\": true,\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

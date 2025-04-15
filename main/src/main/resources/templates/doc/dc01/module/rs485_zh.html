@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_RS485模块介绍</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#description" class="active">模块说明</a></li>
+        <li><a href="#periodupload">数据上报-自动</a></li>
+		<li><a href="#interruptupload">数据上报-中断</a></li> 
+		<li><a href="#commandupload">数据上报-命令</a></li> 
+		<li><a href="#forward">数据转发</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_RS485模块介绍</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>模块说明</h6>
+        <p>DC01的ESP芯片有3路UART，为UART0，UART1和UART2，UART0一般用于烧录和打印日志，因此这里谈的是UART2 (UART1用于UART通讯)，像大部分ESP芯片的功能模块一样，UART引脚可以配置，就是不必固定为那几个引脚。
+		   具体可以参考。<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看RS485相关章节。
+		   RS485和UART原理几乎一样，只是电压不同，通讯距离RS485要远得多，默认配置是用同样的引脚，因此如果同时开启要修改配置，不能用相同引脚。
+		</p>
+    </div>
+	<div class="help-item" id="periodupload">
+	    <h6>数据上报-自动</h6>
+		<p>自动上报的数据是485运行的状态信息。主要为Tx, Rx的次数以及出错次数。dataType类型为PROPERTY,rxData为null。
+			rxTimes 开机后，接收的次数，rxLength 总计接收的字节长度，rxTimesFailed接收出错次数，rxUploadFailed接收上报出错次数，
+			rxFifoOverTimes 硬件UART的buffer溢出次数，比如短时间接收大量数据。rxBufFullTimes 硬件UART的buffer满次数，
+			rxBreakTimes 中断次数，rxParityErrTimes 接收奇偶校验出错次数，rxFrameErrTimes 接收帧出错次数，txLength 总计发送字节长度，
+			txTimes 总结发送次数，txTimesFailed 总计发送出错次数。
+		</p>
+	    <code>		
+			{
+			    "key": "f402afaa0f9ceeeb230ce6291c95c306",
+			    "content": {
+			        "id": "67b6a0aa87025163883ee5ab",
+			        "deviceId": "67b460755a961507ca44bc0d",
+			        "moduleTypeId": 19,
+			        "request": null,
+			        "requestTime": null,
+			        "upload": {
+						"protocolType": "RS485",
+						"dataType": "PROPERTY",
+			            "rxData": null,
+			            "rxTimes": 10,
+			            "rxLength": 59,
+			            "rxTimesFailed": 0,
+			            "rxUploadFailed": 0,
+			            "rxFifoOverTimes": 0,
+			            "rxBufFullTimes": 0,
+			            "rxBreakTimes": 1,
+			            "rxParityErrTimes": 0,
+			            "rxFrameErrTimes": 0,
+			            "txLength": 3,
+			            "txTimes": 1,
+			            "txTimesFailed": 0
+			        },
+			        "uploadTime": "2025-02-20T03:25:30.761688310Z",
+			        "command": 6,
+			        "operate": null,
+			        "info": null,
+			        "errorType": "OK",
+			        "dataCommType": "PERIOD_UPLOAD",
+			        "dataCommSource": "DEVICE_AUTO"
+			    }
+			}
+	    </code>	
+	</div>
+	<div class="help-item" id="interruptupload">
+	    <h6>数据上报-中断</h6>
+		<p>中断上报实际是485处于监听状态，当收到信息后自动上报。<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看485章节接收数据部分，中断上报的是接收数据， 其他字段为0
+		</p>	
+	</div>
+	
+	<div class="help-item" id="commandupload">
+	    <h6>数据上报-命令</h6>
+		<p>通过向设备发送命令可以触发485模块发送信息，<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看485相关章节了解可以执行那些命令，以及上报的数据格式。
+		</p>
+	</div>
+	<div class="help-item" id="forward">
+	    <h6>数据转发</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">点击</a>查看如何配置模块的数据转发。
+		   <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">点击</a>查看转发的数据格式。
+		</p>
+	</div>	
+</div>
+</body>
+</html>

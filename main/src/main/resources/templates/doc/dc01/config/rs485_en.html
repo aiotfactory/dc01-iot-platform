@@ -1,0 +1,49 @@
+{
+    "moduleName": "MODULE_RS485",
+    "moduleComments": "Used to configure related parameters of the RS485 module, such as on/off status, baud rate, upload interval, etc.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "rs485_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "Used for configuring the on/off status of the RS485 module. 0 indicates off, 1 indicates on."
+        },
+        {
+            "order": 2,
+            "name": "rs485_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff seconds",
+            "comments": "Configures the interval time (seconds) for RS485 data upload."
+        },
+        {
+            "order": 3,
+            "name": "rs485_baud_rate",
+            "sample": "115200",
+            "range": "1000-800000",
+            "comments": "Configures the baud rate of RS485."
+        },
+        {
+            "order": 4,
+            "name": "rs485_rts_pin",
+            "sample": "1",
+            "range": "0-48",
+            "comments": "Configures the RTS pin for RS485. Theoretically, any IO pin of the ESP chip can be used, but gpio_esp_1 is easier for wiring as it only requires connecting a jumper cap. If other pins are used, careful wiring is required and check if those pins are being used for other purposes."
+        },
+        {
+            "order": 5,
+            "name": "rs485_tx_pin",
+            "sample": "21",
+            "range": "0-48",
+            "comments": "Configures the TX transmission pin for RS485. Theoretically, any IO pin of the ESP chip can be used, but gpio_esp_21 is easier for wiring as it only requires connecting a jumper cap. If other pins are used, careful wiring is required and check if those pins are being used for other purposes."
+        },
+        {
+            "order": 6,
+            "name": "rs485_rx_pin",
+            "sample": "2",
+            "range": "0-48",
+            "comments": "Configures the RX reception pin for RS485. Theoretically, any IO pin of the ESP chip can be used, but gpio_esp_2 is easier for wiring as it only requires connecting a jumper cap. If other pins are used, careful wiring is required and check if those pins are being used for other purposes."
+        }
+    ],
+    "status": "ok"
+}

@@ -1,0 +1,28 @@
+{
+    "moduleName": "MODULE_BATADC",
+    "moduleComments": "Used to configure parameters for the battery detection module.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "adc_bat_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "Used for configuring the on/off status of the battery detection module. 0 indicates off, 1 indicates on."
+        },
+        {
+            "order": 2,
+            "name": "adc_bat_partial_pressure",
+            "sample": "5000",
+            "range": "0-0xffffffff",
+            "comments": "If the battery voltage is high, it cannot be directly connected to the ESP pin for voltage measurement; it needs to be measured after voltage division. For example, with two 10k resistors in series, the positive and negative terminals of the battery are connected to the ends of the two series resistors. The voltage measured at the connection point of the two resistors is half of the battery voltage, which is so-called voltage division. Here, the stored value is 10000 times the voltage division coefficient. For instance, a 50% voltage division means the coefficient is 0.5, so the stored value would be 0.5*10000=5000."
+        },
+        {
+            "order": 3,
+            "name": "adc_bat_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff seconds",
+            "comments": "Configures the interval time (seconds) for data upload from the battery detection module."
+        }
+    ],
+    "status": "ok"
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块配置说明</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	    .command-intro {
+	        background-color: #f8f9fa;
+	        padding: 20px;
+	        border-radius: 8px;
+	        margin-bottom: 30px;
+	        border-left: 4px solid #007bff;
+	    }
+	    .command-intro h5 {
+	        margin-bottom: 15px;
+	    }
+	    .badge-required {
+	        background-color: #dc3545;
+	    }
+	    .badge-optional {
+	        background-color: #28a745;
+	    }
+	</style>
+</head>
+<body>
+
+<div class="container my-5">
+    <div class="text-center mb-4">
+		<h1>帮助 - 配置设备</h1>
+		<p class="text-muted">数据流: Web页面配置 → 云服务器 → 设备 → 云服务器</p>
+    </div>
+	<div class="command-intro">
+	    <h5>配置机制说明</h5>
+	    <p>云服务器，设备之间交互:</p>
+	    <ul>
+	        <li><strong>通过Web页面配置:</strong> 配置内容首先存储在云端服务器上，可以修改多个配置项。</li>
+	        <li><strong>修改config_version:</strong> 在Web页面修改config_version为任意一个和设备上的值不同的值，不同值表示标记为开始推送信息。</li>
+	        <li><strong>下一次设备上报数据:</strong> 云端检查到config_version被修改，云端筛选所有被修改的配置项，打包，打包内容作为上报消息的返回值发回到设备，也就是说，只有设备上报数据时，修改信息才会随同返回值发回，如果设备不上报，信息就暂存在云端</li>
+	        <li><strong>设备接收配置:</strong>设备接收到配置信息后会进行检查，跳过相同内容和出错内容，如果仍旧存在有效修改，设备会把修改内容存储在本地flash，同时设备会立刻把最新配置信息上报到云端。</li>
+			<li><strong>云端接收最新配置:</strong>云端接收到最新配置信息后会把配置页面中的设备列内容更新。</li>
+	    </ul>
+	</div>
+    <div class="accordion" id="configAccordion">
+    </div>
+</div>
+<script src="/dc/js/bootstrap.bundle.min.js"></script>
+<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+<script th:inline="javascript">
+    window.onload = function () {
+        (async () => {
+            const result = await (await makeRequest('GET','/dc/pub/doc/configlist', null, false)).json();
+            if (result.configList && Array.isArray(result.configList)) {
+                result.configList.forEach(config => {
+                    createAccordionItem(config.id, config.order, config.moduleName);
+                });
+            }	
+        })();
+    };
+	function createAccordionItem(id,order,name) {
+	     const accordion = document.getElementById('configAccordion');
+	     const accordionItem = document.createElement('div');
+	     accordionItem.className = 'accordion-item';
+	     accordionItem.id = `item${id}`;
+
+	     const headerHtml = `
+	         <h2 class="accordion-header" id="heading${id}">
+	             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+	                 data-bs-target="#collapse${id}" aria-expanded="false" aria-controls="collapse${id}" 
+	                 onclick="loadAccordionContent('${id}', '${name}')">
+	                 <span class="me-2 badge bg-primary">${order}</span> ${name}
+	             </button>
+	         </h2>
+	     `;
+	     
+	     const contentHtml = `
+	         <div id="collapse${id}" class="accordion-collapse collapse" aria-labelledby="heading${id}" data-bs-parent="#configAccordion">
+	             <div class="accordion-body">Loading...</div>
+	         </div>
+	     `;
+
+	     accordionItem.innerHTML = headerHtml + contentHtml;
+	     accordion.appendChild(accordionItem);
+	 }
+
+	 function loadAccordionContent(id,name) {
+	     const accordionBody = document.querySelector(`#collapse${id} .accordion-body`);
+	     if (accordionBody.dataset.loaded === 'true') return;
+	     const name2=name.split('_')[1].toLowerCase();
+	     const url = '/dc/pub/doc?page=config_'+name2+'&deviceType=dc01';
+	     fetch(url)
+	         .then((response) => response.ok ? response.json() : Promise.reject('Failed to load content'))
+	         .then((content) => {
+	             fillAccordionItem(content.moduleName,content.moduleComments,content.configInfo, accordionBody)
+	             accordionBody.dataset.loaded = 'true';
+	         })
+	         .catch(() => {
+	             accordionBody.innerHTML = 'Error loading content.';
+	         });
+	 }
+	 
+	 function fillAccordionItem(moduleName,moduleComments,configInfo, bodyDiv) {
+			bodyDiv.innerHTML='';
+		    // 创建模块卡片容器
+		    const moduleCard = document.createElement("div");
+		    moduleCard.className = "module-card";
+
+		    // 创建模块标题
+		    const moduleTitle = document.createElement("h4");
+		    moduleTitle.innerHTML = '模块名称: <strong>'+moduleName+'</strong>';
+		    moduleCard.appendChild(moduleTitle);
+
+		    // 模块描述
+		    const moduleDescription = document.createElement("p");
+		    moduleDescription.textContent = moduleComments;
+		    moduleCard.appendChild(moduleDescription);
+
+		    // 创建表格
+		    const table = document.createElement("table");
+		    table.className = "table config-table";
+
+		    // 创建表头
+		    const thead = document.createElement("thead");
+		    thead.innerHTML = `
+		        <tr>
+		            <th>配置项</th>
+		            <th>例子</th>
+		            <th>范围</th>
+		            <th>说明</th>
+		        </tr>
+		    `;
+		    table.appendChild(thead);
+
+		    // 创建表格内容
+		    const tbody = document.createElement("tbody");
+		    configInfo.forEach((config) => {
+		        const row = document.createElement("tr");
+
+		        // 配置项列
+		        const nameCell = document.createElement("td");
+		        nameCell.textContent = config.name;
+		        row.appendChild(nameCell);
+
+		        // 示例值列
+		        const sampleCell = document.createElement("td");
+		        sampleCell.textContent = config.sample;
+		        row.appendChild(sampleCell);
+
+		        // 范围列
+		        const rangeCell = document.createElement("td");
+		        rangeCell.textContent = config.range;
+		        row.appendChild(rangeCell);
+
+		        // 说明列
+		        const commentsCell = document.createElement("td");
+		        commentsCell.textContent = config.comments;
+		        row.appendChild(commentsCell);
+
+		        tbody.appendChild(row);
+		    });
+
+		    table.appendChild(tbody);
+		    moduleCard.appendChild(table);
+
+		    // 将模块卡片插入到指定的容器中
+		    bodyDiv.appendChild(moduleCard);
+		}
+    function createAccordionItem2(id, name, order) {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('accordion-item');
+        const header = document.createElement('h2');
+        header.classList.add('accordion-header');
+        header.id = `${id}Header`;
+        const button = document.createElement('button');
+        button.classList.add('accordion-button', 'collapsed');
+        button.type = 'button';
+        button.setAttribute('data-bs-toggle', 'collapse');
+        button.setAttribute('data-bs-target', `#${id}`);
+        button.setAttribute('aria-expanded', 'false');
+        button.setAttribute('aria-controls', id);
+        button.innerText = `${order}: ${name}`;
+        button.onclick = function () {
+            (async () => {
+                const result = await (await makeRequest('GET', `/dc/pub/doc/configinfo?id=${id}`, null, false)).json();
+                if (result.configInfo) fillAccordionItem(result.moduleName,result.moduleComments,result.configInfo, bodyDiv);
+            })();
+        };
+        const collapseDiv = document.createElement('div');
+        collapseDiv.classList.add('accordion-collapse', 'collapse');
+        collapseDiv.id = id;
+        collapseDiv.setAttribute('aria-labelledby', `${id}Header`);
+        collapseDiv.setAttribute('data-bs-parent', '#configAccordion');
+        const bodyDiv = document.createElement('div');
+        bodyDiv.classList.add('accordion-body');
+        collapseDiv.appendChild(bodyDiv);
+        header.appendChild(button);
+        itemDiv.appendChild(header);
+        itemDiv.appendChild(collapseDiv);
+        document.getElementById('configAccordion').appendChild(itemDiv);
+    }
+
+	
+
+    </script>
+</body>
+</html>

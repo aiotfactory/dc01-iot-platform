@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{fragments/nav :: head(#{ota_list})}"></th:block>
+<body>
+ <th:block th:insert="~{fragments/nav :: search}"></th:block>
+<div class="container-fluid">
+  <div class="row">
+   <th:block th:insert="~{fragments/nav :: menu}"></th:block>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+	  <th:block th:insert="~{fragments/nav :: breadcrumb}"></th:block>
+	  <div class="d-flex align-items-center">
+	      <h2 class="me-2" th:text="#{ota_list}">OTA list</h2>
+		  <a th:href="@{/pub/doc(page='ota')}" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+	      <a class="icon-link mb-1" href="javascript:void(0);" onclick="showCreateOTAModal()" rel="noopener">
+	          <svg class="bi" width="16" height="16"><use xlink:href="#arrow-right-circle"></use></svg>
+			  <span th:text="#{new}">new</span>
+	      </a>
+	  </div>
+      <div class="table-responsive small">
+        <table class="table table-striped table-sm" id="ota-body">
+        </table>
+      </div>
+    </main>
+   <th:block th:insert="~{fragments/nav :: modalError}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalConfirm}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalCreateItem}"></th:block>
+  </div>
+</div>
+
+<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+<script th:inline="javascript">
+	
+const colorStatus = {column: 'colorStatus',colors: [{value: 1,color:'yellow'},{value: 2,color:'#00FF00'}]};
+const actionUpload={ icon: 'bi-upload', space: 'me-2', isAjax: 'callback', callback: uploadFirmware,help: [[#{ota_upload_firmware}]] };
+const actionInclude={ icon: 'bi-box-arrow-in-down-right', space: 'me-2', isAjax: 'callback', callback: showCreateDeviceListModal, callbackParameters: 'include', help: [[#{ota_device_include}]] };
+const actionExclude={ icon: 'bi-box-arrow-up-left', space: 'me-2', isAjax: 'callback', callback: showCreateDeviceListModal, callbackParameters: 'exclude', help: [[#{ota_device_exclude}]] };
+const actionView={ newWindow: 1, operate: '/dc/web/otarecord?id=', icon: 'bi-eye', space: 'me-2', help: [[#{ota_detail}]]};
+const actionDel={ confirmTitle: [[#{confirm_modal_title}]], confirmDescription:  [[#{ota_confirm_delete}]], operate: '/dc/web/otalistrefresh?action=otaDel&id=', icon: 'bi-trash', isAjax: 'normal', help: [[#{ota_delete}]] };
+
+const columns = [
+    { column: 'id', name: 'ID', width: '0%', isId: 1, isHidden: 1,help: [[#{id_tb_device_comments}]] },
+	{ column: 'name', name: [[#{name_tb_device}]], width: '5%', help: [[#{ota_name}]] },
+    { column: 'deviceType', name: [[#{device_tb_device}]], width: '5%', editable: [], fieldType: 'string', updateAction:'/dc/web/otalistrefresh?action=otaUpdate&id=', help: [[#{ota_devicetype}]] },
+    { column: 'deviceFirmWareTargetVersion', name: [[#{target}]], width: '5%', editable: [], fieldType: 'string', updateAction:'/dc/web/otalistrefresh?action=otaUpdate&id=', help: [[#{ota_target_version}]] },
+    { column: 'deviceFirmWareVersion', name: [[#{version}]], width: '5%', help: [[#{ota_firmware_version}]] },
+	{ column: 'upgradeStrategy', name: [[#{strategy}]], width: '10%', editable: [], fieldType: 'string', updateAction:'/dc/web/otalistrefresh?action=otaUpdate&id=', help: [[#{ota_upgrade_strategy_list}]] },
+	{ column: 'upgradeScope', name: [[#{scope}]], width: '10%', editable: [], fieldType: 'string', updateAction:'/dc/web/otalistrefresh?action=otaUpdate&id=', help: [[#{ota_upgrade_scope_list}]]},
+	{ column: 'includeNum', name: [[#{include}]], width: '5%', help: [[#{ota_num_include}]]},
+	{ column: 'excludeNum', name: [[#{exclude}]], width: '5%', help: [[#{ota_num_exclude}]]},
+	{ column: 'firmWareSize', name: [[#{size}]], width: '5%', help: [[#{ota_firmware_size}]] }, 
+	{ name: [[#{action_tb_device}]], width: '10%', isAction: 1, actions: [actionInclude,actionExclude,actionUpload,actionView,actionDel]},
+];
+const tableInput=[{tableData: 'otaList', tableDataMeta: 'otaListMeta', tableBody: 'ota-body', tableColumns: columns}];
+excAction('/dc/web/otalistrefresh',null,tableInput,null,true);
+
+function uploadFirmware(otaId) 
+{
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.style.position = 'absolute';
+    fileInput.style.opacity = 0;
+    fileInput.addEventListener('change', function () {
+        const file = fileInput.files[0];
+        if (!file) {
+            return;
+        }
+        const formData = new FormData();
+        formData.append('file', file);
+        fetch('/dc/web/otaupload?id='+otaId, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+			excAction('/dc/web/otalistrefresh',null,tableInput,null,true);
+            showErrorModal(data.status);
+        })
+        .catch(() => {
+			excAction('/dc/web/otalistrefresh',null,tableInput,null,true);
+            showErrorModal(data.status);
+        });
+		
+    });
+    fileInput.click();
+}
+function showCreateDeviceListModal(otaId,listType) {
+	const modalId=document.getElementById('createItemModal');
+	let createItemModal = bootstrap.Modal.getInstance(modalId);
+	if (!createItemModal) 
+		createItemModal = new bootstrap.Modal(modalId);
+    modalId.querySelector('.modal-title').textContent=[[#{action_device_add_device_no_enter}]];
+	const fieldDivs = document.querySelectorAll(".field"); 
+	fieldDivs.forEach(function(div) {
+		div.classList.add('d-none');
+	});
+
+	fieldDivs[3].classList.remove('d-none');
+	if(listType=='include')
+		fieldDivs[3].querySelectorAll(".form-label")[0].textContent =[[#{ota_include_device_no}]]; 
+	else
+		fieldDivs[3].querySelectorAll(".form-label")[0].textContent =[[#{ota_exclude_device_no}]]; 
+	fieldDivs[3].querySelectorAll(".form-control")[0].value='';
+	fieldDivs[3].querySelectorAll(".form-control")[0].placeholder=[[#{ota_enter_device_no}]];
+
+	const confirmButton = modalId.querySelector('.submit');
+	confirmButton.addEventListener('click', function() {
+		const deviceNoList=fieldDivs[3].querySelectorAll(".form-control")[0].value;
+		const jsonSend = {
+			deviceNoList: deviceNoList
+		   };
+		createItemModal.hide();
+		excAction("/dc/web/otalistrefresh?action=otaDeviceList&listType="+listType+"&id="+otaId,jsonSend,tableInput,null,true);		
+	}, { once: true });
+	createItemModal.show();
+}
+function showCreateOTAModal() {
+	const modalId=document.getElementById('createItemModal');
+	let createItemModal = bootstrap.Modal.getInstance(modalId);
+	if (!createItemModal) 
+		createItemModal = new bootstrap.Modal(modalId);
+    modalId.querySelector('.modal-title').textContent=[[#{ota_enter_firmware_info}]] ;
+	const fieldDivs = document.querySelectorAll(".field"); 
+	fieldDivs.forEach(function(div) {
+		div.classList.add('d-none');
+	});
+
+	fieldDivs[0].classList.remove('d-none');
+	fieldDivs[0].querySelectorAll(".form-label")[0].textContent =[[#{name_tb_device}]]; 
+	fieldDivs[0].querySelectorAll(".form-control")[0].value='';
+	fieldDivs[0].querySelectorAll(".form-control")[0].placeholder=[[#{ota_enter_name}]];
+	
+	const confirmButton = modalId.querySelector('.submit');
+	confirmButton.addEventListener('click', function() {
+		const name=fieldDivs[0].querySelectorAll(".form-control")[0].value;
+		const jsonSend = {
+			name: name
+		   };
+		createItemModal.hide();
+		excAction("/dc/web/otalistrefresh?action=otaAdd",jsonSend,tableInput,null,true);		
+	}, { once: true });
+	createItemModal.show();
+}
+
+// Tooltip initialization
+//const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+//const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
+// 等待页面完全加载后初始化 Tooltip
+document.addEventListener('DOMContentLoaded', function () {
+  const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+  tooltipTriggerList.forEach(tooltipTriggerEl => {
+    new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+});
+
+
+</script>
+</body>
+</html>

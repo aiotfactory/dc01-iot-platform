@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Code Writing, Compilation, and Upgrade</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#c1">Principles</a></li>
+        <li><a href="#c2">Edit Code</a></li>
+        <li><a href="#c3">Compile Code</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">Online Code Writing, Compilation, and Upgrade</h1>
+    </div>
+    <div class="help-item" id="c1">
+        <h6>Principles</h6>
+        <p>When exploring a new field, setting up the environment is often time-consuming and error-prone, requiring the installation of editors, compilers, and learning how to connect and burn firmware. To simplify this process, an online method has been introduced where users do not need to perform any local preparations.
+            The system's cloud already pre-installs the editor; users can modify code through the web page, submit it for compilation online, which may require queuing during peak times. Generally, compiling once takes several minutes.
+            The compilation results are also viewed through the page, with error messages visible as well. If there are no errors, the compiled result can be saved as new firmware or discarded.
+            After compiling successfully and saving as new firmware, you can start <a href="/dc/pub/doc?page=ota#c4" target="_blank">upgrading</a>.
+        </p>
+    </div>
+    <div class="help-item" id="c2">
+        <h6>Edit Code</h6>
+        <p>Click on <a href="/dc/web/codelist" target="_blank">Code</a> to see the projects that the current user can edit online. Clicking the icon next to the project opens the web editor for the code. 
+            On the left side of the code editor, the directory tree contains editable files with "Save", "Build", and "Logs" buttons corresponding to file save, submission for compilation, and viewing build logs respectively.
+        </p>
+    </div>
+    <div class="help-item" id="c3">
+        <h6>Compile Code</h6>
+        <p>In the above code editor, click "Build" to submit for compilation. Then, clicking "Logs" will view the progress of the compilation. In the "Logs" page at the top left corner, you can see recent build records in a dropdown list.
+            Green indicates success, red indicates failure. Selecting each one shows specific log information.
+            Tail 1000 and Tail 100 allow you to view the last 1000 and 100 lines of the log, especially useful when frequently checking progress during compilation.
+            The "Delete" button allows you to delete the current log. If the latest record in the dropdown list displays "pending", it means waiting for others to complete.
+        </p>
+        <p>For successful compilations, you can click the "OTA" button to save the firmware for remote upgrades. More detailed OTA upgrade guidance can be found <a href="/dc/pub/doc?page=ota" target="_blank">here</a>.</p>
+    </div>
+</div>
+</body>
+</html>

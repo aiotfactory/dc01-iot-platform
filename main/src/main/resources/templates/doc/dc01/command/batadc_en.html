@@ -1,0 +1,56 @@
+<h5>Description</h5>
+<p>When the device is powered by a battery, it is necessary to monitor the battery level. If the battery is low, a reminder to charge or replace the battery should be triggered. A simple approach is to measure the battery voltage. For example, for a regular polymer lithium battery, charging is required when the voltage drops below 3.5V. Through experiments, a relationship table between voltage and remaining battery capacity can also be established.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 12</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Get Battery Voltage:</strong>
+    <p><code>operate=12</code></p>
+    <p>Response, Normal</p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><code>adcTimes</code></td>
+                <td>Indicates how many times the battery voltage has been measured since startup.</td>
+            </tr>
+            <tr>
+                <td><code>adcTimesFailed</code></td>
+                <td>Indicates the number of failed measurement attempts since startup.</td>
+            </tr>
+            <tr>
+                <td><code>adcPinOnoff</code></td>
+                <td>To measure the voltage, the battery voltage is divided and connected to an ESP pin. This results in a small current loss of a few microamperes. In scenarios where extreme power saving is critical, we use a switch to control this connection. If the switch is off, the microampere-level current loss will not occur.</td>
+            </tr>
+            <tr>
+                <td><code>adcValue</code></td>
+                <td>This is the result of multiplying millivolts (mV) by 10000. Therefore, dividing this value by 10000 gives the voltage in mV.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Normal Response</p>
+    <p><code>{"id":"67aee3f35820a82f992fef25","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":11,"request":{"rawString":"operate=12","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-14T06:34:26.714554677Z","upload":{"adcValue":8940000,"adcTimes":7,"adcTimesFailed":0,"adcPinOnoff":1},"uploadTime":"2025-02-14T06:34:27.016364458Z","command":3,"operate":12,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <p>Response, Voltage Measurement Not Enabled, adcPinOnoff=0 indicates the pin is disconnected</p>
+    <p><code>{"id":"67b6f2abce367f5034a00858","deviceId":"67b6f1a4ce367f5034a00513","deviceNo":"24587cd6ef0c","moduleTypeId":11,"request":{"rawString":"operate=12","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-20T09:15:20.694627771Z","upload":{"adcValue":0,"adcTimes":36,"adcTimesFailed":0,"adcPinOnoff":0},"uploadTime":"2025-02-20T09:15:23.260335790Z","command":3,"operate":12,"deviceRequestPack":5,"deviceUploadPack":5,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

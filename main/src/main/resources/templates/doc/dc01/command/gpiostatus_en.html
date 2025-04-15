@@ -1,0 +1,33 @@
+<h5>Description</h5>
+<p>Read the values of all GPIOs at once.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 7</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Read the operating status. Only pins configured as enabled are returned; pins configured as 0 are not returned:</strong>
+    <p><code>operate=7</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67aaebef64b53b7e99f1fadc","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=7","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:19:25.970685959Z","upload":{"values":[{"pinValue":0,"pinMode":33,"pinType":"ESP","pin":14,"valueType":"ANALOG"},{"pinValue":0,"pinMode":60,"pinType":"ESP","pin":21,"valueType":"DIGITAL"}]},"uploadTime":"2025-02-11T06:19:27.398332674Z","command":3,"operate":7,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

@@ -1,0 +1,12 @@
+{
+  "params": "fields=config&deviceId=xxxxxxxxxxxx&moduleTypeId=xxx",
+  "inputComments": "Specify the deviceId and moduleTypeId to list all the configurable elements of the module.",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>The id of the device.</td></tr><tr><td>moduleTypeId</td><td>The id of module.</td></tr></tbody></table>",
+  "outputComments": "All the configurable elements of the module.",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>If success, it will return ok.</td></tr><tr><td>configList</td><td>Contain all the configs.</td></tr><tr><td>valueInDb</td><td>Config set in cloud database, and it will be pushed to device as part of response once device uploads any data to cloud, once it is updated on device, valueInDevice will be set accordingly in cloud database.</td></tr><tr><td>valueLen</td><td>The max bytes of the config value, 1 means 1 byte(8 bits).</td></tr><tr><td>module</td><td>The module name.</td></tr><tr><td>name</td><td>The module alias.</td></tr><tr><td>id</td><td>The id of this config</td></tr><tr><td>type</td><td>Number or String</td></tr><tr><td>valueInDevice</td><td>Value in device, if the valueInDevice is different from the valueInDb, cloud will push valueInDb to device.</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"configList\": [\r\n    {\r\n      \"valueInDb\": \"\",\r\n      \"valueLen\": 1,\r\n      \"module\": \"MODULE_WIFI\",\r\n      \"name\": \"wifi_mode\",\r\n      \"id\": 50,\r\n      \"type\": \"Number\",\r\n      \"valueInDevice\": \"1\"\r\n    }\r\n	...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"configList\": [\r\n    {\r\n      \"valueInDb\": \"\",\r\n      \"valueLen\": 1,\r\n      \"module\": \"MODULE_WIFI\",\r\n      \"name\": \"wifi_mode\",\r\n      \"id\": 50,\r\n      \"type\": \"Number\",\r\n      \"valueInDevice\": \"1\"\r\n    }\r\n	...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

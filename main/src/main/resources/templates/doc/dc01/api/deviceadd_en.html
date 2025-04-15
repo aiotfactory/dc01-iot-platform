@@ -1,0 +1,12 @@
+{
+  "params": "action=deviceAdd&deviceNo=xxxxxxxxxxxx&deviceToken=xxxxxx",
+  "inputComments": "Specify the deviceNo and deviceToken, both can be found from the surface of product.",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceNo</td><td>The device No, usually, it will be 12 characters.</td></tr><tr><td>deviceToken</td><td>The token for the device.</td></tr></tbody></table>",
+  "outputComments": "If the deviceNo and deviceToken both correct, a device will be added into the current user, and all the devices will be returned as well.",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>If success, it will return ok and the rest of devices.</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"deviceList\": [\r\n    {\r\n      \"iccid\": \"\",\r\n      \"ownerShip\": \"\",\r\n      \"colorStatus\": 0,\r\n      \"imei\": \"\",\r\n      \"id\": \"6728af1db4ccfe5fd00fd2d2\",\r\n      \"deviceNo\": \"245872206b91\",\r\n      \"uploadTime\": \"\",\r\n      \"deviceName\": \"\",\r\n      \"deviceStatus\": \"ENABLED\"\r\n    }\r\n	...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"deviceList\": [\r\n    {\r\n      \"iccid\": \"\",\r\n      \"ownerShip\": \"\",\r\n      \"colorStatus\": 0,\r\n      \"imei\": \"\",\r\n      \"id\": \"6728af1db4ccfe5fd00fd2d2\",\r\n      \"deviceNo\": \"245872206b91\",\r\n      \"uploadTime\": \"\",\r\n      \"deviceName\": \"\",\r\n      \"deviceStatus\": \"ENABLED\"\r\n    }\r\n	...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

@@ -1,0 +1,244 @@
+<h5>Description</h5>
+<p>Users may be unfamiliar with LoRa, but it can be roughly compared to Wi-Fi. However, LoRa has a much longer transmission range than Wi-Fi, reaching over 10 kilometers in open areas, although its transmission speed is slower. On the other hand, it is highly energy-efficient, allowing battery-powered devices to operate for more than a year in many scenarios. In addition to this, LoRa also has complex protocols like LoRaWAN, but here we only use point-to-point communication. For example, when writing socket communication programs, the underlying driver handles a large number of network-related protocols, such as handshakes. Even at the application layer, actions like opening and closing connections are required. However, point-to-point communication is much simpler: the transmitter broadcasts some bits of data on a specific radio frequency, and nearby receivers can pick up the data without handshakes, connection establishment, or confirmation steps. It simply broadcasts the data wirelessly in an encoded format, making it more power-efficient, though the application layer needs to handle tasks like confirmation.</p>
+
+<h5>Data Reception</h5>
+<p>Since point-to-point devices are peer-to-peer, the other device may send data to this device at any time. This device remains on standby according to predefined configurations, and after receiving the data, it reports it to the cloud. The cloud stores and forwards the data. Therefore, there are two ways to obtain data: one is to query the latest received data from the cloud via API, and the other (better) method is to register a third-party system URL in advance so that the cloud can push the received device data to the specified URL.</p>
+<p>To query, click <a href="/dc/web/doc?page=api&deviceType=dc01" target="_blank">here</a> and use the API "Data Forward List" to query the reported data.</p>
+<p>For push forwarding, click <a href="/dc/web/apisetting" target="_blank">here</a> to configure your receiving URL. The received LoRa messages will be forwarded to your URL via HTTP POST.</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>deviceId</code></td>
+            <td>The ID of the device reporting the data.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td><code>deviceNo</code></td>
+            <td>The device code reporting the data, usually printed on the surface of the device.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td><code>uploadDatatype</code></td>
+            <td>The type of LoRa-reported data: "dtu rx" for received data, "property" for LoRa status information reported by the device.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td><code>rxData</code></td>
+            <td>The hexadecimal value of the reported data. Since it may contain non-visible characters, it is fully converted to hexadecimal for transmission, and the receiving end needs to decode the hexadecimal string.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td><code>txTimes, txTimesTimeout, rxTimes, rxTimesTimeout, rxTimesError</code></td>
+            <td>Count information recorded since the device was powered on.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+    </tbody>
+</table>
+
+<h5>Example</h5>
+<div>
+    <p><strong>Your server will receive the reported data via HTTP POST:</strong></p>
+    <code>{
+        "key": "050b354d1fafb3f1ae5b59e1a326f2b0",
+        "content": {
+            "id": "67c983a0ca195b006fba5514",
+            "deviceId": "67c561d2cbc9eb4b857adc42",
+            "deviceNo": "24587cd6ef0c",
+            "moduleTypeId": 7,
+            "request": null,
+            "requestTime": null,
+            "upload": {
+                "uploadDatatype": "dtu",
+                "rxData": "YWJjMDAwMDAwMDA0Mw==",
+                "txTimes": 0,
+                "txTimesTimeout": 0,
+                "rxTimes": 0,
+                "rxTimesTimeout": 0,
+                "rxTimesError": 0
+            },
+            "uploadTime": "2025-03-06T11:14:40.017933688Z",
+            "command": 7,
+            "operate": null,
+            "deviceRequestPack": null,
+            "deviceUploadPack": 8,
+            "info": null,
+            "errorType": "OK",
+            "dataCommType": "INTERRUPT_UPLOAD",
+            "dataCommSource": "DEVICE_AUTO"
+        }
+    }</code>
+</div>
+
+<h5>Sending Data</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed at 10</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>flag</code></td>
+            <td>1 means only initialization and enabling reception, 2 means using previous initialization settings and only sending data, 3 means reinitializing and sending data simultaneously.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>fre</code></td>
+            <td>The frequency of the LoRa device in Hertz. Only devices with the same frequency can communicate with each other. Typically, 43300000 is used.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>4</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>tx_output_power</code></td>
+            <td>Transmission power, ranging from 0 to 22. The higher the value, the farther the distance, but it consumes more power.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>bandwidth</code></td>
+            <td>0: 125 kHz, 1: 250 kHz, 2: 500 kHz. The wider the bandwidth, the farther the communication range, but the poorer the interference resistance, and vice versa.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>spreading_factor</code></td>
+            <td>7–12, spreading factor. It can be roughly understood as how many bits represent 1 bit of information, providing some error correction capability. The higher the value, the farther the distance, but the slower the speed. Generally, it does not exceed 10.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>codingrate</code></td>
+            <td>Error correction coding rate [1: 4/5, 2: 4/6, 3: 4/7, 4: 4/8]. Typically, 1 is used.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>preamble_length</code></td>
+            <td>Preamble length. Typically, 8 is used.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>fix_length_payload_on</code></td>
+            <td>Whether the packet has a fixed length. Typically, 0 is used, meaning no.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>iq_inversion_on</code></td>
+            <td>Set whether to invert the interrupt level. Typically, 0 is used, meaning no.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>tx_timeout</code></td>
+            <td>Transmission timeout time in milliseconds.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>4</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>rx_timeout</code></td>
+            <td>Reception timeout time in milliseconds.</td>
+            <td><span class="badge badge-optional">Initialization parameter; if provided, all initialization parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>4</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>tx_times</code></td>
+            <td>Number of transmissions. After receiving the command, the device will broadcast the same data multiple times. This sets the number of repetitions.</td>
+            <td><span class="badge badge-optional">Transmission parameter; if provided, all transmission parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>4</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>tx_interval_min_ms, tx_interval_max_ms</code></td>
+            <td>Interval period for repeated transmissions. After receiving the command, the device will broadcast the same data multiple times. This sets the minimum and maximum values (in milliseconds), and the device will automatically select a random value within this range.</td>
+            <td><span class="badge badge-optional">Transmission parameter; if provided, all transmission parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>4</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>tx_data</code></td>
+            <td>Data to be transmitted, represented in hexadecimal format with the prefix 0x, e.g., 0x303132.</td>
+            <td><span class="badge badge-optional">Transmission parameter; if provided, all transmission parameters must be provided.</span></td>
+            <td>Number</td>
+            <td>x</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Initialize and send data:</strong>
+    <p><code>operate=10 flag=3 fre=442800000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132</code></p>
+    <p>Response: Transmission successful</p>
+    <code>{"id":"67c981f5ca195b006fba5506","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=10 flag=3 fre=442800000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-06T11:07:32.310153626Z","upload":null,"uploadTime":"2025-03-06T11:07:33.032603026Z","command":3,"operate":10,"deviceRequestPack":27,"deviceUploadPack":27,"info":"lora tx success","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code>
+    <p>Response: LoRa not configured to be enabled</p>
+    <code>{"id":"67ca515fca195b006fba551e","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=10 flag=3 fre=442800000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-07T01:52:31.240263242Z","upload":null,"uploadTime":"2025-03-07T01:52:31.688551666Z","command":3,"operate":10,"deviceRequestPack":28,"deviceUploadPack":28,"info":"lora is off in device","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code>
+    <hr>
+    <strong>Send data only:</strong>
+    <p><code>operate=10 flag=2 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132</code></p>
+    <p>Response</p>
+    <code>{"id":"67c9802eca195b006fba54d9","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=10 flag=2 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-06T10:59:55.766960163Z","upload":null,"uploadTime":"2025-03-06T10:59:58.923583455Z","command":3,"operate":10,"deviceRequestPack":20,"deviceUploadPack":20,"info":"lora tx success","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code>
+    <hr>
+    <strong>Initialize only:</strong>
+    <p><code>operate=10 flag=1 fre=442800000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000</code></p>
+    <p>Response</p>
+    <code>{"id":"67c980c8ca195b006fba54ec","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=10 flag=1 fre=433000000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-06T11:02:31.391464193Z","upload":null,"uploadTime":"2025-03-06T11:02:32.783787415Z","command":3,"operate":10,"deviceRequestPack":23,"deviceUploadPack":23,"info":"lora tx success","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code>
+    <hr>
+    <strong>Request operational status only:</strong>
+    <p><code>operate=21</code></p>
+    <p>Response</p>
+    <code>{"id":"67ca51d6ca195b006fba5521","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=21","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-07T01:54:29.508172635Z","upload":{"uploadDatatype":"property","rxData":null,"txTimes":0,"txTimesTimeout":0,"rxTimes":0,"rxTimesTimeout":0,"rxTimesError":0},"uploadTime":"2025-03-07T01:54:30.161922949Z","command":3,"operate":21,"deviceRequestPack":29,"deviceUploadPack":29,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code>
+</div>

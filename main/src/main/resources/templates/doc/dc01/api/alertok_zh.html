@@ -1,0 +1,12 @@
+{
+  "params": "fields=none&action=alertOk&deviceId=xxxxxxxxxxxx&moduleTypeId=xxx&alertId=xxxxxxx",
+  "inputComments": "指定设备ID、模块类型ID和告警ID。",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>设备的ID。</td></tr><tr><td>moduleTypeId</td><td>模块的ID。</td></tr><tr><td>alertId</td><td>告警的ID。</td></tr></tbody></table>",
+  "outputComments": "通过将状态标记为DONE来解决告警。",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>如果成功，将返回ok。</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

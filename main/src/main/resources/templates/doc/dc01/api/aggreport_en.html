@@ -1,0 +1,12 @@
+{
+  "params": "fields=data&action=aggRefresh&deviceId=xxxxxxxxxxxx&moduleTypeId=xxx&page=0&startDate=2024-11-10T00:00:00.000Z&endDate=2024-11-11T00:00:00.000Z",
+  "inputComments": "Specify the deviceId, moduleTypeId,page,startDate,endDate to get the aggregated report of the module.",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>The id of the device.</td></tr><tr><td>moduleTypeId</td><td>The id of module.</td></tr><tr><td>page</td><td>The page sequence, and num per page is defined by system, page starting from 0.</td></tr><tr><td>startDate endDate</td><td>ISO date format 2024-11-11T00:00:00.000Z, if not present,it will take current date as default.</td></tr></tbody></table>",
+  "outputComments": "Return the aggregated report of this module, and the data will be displayed in table, and they will be different for different modules, you may check the view page of module to understand the meaning.",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>If success, it will return ok.</td></tr><tr><td>aggMap</td><td>It is the container of data.</td></tr><tr><td>yAxisData</td><td>It is the container of Y axis data.</td></tr><tr><td>xAxisData</td><td>X axis data.</td></tr><tr><td>minPin1Value minPin2Value</td><td>Just example, and the fields will be different for different module, you may check the view page of module.</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"aggMap\": {\r\n    \"yAxisData\": {\r\n      \"minPin1Value\": [\r\n        \"0\",\r\n        \"0\",\r\n        ...\r\n      ],\r\n      \"minPin2Value\": [\r\n        \"0\",\r\n        \"0\",\r\n        ...\r\n      ],\r\n      ...\r\n    },\r\n    \"xAxisData\": [\r\n      \"11-10 00\",\r\n      \"11-10 01\",\r\n      ...\r\n    ]\r\n  },\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"aggMap\": {\r\n    \"yAxisData\": {\r\n      \"minPin1Value\": [\r\n        \"0\",\r\n        \"0\",\r\n        ...\r\n      ],\r\n      \"minPin2Value\": [\r\n        \"0\",\r\n        \"0\",\r\n        ...\r\n      ],\r\n      ...\r\n    },\r\n    \"xAxisData\": [\r\n      \"11-10 00\",\r\n      \"11-10 01\",\r\n      ...\r\n    ]\r\n  },\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

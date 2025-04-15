@@ -1,0 +1,104 @@
+<h5>Description</h5>
+<p>There are two types of GPIOs on the circuit board: one is the pin of the ESP32 chip, and the other comes from an expansion module. The reason for adding the expansion module is that the number of ESP32 pins is insufficient. However, the GPIOs of the ESP32 support more functions (refer to other documents for details). Currently, the extended GPIO only supports outputting high or low voltage levels. Fun fact: A pin is a soldering point on the chip, usually a thin metal wire-like structure. These pins are typically connected to terminals, posts, or sockets on the circuit board, making it convenient to connect external devices.</p>
+<!-- Parameter Table -->
+<h5>GPIO Output</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 2</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>gpio_ext_no</code></td>
+            <td>7=gpio_ext_io7, 9=gpio_ext_oc1, 13=gpio_ext_oc5, 14=gpio_ext_oc6, 17=gpio_ext_oc9, 18=gpio_ext_oc10, 19=gpio_ext_oc11, 20=gpio_ext_oc12, 21=gpio_ext_oc13, 22=gpio_ext_oc14, 0=gpio_ext_io0, 1=gpio_ext_io1, 2=gpio_ext_io2, 3=gpio_ext_io3</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>status</code></td>
+            <td>The switch status of the pin. Setting it to 1 means turning it on, commonly referred to as "pull up" or "output high level." If measured with a multimeter, the voltage of this pin will generally equal the chip's voltage, such as 3.3V. Setting it to 0 turns off the pin, commonly referred to as "pull down" or "output low level." When measured with a multimeter, the voltage will be 0V or close to 0V.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Set gpio_ext_io0 (because 0=gpio_ext_io0, so use 0) to output high level:</strong>
+    <p><code>operate=2 gpio_ext_no=0 status=1</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67aaec4064b53b7e99f1fadf","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=2 gpio_ext_no=0 status=1","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:20:45.600353615Z","upload":{"values":null},"uploadTime":"2025-02-11T06:20:48.712225589Z","command":3,"operate":2,"info":"ext gpio no 0 set to 1","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <hr>
+    <strong>Set gpio_ext_oc1 (because 9=gpio_ext_oc1, so use 9) to output low level:</strong>
+    <p><code>operate=2 gpio_ext_no=9 status=0</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67aafe5364b53b7e99f1fafe","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=2 gpio_ext_no=9 status=0","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T07:37:55.340840473Z","upload":{"values":null},"uploadTime":"2025-02-11T07:37:55.569098984Z","command":3,"operate":2,"info":"ext gpio no 9 set to 0","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <h5>GPIO Read</h5>
+    <p>The value read is a logical value: high voltage is 1, and low voltage is 0.</p>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Parameter</th>
+                <th>Description</th>
+                <th>Required</th>
+                <th>Type</th>
+                <th>Bytes</th>
+                <th>Input/Output</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>Fixed value: 16</td>
+                <td><span class="badge badge-required">Yes</span></td>
+                <td>Number</td>
+                <td>1</td>
+                <td>Input</td>
+            </tr>
+            <tr>
+                <td><code>is_esp</code></td>
+                <td>1 indicates an ESP chip GPIO pin, and 0 indicates an EXT GPIO pin.</td>
+                <td><span class="badge badge-required">Yes</span></td>
+                <td>Number</td>
+                <td>1</td>
+                <td>Input</td>
+            </tr>
+            <tr>
+                <td><code>gpio_no</code></td>
+                <td>7=gpio_ext_io7, 9=gpio_ext_oc1, 13=gpio_ext_oc5, 14=gpio_ext_oc6, 17=gpio_ext_oc9, 18=gpio_ext_oc10, 19=gpio_ext_oc11, 20=gpio_ext_oc12, 21=gpio_ext_oc13, 22=gpio_ext_oc14, 0=gpio_ext_io0, 1=gpio_ext_io1, 2=gpio_ext_io2, 3=gpio_ext_io3</td>
+                <td><span class="badge badge-required">Yes</span></td>
+                <td>Number</td>
+                <td>1</td>
+                <td>Input</td>
+            </tr>
+        </tbody>
+    </table>
+    <h5>Examples</h5>
+    <div>
+        <strong>Read the logical level of gpio_ext_io2 (because 2=gpio_ext_io2, so use 2), returning logical high level 1:</strong>
+        <p><code>operate=16 is_esp=0 gpio_no=2</code></p>
+        <p>Response</p>
+        <p><code>{"id":"67aaff3b64b53b7e99f1fb05","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=0 gpio_no=2","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T07:41:47.694480570Z","upload":{"values":[{"pinValue":1,"pinMode":2,"pinType":"EXT","pin":2,"valueType":"DIGITAL"}]},"uploadTime":"2025-02-11T07:41:47.969551710Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+        <strong>Read the logical level of gpio_ext_oc5 (because 13=gpio_ext_oc5, so use 13). Since it is not configured to be enabled, no value is read:</strong>
+        <p><code>operate=16 is_esp=0 gpio_no=13</code></p>
+        <p>Response</p>
+        <p><code>{"id":"67aaffbc64b53b7e99f1fb08","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=0 gpio_no=13","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T07:43:55.486612585Z","upload":{"values":[]},"uploadTime":"2025-02-11T07:43:56.038617448Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    </div>

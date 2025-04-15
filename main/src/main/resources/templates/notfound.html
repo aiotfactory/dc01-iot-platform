@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{page_not_found}">Page Not Found</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .error-container {
+            max-width: 600px;
+            margin: 100px auto;
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 4rem;
+            color: #dc3545;
+        }
+        .error-title {
+            font-size: 2rem;
+            margin-top: 20px;
+            color: #343a40;
+        }
+        .error-description {
+            margin-top: 10px;
+            color: #6c757d;
+        }
+        .btn-back {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-container">
+            <i class="bi bi-exclamation-triangle-fill error-icon"></i>
+            <h1 class="error-title" th:text="#{page_not_found}">Page Not Found</h1>
+            <p class="error-description" th:text="#{sorry_page_moved}">
+                Sorry, the page you're looking for doesn't exist or may have been moved.
+            </p>
+            <a href="/dc/" class="btn btn-primary btn-back">
+                <i class="bi bi-house-door-fill" th:text="#{return_to_home}"></i> Back to Home
+            </a>
+        </div>
+    </div>
+    <script src="/dc/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

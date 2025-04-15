@@ -1,0 +1,21 @@
+{
+    "moduleName": "MODULE_META",
+    "moduleComments": "用于配置设备的元信息，如开关状态，上报间隔等。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "meta_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "用于配置设备的开启与关闭状态。0表示关闭，1表示开启。"
+        },
+        {
+            "order": 2,
+            "name": "meta_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff秒",
+            "comments": "配置设备上传数据的间隔时间（秒）。"
+        }
+    ],
+    "status": "ok"
+}

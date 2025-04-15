@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_CONFIG模块介绍</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#description" class="active">模块说明</a></li>
+		<li><a href="#forward">数据转发</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_CONFIG模块介绍</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>模块说明</h6>
+        <p>设备启动后，当网络连接完毕，首先会把设备上的配置信息上报一次，如果用户还希望设备周期上报配置信息，可以开启此模块。即便关闭此模块，设备首次建立连接后仍旧会上报配置信息一次。中间如果网络中断，重新建立
+			连接，建立好后，也会上报一次。
+			每个模块页面开端都是和其模块相关配置，而MODULE_CONFIG模块可以查看到所有配置，方便用户集中处理。
+		    <a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">点击</a>查看所有配置说明。
+			其中MODULE_CONFIG章节介绍本模块的管理。
+		</p>
+    </div>
+	<div class="help-item" id="forward">
+	    <h6>数据转发</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">点击</a>查看如何配置模块的数据转发。
+		   <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">点击</a>查看转发的数据格式。
+		</p>
+	</div>	
+</div>
+</body>
+</html>

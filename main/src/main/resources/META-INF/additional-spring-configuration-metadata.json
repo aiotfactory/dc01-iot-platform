@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "md5.keys.password",
+    "type": "java.lang.String",
+    "description": "A description for 'md5.keys.password'"
+  },
+  {
+    "name": "constant.cookie.default-max-time",
+    "type": "java.lang.String",
+    "description": "A description for 'constant.cookie.default-max-time'"
+  },
+  {
+    "name": "md5.keys.device",
+    "type": "java.lang.String",
+    "description": "A description for 'md5.keys.device'"
+  }
+]}

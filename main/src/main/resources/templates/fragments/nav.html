@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head th:fragment="head(title)">
+	  	<script src="/dc/js/assets/color-modes.js"></script>
+		<title th:text="${title}"></title>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+	    <meta name="description" content="">
+	    <meta name="author" content="AIOT factory">
+	    <meta name="generator" content="Hugo 0.122.0">
+	    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	    <script src="/dc/js/echarts.min.js"></script>
+		<link rel="stylesheet" href="/dc/css/flatpickr.min.css">
+	    <script src="/dc/js/flatpickr.js"></script>
+		<script src="/dc/js/bootstrap.bundle.min.js"></script>
+	    <style>		
+		.cmd-window {
+		           background-color: black;
+		           color: lime;
+		           padding: 10px;
+		           font-family: monospace;
+		           border-radius: 5px;
+		           margin: 10px 0;
+		           height: 300px;
+		           overflow-y: auto;
+		       }
+       .cmd-line {
+           display: flex; /* 使用flexbox布局 */
+           align-items: center;
+       }
+       .cmd-prompt {
+           display: inline-block;
+           width: auto;
+           margin-right: 5px; /* 间距调整 */
+       }
+       .cmd-input {
+           background-color: black;
+           color: lime;
+           border: none;
+           outline: none;
+           flex-grow: 1; /* 让输入框占满剩余空间 */
+       }
+       .cmd-output {
+           white-space: pre-wrap;
+       }
+	    </style>
+	    <link href="/dc/css/dashboard/dashboard.css" rel="stylesheet">
+	</head>
+		<header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark" th:fragment="search">
+		  <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#" th:text="${siteCompany} +' '+ #{greeting} + ' ' + ${login}">Hello Guest</a>
+		  <ul class="navbar-nav flex-row d-md-none">
+		    <li class="nav-item text-nowrap">
+		      <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+		        <i class="bi bi-list-ul"></i>
+		      </button>
+		    </li>
+		  </ul>
+		  <div class="d-flex justify-content-end p-3" id="language-switcher">
+		      <a href="javascript:void(0);" class="text-decoration-none mx-2 text-body small" data-lang="zh_CN" title="中文">
+		          <span class="fi fi-cn me-1"></span>中文
+		      </a>
+		      <a href="javascript:void(0);" class="text-decoration-none mx-2 text-body small" data-lang="en_US" title="English">
+		          <span class="fi fi-gb me-1"></span>English
+		      </a>
+		  </div>
+
+		</header>		
+		    <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary"  th:fragment="menu">
+		      <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+		        <div class="offcanvas-header">
+		          <h5 class="offcanvas-title" id="sidebarMenuLabel"><span th:text="${siteCompany}"></span></h5>
+		          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+		        </div>
+		        <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+		          <ul class="nav flex-column">
+		            <li class="nav-item">
+		              <a class="nav-link d-flex align-items-center gap-2" href="/dc/web/devicelist">
+		                <i class="bi bi-phone-vibrate-fill"></i>
+		                <span th:text="#{menu_devices}">Devices</span>
+		              </a>
+		            </li>
+		          </ul>				
+				  <ul class="nav flex-column" th:if="${parentUserId == null}">
+				    <li class="nav-item">
+				      <a class="nav-link d-flex align-items-center gap-2" href="/dc/web/userlist">
+				        <i class="bi bi-people"></i>
+				        <span th:text="#{menu_users}">Users</span>
+				      </a>
+				    </li>
+				  </ul>			 
+				  <ul class="nav flex-column" th:if="${parentUserId == null}">
+				    <li class="nav-item">
+				      <a class="nav-link d-flex align-items-center gap-2" href="/dc/web/otalist">
+				        <i class="bi bi-file-arrow-down"></i>
+				        <span th:text="#{menu_ota}">OTA</span>
+				      </a>
+				    </li>
+				  </ul>		
+				  <ul class="nav flex-column" th:if="${parentUserId == null}">
+				    <li class="nav-item">
+				      <a class="nav-link d-flex align-items-center gap-2" href="/dc/web/codelist">
+				        <i class="bi bi-code"></i>
+				        <span th:text="#{menu_project}">Codes</span>
+				      </a>
+				    </li>
+				  </ul>	
+				  <ul class="nav flex-column" th:if="${parentUserId == null}">
+				    <li class="nav-item">
+				      <a class="nav-link d-flex align-items-center gap-2" href="/dc/web/apisetting">
+				        <i class="bi bi-cloud"></i>
+				        <span th:text="#{menu_api}">API</span>
+				      </a>
+				    </li>
+				  </ul>	 
+<!-- 				  <ul class="nav flex-column" th:if="${parentUserId == null}">
+				    <li class="nav-item">
+				      <a class="nav-link d-flex align-items-center gap-2" href="/dc/web/llmsetting">
+				        <i class="bi bi-yin-yang"></i>
+				        <span th:text="#{menu_llm}">LLM</span>
+				      </a>
+				    </li>
+				  </ul>	  -->
+				  <ul class="nav flex-column" th:if="${parentUserId == null}">
+				    <li class="nav-item">
+				      <a class="nav-link d-flex align-items-center gap-2" href="/dc/pub/doc?page=membership" target="_blank">
+				  	<i class="bi bi-collection"></i>
+				        <span th:text="#{menu_quotation}">Membership</span>
+				      </a>
+				    </li>
+				  </ul>	 
+				  <ul class="nav flex-column">
+				    <li class="nav-item">
+				      <a class="nav-link d-flex align-items-center gap-2" href="/dc/pub/doc?page=index" target="_blank">
+						<i class="bi bi-file-break"></i>
+				        <span th:text="#{menu_help}">Help</span>
+				      </a>
+				    </li>
+				  </ul>	 
+		          <hr class="my-3">
+		          <ul class="nav flex-column mb-auto">
+		            <li class="nav-item">
+		              <a class="nav-link d-flex align-items-center gap-2" href="/dc/web/usersetting">
+		                <i class="bi bi-gear"></i>
+		                <span th:text="#{menu_settings}">Settings</span>
+		              </a>
+		            </li>
+		            <li class="nav-item">
+		              <a class="nav-link d-flex align-items-center gap-2" href="/dc/web/logout">
+						<i class="bi bi-door-open"></i>
+		                <span th:text="#{menu_sign_out}">Sign out</span>
+		              </a>
+		            </li>
+		          </ul>
+		        </div>
+		      </div>
+		    </div>
+		<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true"  th:fragment="modalError">
+	        <div class="modal-dialog modal-dialog-centered">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <h5 class="modal-title" id="errorModalLabel" th:text="#{error_modal_title}">Info</h5>
+	                    <button type="button" class="btn-close" data-bs-dismiss="modal" th:aria-label="#{error_modal_close}"></button>
+	                </div>
+	                <div class="modal-body" id="errorModalBody" style="word-wrap: break-word; word-break: break-all;">
+	                </div>
+	                <div class="modal-footer">
+	                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{error_modal_close}">Close</button>
+	                </div>
+	            </div>
+	        </div>
+    	</div>
+		<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true" th:fragment="modalConfirm">
+		    <div class="modal-dialog modal-dialog-centered">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title" id="confirmModalLabel" th:text="#{confirm_modal_title}">Confirm Deletion</h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" th:attr="aria-label=#{error_modal_close}"></button>
+		            </div>
+		            <div class="modal-body" id="confirmModalBody" th:text="#{confirm_modal_msg}">
+		                Are you sure you want to delete this item?
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" th:text="#{confirm_modal_cancel}">Cancel</button>
+		                <button type="button" class="btn btn-danger" id="confirmDeleteBtn" th:text="#{confirm_modal_continue}">Continue</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+		
+		<div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true" th:fragment="modalImagePreview">
+		  <div class="modal-dialog modal-lg">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="imageModalLabel" th:text="#{image_preview_modal_title}">Image Preview</h5>
+		        <button type="button" class="btn-close" data-bs-dismiss="modal" th:attr="aria-label=#{error_modal_close}"></button>
+		      </div>
+		      <div class="modal-body">
+		        <img id="imagePreviewImage" src="" class="img-fluid" th:attr="alt=#{image_preview_modal_alt}">
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		
+		<div class="modal fade" id="createItemModal" tabindex="-1" aria-labelledby="modalCreateItemLabel" aria-hidden="true" th:fragment="modalCreateItem">
+		    <div class="modal-dialog">
+		        <div class="modal-content">
+		            <div class="modal-header">
+		                <h5 class="modal-title"></h5>
+		                <button type="button" class="btn-close" data-bs-dismiss="modal" th:attr="aria-label=#{error_modal_close}"></button>
+		            </div>
+		            <div class="modal-body">
+		                <form id="itemForm">
+		                    <div class="mb-3 field">
+		                        <label for="field1" class="form-label"></label>
+		                        <input type="text" class="form-control" placeholder="" required>
+		                    </div>
+		                    <div class="mb-3 field">
+		                        <label for="field2" class="form-label"></label>
+		                        <input type="text" class="form-control"placeholder="" required>
+		                    </div>
+							<div class="mb-3 field">
+							    <label for="field3" class="form-label"></label>
+							    <input type="text" class="form-control"placeholder="" required>
+							</div>
+							<div class="mb-3 field">
+							    <label for="field4" class="form-label"></label>
+							    <textarea class="form-control" rows="4" placeholder="" required></textarea>
+							</div>
+		                </form>
+		            </div>
+		            <div class="modal-footer">
+		                <button type="button" class="btn btn-secondary cancel" data-bs-dismiss="modal" th:text="#{create_item_modal_cancel}">Cancel</button>
+		                <button type="button" class="btn btn-primary submit" th:text="#{create_item_modal_submit}">Submit</button>
+		            </div>
+		        </div>
+		    </div>
+		</div>
+			
+		<nav aria-label="breadcrumb"  th:fragment="breadcrumb">
+		    <ol class="breadcrumb p-1 bg-body-tertiary rounded-3">
+		        <li class="breadcrumb-item">
+		            <a class="link-body-emphasis" th:href="@{/}">
+						<i class="bi bi-house"></i>
+		                <span class="visually-hidden" th:text="#{breadcrumb_home}">Home</span>
+		            </a>
+		        </li>
+		        <li th:each="breadcrumb, iterStat : ${breadcrumbs}" class="breadcrumb-item" th:classappend="${iterStat.last} ? 'active' : ''">
+		            <a th:if="${!iterStat.last}" th:href="@{${breadcrumb[1]}}" class="link-body-emphasis fw-semibold text-decoration-none">
+		                <span th:text="${breadcrumb[0]}"></span>
+		            </a>
+		            <span th:if="${iterStat.last}" th:text="${breadcrumb[0]}"></span>
+		        </li>
+		    </ol>
+		</nav>
+<script th:fragment="scriptFunctions" th:inline="javascript">
+
+	var commandHistory = [];  // 存储历史命令
+	var historyIndex = -1;    // 当前命令在历史中的索引
+	var currentInput = "";    // 用于保存用户输入的命令
+
+	async function makeRequest(protocol,actionSend,jsonSend,throwError) 
+	{
+	    try {
+			const url = new URL(actionSend, window.location.origin);
+			const requestOptions = {
+			    method: protocol,
+			    headers: {
+			        'Content-Type': 'application/json',
+			    }
+			};
+			let tempUrl=actionSend;
+			if (protocol === 'POST') 
+			{
+				const params = new URLSearchParams(url.search);
+				const combinedData = { ...(jsonSend || {}) };
+				params.forEach((value, key) => {
+				    combinedData[key] = value;
+				});
+				const jsonStr = JSON.stringify(combinedData);
+			    requestOptions.body = jsonStr;
+				tempUrl=url.pathname;
+			}
+			//console.log(`Sending request to: ${tempUrl}`); // 添加日志
+			const response = await fetch(tempUrl, requestOptions);
+			//console.log('Response received:', response); // 响应日志
+			if (response.redirected)
+				window.location.href = response.url;
+			if (!response.ok) {
+				if(throwError)
+			    	throw new Error([[#{network_response_error}]]); 
+				else
+					showErrorModal([[#{return_error}]]);
+			}
+	        return response;
+	    } catch (error) {
+	        console.error("Error in makeRequest:", error);
+			if(throwError)
+	        	throw error; 
+			else
+				showErrorModal([[#{return_error}]]);
+	    }
+	}
+
+	async function commandExe(e) {
+		const cmdInput =  document.getElementById('cmdInput');
+		const cmdOutput = document.getElementById('cmdOutput');
+		const cmdWindow = document.getElementById('cmdWindow');
+		const cmdPrompt = document.getElementById('cmdPrompt');
+	    if (e.key === 'Enter') {
+	        e.preventDefault();
+	        const command = cmdInput.value.trim();
+	        if (command === '') {
+	            return;
+	        }
+	        commandHistory.push(command);
+	        historyIndex = -1;  // 重置索引
+	        currentInput = '';   // 清空当前输入
+	        
+	        cmdOutput.innerHTML += '<div>[Device]# '+command+'</div>';
+	        cmdPrompt.style.display = 'none';
+	        cmdInput.style.display = 'none';
+	        cmdInput.value = '';
+	        try {
+				const result = await (await makeRequest('POST','/dc/web/devicecmdrefresh?deviceId='+deviceId+'&moduleTypeId='+moduleTypeId,{command: command},true)).json();
+	            if((result.status)&&(result.status=="ok")){
+	            	cmdOutput.innerHTML += '<div>'+result.response+'</div>';
+	            }else
+	            	cmdOutput.innerHTML += '<div style="color: red;">Error executing command.</div>';
+	        } catch (error) {
+	            cmdOutput.innerHTML += '<div style="color: red;">Error executing command.</div>';
+	        }
+	        cmdPrompt.style.display = 'inline';
+	        cmdInput.style.display = 'inline';
+	        cmdWindow.scrollTop = cmdWindow.scrollHeight;
+	        cmdInput.focus();
+	    } else if (e.key === 'ArrowUp') {  // 向上翻历史命令
+	        e.preventDefault();
+	        if (historyIndex === -1) {
+	            currentInput = cmdInput.value;  // 记录当前输入
+	        }
+	        if (commandHistory.length > 0) {
+	            historyIndex = Math.min(historyIndex + 1, commandHistory.length - 1);
+	            cmdInput.value = commandHistory[commandHistory.length - 1 - historyIndex];
+	        }
+	    } else if (e.key === 'ArrowDown') {  // 向下翻历史命令
+	        e.preventDefault();
+	        if (historyIndex > -1) {
+	            historyIndex--;
+	            if (historyIndex === -1) {
+	                cmdInput.value = currentInput;  // 恢复当前输入
+	            } else {
+	                cmdInput.value = commandHistory[commandHistory.length - 1 - historyIndex];
+	            }
+	        }
+	    }
+	}	
+	
+	function isValidDate(date) {
+	    return date instanceof Date && !isNaN(date);
+	}
+	function showErrorModal(message) {
+	    const errorModalBody = document.getElementById('errorModalBody');
+	    errorModalBody.innerText = message;
+		const errorModalId=document.getElementById('errorModal');
+		let errorModal = bootstrap.Modal.getInstance(errorModalId);
+		if (!errorModal) 
+		    errorModal = new bootstrap.Modal(errorModalId);
+	    errorModal.show();
+	}
+
+	function showConfirmModal(confirmLabel,confirmBody,deleteCallback) {
+		const confirmModalId=document.getElementById('confirmModal');
+		let confirmModal = bootstrap.Modal.getInstance(confirmModalId);
+		if (!confirmModal) 
+			confirmModal = new bootstrap.Modal(confirmModalId);
+	    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+	    const confirmModalLabel = document.getElementById('confirmModalLabel');
+	    confirmModalLabel.innerText=confirmLabel;
+	    const confirmModalBody = document.getElementById('confirmModalBody');
+	    confirmModalBody.innerText=confirmBody;
+	    
+	    confirmDeleteBtn.onclick = function() {
+	        deleteCallback();  
+	        confirmModal.hide(); 
+	    };
+	    confirmModal.show();
+	}
+	async function excAction(actionSend,jsonSend,tableInputFunc,callbackFunc,clearTable)
+	{
+		try {
+	        const result = await (await makeRequest('POST',actionSend,jsonSend,true)).json();	         
+	        if((result.status)&&(result.status=="ok")){
+				if(tableInputFunc!=null){
+		        	for (let i = 0; i < tableInputFunc.length; i++) {
+		        		var tableData=result[tableInputFunc[i].tableData];
+		        		if(clearTable||((tableData!=undefined)&&(tableData!=null))){ //to allow empty the table if no data returned
+		        			fillTable(tableData,result[tableInputFunc[i].tableDataMeta],tableInputFunc[i]);
+		        		}
+		        	}
+				}
+				if(result.alarmInfo)
+					showErrorModal(result.alarmInfo);
+				if(callbackFunc!=null)
+					callbackFunc(result);
+	        }else if((result.status)&&(result.status!="ok")){
+	        	showErrorModal(result.status);
+	        }
+	    } catch (error) {
+	    	console.log("refresh error "+error);
+	    } finally {
+	        
+	    }	
+	}
+    //tableDataMeta returned from server
+	function fillTable(tableData,tableDataMeta,tableMeta) {
+		const columns=tableMeta.tableColumns;
+		const tableName=tableMeta.tableBody;
+	    const tableContent = document.getElementById(tableName);
+	    tableContent.innerHTML = ''; 
+	    const thead = document.createElement('thead');
+	    const tr = document.createElement('tr');    
+	    columns.forEach(col => {//create the title row
+	        const th = document.createElement('th');
+	        th.scope = 'col';
+	        th.style.width = col.width; // Set the width of the column
+	        th.innerText = col.name; // Set the column name
+		    if((col.isHidden!=undefined)&&(col.isHidden==1))
+		    	th.style.display='none';
+			if(col.help){
+				const helpIconSpan = document.createElement('span');
+				helpIconSpan.classList.add('ms-2');
+				helpIconSpan.setAttribute('data-bs-toggle', 'tooltip');
+				helpIconSpan.setAttribute('title', col.help);
+				const helpIcon = document.createElement('i');
+				helpIcon.classList.add('bi', 'bi-question-circle');
+				helpIconSpan.appendChild(helpIcon);
+				th.appendChild(helpIconSpan);
+			}
+	        tr.appendChild(th);
+	    });
+	    thead.appendChild(tr);
+	    tableContent.appendChild(thead);
+	    if((tableData==undefined)||(tableData==null))
+			return;
+	    const tbody = document.createElement('tbody');
+	    tableData.forEach((row, rowIndex) => { //for each row of data
+	        const tr = document.createElement('tr');
+			tr.classList.add('align-middle'); 
+	        var trId;
+	        columns.forEach(column => { //for each column
+		       	var value=row[column.column];
+	        	const td = document.createElement('td');
+	        	if((value==undefined)||(value==null)) //set value to empty if null
+	        		value='';
+			    if(column.width)
+					td.style.width = column.width;
+				if(column.style)
+					td.style.cssText = column.style;
+				
+				if (column.color) {//set color of td
+				    const colorStatus = column.color;
+					var colorIdx=row[colorStatus.column];
+					if(colorIdx){
+					    const colorInfo = colorStatus.colors.find(c => c.value === colorIdx);
+					    if (colorInfo) {
+					        td.style.backgroundColor = colorInfo.color;
+					    }
+					}
+				}
+			    if((column.isId!=undefined)&&(column.isId==1))
+			    	trId=value;
+			    if((column.isHidden!=undefined)&&(column.isHidden==1))//hidden
+			    	td.style.display='none';
+				if(column.valueHelp)//value help 
+				{
+					td.setAttribute('data-bs-toggle', 'tooltip');
+					td.setAttribute('title', row[column.valueHelp]);
+				}
+									
+				//editable cell
+				const editableInfo = column.editable?.find(item => 
+					item.editableWhen && row[item.editableWhen.column]==item.editableWhen.value
+
+				);		
+				if((column.editable!=undefined)&&((column.editable.length==0)||editableInfo))
+				{
+					const callbackFun=editableInfo?.editableCallback;
+					td.setAttribute('fieldName', editableInfo?.editableWhen == undefined ? column.column : editableInfo.editableWhen.fieldName);
+		            td.style.backgroundColor = '#fffae6'; 
+		            td.style.cursor = 'pointer'; 
+				    const link = document.createElement('a');
+				    link.href = '#';
+				    link.innerText = value;
+				    td.appendChild(link);
+					const oldValue= editableInfo?.editableNotUseOldValue == undefined ? value: '';
+					showInputField(td, column.updateAction, tableDataMeta?.[column.column],tableMeta, callbackFun, oldValue);
+				} else if((column.isAction!=undefined)&&(column.isAction==1)){//action				
+					column.actions.forEach(action => {
+						if(action.when)//if show or not
+						{
+							let [actionWhenfield, actionWhenvalue] = action.when.split('=');
+							if(row[actionWhenfield]!=actionWhenvalue)
+								return;
+						}
+						
+	                    const link = document.createElement('a');
+	                    if(action.isAjax==undefined){//just link
+	                    	link.href = action.operate+trId;
+							if((action.newWindow!=undefined)&&(action.newWindow==1))
+								link.target = '_blank'
+						}else if(action.isAjax=='normal'){//normal ajax
+	                    	link.href = '#';
+	                    	link.addEventListener('click', function (e) {
+	                    		showConfirmModal(action.confirmTitle,action.confirmDescription,function() {
+	                    			excAction(action.operate+trId,null,[tableMeta],null,true);
+	                    		});
+	                    	});
+						}else if(action.isAjax=='callback'){//callback
+	                    	link.href = '#';
+	                    	link.addEventListener('click', function (e) {
+	                    		action.callback(trId,action.callbackParameters);
+	                    	});
+	                    }
+	                    const icon = document.createElement('i');
+	                    if(action.space==undefined)
+	                    	icon.classList.add('bi', action.icon);
+	                    else
+	                    	icon.classList.add('bi', action.icon,action.space);
+						if(action.help){
+							icon.setAttribute('data-bs-toggle', 'tooltip');
+							icon.setAttribute('title', action.help);
+						} 
+	                    link.appendChild(icon);
+	                    td.appendChild(link);
+	                });
+				}else{//normal value
+					td.innerText = value;
+				}
+					
+				if((column.isId!=undefined)&&(column.isId==1)) {
+					td.setAttribute('isId', 'true');
+				}
+				if(column.fieldType!=undefined) {
+					td.setAttribute('fieldType', column.fieldType);
+				}
+				
+				tr.appendChild(td);
+	        });
+
+	        tbody.appendChild(tr);
+	    });
+	    tableContent.appendChild(tbody);
+	}
+
+	function showInputField(td,updateAction,selectOption,tableMeta,callbackFun,oldValue) {
+		td.innerHTML = ''; // 清空单元格内容
+		if((selectOption!=undefined)&&(selectOption[0]=='list-string'))//select
+		{
+	        const options = selectOption[1];
+			const select = document.createElement('select');
+			select.className = 'form-control custom-dropdown';
+			options.forEach(option => {
+			    const opt = document.createElement('option');
+			    opt.value = option;
+			    opt.textContent = option;
+			    select.appendChild(opt);
+			});
+			select.value = oldValue;
+			select.addEventListener('change',function (e) {
+			    e.preventDefault();
+				if(select.value==oldValue)
+					return;
+				var id = "";
+				const tdId = td.closest('tr').querySelector('td[isId="true"]');
+				if (tdId != undefined)
+				    id = tdId.innerText;
+				const fieldType = td.getAttribute('fieldType');
+				const fieldName = td.getAttribute('fieldName');
+				const fieldValue = encodeURIComponent(select.value);
+				excAction(updateAction + id + '&fieldType=' + fieldType + '&fieldName=' + fieldName + '&fieldValue=' + fieldValue, null, [tableMeta], callbackFun,true);
+			}); 
+			td.appendChild(select);
+		}else{//normal input
+			const input = document.createElement('input');
+			input.type = 'text';
+		    input.className = 'form-control';
+			input.value = oldValue; // 设置默认值	
+			input.addEventListener('blur', function (e) {
+			     e.preventDefault();
+				 if(input.value==oldValue)
+				 	return;
+			     var id = "";
+			     const tdId = td.closest('tr').querySelector('td[isId="true"]');
+			     if (tdId != undefined) {
+			         id = tdId.innerText;
+			     }
+			     const fieldType = td.getAttribute('fieldType');
+			     const fieldName = td.getAttribute('fieldName');
+			     const fieldValue = encodeURIComponent(input.value);
+			     excAction(updateAction + id + '&fieldType=' + fieldType + '&fieldName=' + fieldName + '&fieldValue=' + fieldValue, null, [tableMeta], callbackFun,true);
+			 });
+			td.appendChild(input);
+		}		
+	}
+	
+	function showPreviewImage(imgElement) {
+	    const largeImage = document.getElementById('imagePreviewImage');
+	    largeImage.src = imgElement.src;  
+	    const imageModal = new bootstrap.Modal(document.getElementById('imagePreviewModal'));
+	    imageModal.show();
+	}
+
+	async function aggReportExc(startDate,endDate,page,initParams,addParams)
+	{
+		try {
+			let jsonSend = {
+			    startDate: startDate,
+			    endDate: endDate,
+			    page: page,
+			    ...(initParams.hasIcon && { displayType: document.getElementById(initParams.containerDiv).querySelector('.chart-icon.chart-active')?.id })
+			};
+			jsonSend = Object.assign({}, jsonSend, addParams);
+			if(initParams.download==undefined)
+			{
+				const result = await (await makeRequest('POST',initParams.actionSend,jsonSend,true)).json();
+		        if((result.status)&&(result.status=="ok")){
+					if(initParams.callback!=undefined)
+		        		initParams.callback(result.aggMap,initParams,addParams);
+		        }else if((result.status)&&(result.status!="ok")){
+		        	showErrorModal(result.status);
+		        }
+			}else{
+				const response=await makeRequest('POST',initParams.actionSend,jsonSend,true);
+				response.blob().then(blob => {
+				    const link = document.createElement('a');
+				    link.href = window.URL.createObjectURL(blob);
+				    link.download = initParams.download;  
+				    link.click();  
+				    window.URL.revokeObjectURL(link.href); 
+				});
+			}
+	    } catch (error) {
+	    	console.log("refresh error "+error);
+	    } finally {
+	        
+	    }	
+	}
+	
+	function aggReportInit(initParams) 
+	{
+		if(initParams.hasIcon!=undefined)
+		{
+			const chartIcons = document.querySelectorAll('#'+initParams.containerDiv+' .chart-icon');		
+			chartIcons.forEach(icon => {
+			    icon.addEventListener('click', async (event) => {
+					Array.from(event.target.parentNode.children).forEach(i => {
+					    if (i !== event.target) {
+					        i.classList.remove('chart-active');
+					    }
+					});
+			 	    event.target.classList.add('chart-active');
+			        aggReportSubmit(initParams,0);
+			    });
+			});
+		 }
+	
+		 const startDatePicker = flatpickr('#'+initParams.containerDiv+' .startDate', {
+		    onChange: function(selectedDates, dateStr, instance) {
+		        const selectedStartDate = new Date(dateStr);
+		        aggReportSubmit({...initParams, startDate: selectedStartDate}, 0);
+		    }
+		 });
+
+		 const endDatePicker = flatpickr('#'+initParams.containerDiv+' .endDate', {
+		    onChange: function(selectedDates, dateStr, instance) {
+		        const selectedEndDate = new Date(dateStr);
+		        aggReportSubmit({...initParams, endDate: selectedEndDate}, 0);
+		    }
+		 });
+
+		 
+		 const startIconElement = document.getElementById(initParams.containerDiv)?.querySelector('.startIcon');
+		 if (startIconElement) {
+		     startIconElement.addEventListener('click', function() {
+		         startDatePicker.open();
+		     });
+		 }
+		 
+		 const endIconElement = document.getElementById(initParams.containerDiv)?.querySelector('.endIcon');
+		 if (endIconElement) {
+		     endIconElement.addEventListener('click', function() {
+		         endDatePicker.open();
+		     });
+		 }
+		 
+		 //pagination
+		const pagination = document.querySelector('#'+initParams.containerDiv+' ul.pagination');
+		if(pagination != null){
+	        pagination.addEventListener('click', function(event) {
+	            event.preventDefault();
+	            const targetLink = event.target.closest('.page-link');
+	            if (!targetLink || !targetLink.hasAttribute('data-action')) return;
+	            const currentPage = parseInt(pagination.getAttribute('data-current-page'));
+	            const previousPageItem = pagination.querySelector('.page-item:first-child');
+	            const nextPageItem = pagination.querySelector('.page-item:last-child');
+	            const action = targetLink.getAttribute('data-action');
+	            if (action === 'previous') {
+	                if (currentPage > 0) {
+	                    const newPage = currentPage - 1;
+	                    pagination.setAttribute('data-current-page', newPage);
+	                    if (newPage === 0) {
+	                        previousPageItem.classList.add('disabled');
+	                    }
+	                    aggReportSubmit(initParams, newPage);
+	                } else {
+	                    showErrorModal([[#{has_been_first_page}]]);
+	                }
+	            } else if (action === 'next') {
+	                const newPage = currentPage + 1;
+	                pagination.setAttribute('data-current-page', newPage);
+	                previousPageItem.classList.remove('disabled');
+	                aggReportSubmit(initParams, newPage);
+	            }
+	        });
+	    }
+			
+		aggReportExc(null,null,0,initParams,null);
+	}
+	function aggReportSubmit(initParams,page)
+	{
+		const actionSend=initParams.actionSend;
+		const containerDiv=initParams.containerDiv;
+		const displayDiv=initParams.displayDiv;
+		const callbackFunc=initParams.callbackFunc;
+		
+	    const startDate = new Date(document.querySelector('#' + containerDiv + ' .startDate').value);
+	    const endDate = new Date(document.querySelector('#' + containerDiv + ' .endDate').value);
+
+	    if((!isValidDate(startDate))&&(!isValidDate(endDate)))
+	    {
+	    	aggReportExc(startDate,endDate,page,initParams,null);
+	    	return true;
+	    }
+	    if(isValidDate(startDate)&&isValidDate(endDate))
+	    {
+			if (startDate > endDate)
+			{
+	        	showErrorModal([[#{start_date_before_end_date}]]);
+	        	return false;
+			}
+			if ((endDate - startDate) / (1000 * 60 * 60 * 24) > 90)
+			{
+	        	showErrorModal([[#{data_exceed_x_days}]]);
+	        	return false;
+			}
+			aggReportExc(startDate,endDate,page,initParams,null);
+			return true;
+	    }
+	    return false;
+	}
+
+	
+	function aggReportChartDraw(chartDataIn,initParams,addParams)
+	{
+			const displayDiv=initParams.tableDiv;
+			const containerDiv=initParams.containerDiv;
+			var chartDom = document.getElementById(displayDiv);
+			var myChart = echarts.init(chartDom);
+			var seriesMeta=chartDataIn.chartMeta.seriesMeta;
+			var chartName=chartDataIn.chartMeta.chartName;
+			var chartType=chartDataIn.chartMeta.chartType;
+			var chartNameInner=chartDataIn.chartMeta.chartNameInner;
+			var excelName=chartDataIn.chartMeta.excelName;
+
+			const legends = seriesMeta.map(item => item.legend);
+			const colors = seriesMeta.map(item => item.color);
+		    var seriesData = seriesMeta.map(meta => {
+		        const key = meta.operator+meta.field.charAt(0).toUpperCase() + meta.field.slice(1);
+		        return {
+			      name: meta.legend,
+			      type: chartType,//line, bar,scatter
+			      smooth: true,
+			      lineStyle: {
+			        width: 0
+			      },
+			      showSymbol: false,
+			      areaStyle: {
+				        opacity: 0.8
+				      },
+			      emphasis: {
+			        focus: 'series'
+			      },
+			      data: chartDataIn.yAxisData[key] || []
+		        };
+		    });
+
+			var option = {
+			  color: colors,
+			  title: {
+			    text: chartNameInner,
+			    top: '5%' // 设置标题的位置在顶部
+			  },
+			  tooltip: {
+			    trigger: 'axis',
+			    axisPointer: {
+			      type: 'cross',
+			      label: {
+			        backgroundColor: '#6a7985'
+			      }
+			    }
+			  },
+			  legend: {
+			    data: legends,
+			    top: '12%', 
+			  },
+			  toolbox: {
+				    feature: {
+				        saveAsImage: {},  
+				        myCustomExport: {
+				            show: true,
+				            title: [[#{export_as_excel}]],
+				            icon: 'path://M1 1v14h14V4H8V1H1zM7 6h6v6H7V6zM3 6v6h4V6H3z', 
+				            onclick: function (params) {
+				    			const jsonSend = {
+				    					yAxisData: chartDataIn.yAxisData,
+				    					xAxisData: chartDataIn.xAxisData
+				    		        };
+								fetch('/dc/web/export/excelchart', {
+								    method: 'POST',
+								    headers: {
+								        'Content-Type': 'application/json'
+								    },
+								    body: JSON.stringify(jsonSend)
+								})
+				                .then(response => response.blob())
+				                .then(blob => {
+				                    const link = document.createElement('a');
+				                    link.href = window.URL.createObjectURL(blob);
+				                    link.download = excelName;  
+				                    link.click();
+				                })
+				                .catch(error => console.error('Error:', error));
+				            }
+				        }
+				    }
+				},
+
+			  grid: {
+			    left: '3%',
+			    right: '4%',
+			    bottom: '3%',
+			    top: '25%', // 为 legend 和 title 预留足够的空间
+			    containLabel: true
+			  },
+			  xAxis: [
+			    {
+			      type: 'category',
+			      boundaryGap: false,
+			      data: chartDataIn.xAxisData
+			    }
+			  ],
+			  yAxis: [
+			    {
+			      type: 'value'
+			    }
+			  ],
+			  series: seriesData
+			};
+
+			option && myChart.setOption(option);
+	}
+	function aggReportGalleryDraw(aggMap, initParams, addParams)
+	{
+		const imageGallery = document.getElementById(initParams.tableDiv);
+		imageGallery.innerHTML = '';
+		var cameraDataList = aggMap.cameraDataList;
+		if(cameraDataList==null)
+			return;
+		var displayNo=parseInt(aggMap.displayType,10);
+		var displayMd=12/displayNo;
+		let rowDiv = null;
+		
+		if(cameraDataList!=null)
+		{
+			cameraDataList.forEach((cameraData, index) => {
+		        if (index % displayNo === 0) {
+		            rowDiv = document.createElement('div');
+		            rowDiv.className = 'row mb-4';
+		            imageGallery.appendChild(rowDiv);
+		        }
+		        const cardHtml = `
+		            <div class="col-md-${displayMd}">
+		                <div class="card">
+		                    <img src="/dc/web/camera/${cameraData.picId}" class="card-img-top" alt="${cameraData.picSize}" onclick="showPreviewImage(this)"> 
+		                    <div class="card-body">
+		                        <h5 class="card-title">${cameraData.uploadTime}</h5>
+		                    </div>
+		                </div>
+		            </div>
+		        `;
+		        rowDiv.innerHTML += cardHtml;
+			});
+		}
+	}
+	function aggReportHistoryDataDraw(aggMap, initParams, addParams) {
+	    const tableDiv = document.getElementById(initParams.tableDiv);
+	    tableDiv.innerHTML = ''; 
+	    if (aggMap == null) return;
+	    var dataList = aggMap[initParams.tableData];
+	    if (dataList == null) return;
+	    dataList.forEach((dataItem, index) => {
+	        const cardHtml = `
+	            <div class="card mb-3 shadow-sm">
+	                <div class="card-body">
+	                    <div class="row mb-2">
+	                        <div class="col-auto record-time">Request Time: ${dataItem.requestTime}</div>
+	                        <div class="col-auto ms-3 record-time">Upload Time: ${dataItem.uploadTime}</div>
+							<div class="col-auto ms-3 record-time">Error: ${dataItem.error}</div>
+							<div class="col-auto ms-3 record-time">Type: ${dataItem.commType}</div>
+							<div class="col-auto ms-3 record-time">Source: ${dataItem.commSource}</div>
+	                    </div>
+						<p class="card-text"><strong>Info:</strong> ${dataItem.info}</p>
+	                    <p class="card-text"><strong>Request:</strong> ${dataItem.request}</p>
+	                    <p class="card-text"><strong>Upload:</strong> ${dataItem.upload}</p>
+	                </div>
+	            </div>
+	        `;
+	        tableDiv.insertAdjacentHTML('beforeend', cardHtml);
+	    });
+	}
+	function refreshCaptcha() {
+	    const captchaImage = document.getElementById('captchaImage');
+		document.getElementById('captcha').value='';
+	    captchaImage.src = '/dc/pub/captcha?' + new Date().getTime(); 
+	}
+	function isValidUrl(url) {
+	    try {
+	        new URL(url);  
+	        return true;    
+	    } catch (e) {
+	        return false;   
+	    }
+	}
+	function isValidEmail(email) {
+	    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+	    return emailRegex.test(email);
+	}
+	document.addEventListener("DOMContentLoaded", function () {
+	    const links = document.querySelectorAll("#language-switcher a");
+
+	    links.forEach(link => {
+	        link.addEventListener("click", function (event) {
+	            const lang = this.getAttribute("data-lang");
+	            
+	            // 设置有效期为 10 年后
+	            const expirationDate = new Date();
+	            expirationDate.setFullYear(expirationDate.getFullYear() + 10);  // 设置为 10 年后的日期
+	            
+	            // 设置永久 Cookie
+	            document.cookie = `lang=${lang}; path=/; expires=${expirationDate.toUTCString()}`;
+	            
+	            // 刷新页面
+	            location.reload();
+	        });
+	    });
+	});
+
+	function parseContent(content, key) {
+	    if (content == null || content === undefined) {
+	        return '';
+	    }
+	    const regex = new RegExp(`"${key}"\\s*:\\s*"((?:\\\\"|[^"])*)"`);
+	    const match = content.match(regex);
+	    if (match && match[1]) {
+	    	match[1]=match[1].replace(/\\"/g, '"'); 
+	    	match[1]=match[1].replace(/\\t/g, '    '); 
+	    	match[1]=match[1].replace(/\\r\\n/g, '\n');
+	        return match[1];
+	    }
+	    return '';
+	}
+
+</script>
+
+</html>

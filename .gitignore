@@ -1,0 +1,15 @@
+# ignore all
+/*
+
+# select folders
+!/base/
+!/base/**
+!/main/
+!/main/**
+!/src/
+!/src/**
+
+# select files
+!.classpath
+!.project
+!.gitignore

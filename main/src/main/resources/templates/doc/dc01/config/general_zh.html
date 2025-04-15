@@ -1,0 +1,77 @@
+{
+    "moduleName": "MODULE_GENERAL",
+    "moduleComments": "用于配置设备的通用信息，比如上报地址，端口，工作时段等。",
+    "configInfo": [
+        {
+            "order": 0,
+            "name": "server_host",
+            "sample": "123.123.123.123",
+            "range": "10-49个字符",
+            "comments": "设备上报的云端IP地址，可以为IP地址，也可以为域名。"
+        },
+        {
+            "order": 1,
+            "name": "server_port",
+            "sample": "8080",
+            "range": "50-65535",
+            "comments": "设备上报的云端端口。"
+        },
+        {
+            "order": 2,
+            "name": "upload_interval_seconds",
+            "sample": "60",
+            "range": "1-0xffffffff秒",
+            "comments": "暂未使用"
+        },
+        {
+            "order": 3,
+            "name": "upload_retry_times",
+            "sample": "3",
+            "range": "1-20次",
+            "comments": "暂未使用"
+        },
+        {
+            "order": 4,
+            "name": "upload_timeout_seconds",
+            "sample": "30",
+            "range": "10-300秒",
+            "comments": "向云端发送数据时，超时设置，其他模块也使用这里的超时设置。"
+        },
+        {
+            "order": 5,
+            "name": "work_start",
+            "sample": "0001",
+            "range": "0000-2400",
+            "comments": "每天设备开始运行时间，可设置范围0000-2400，也就是0点到24点，暂未使用。"
+        },
+        {
+            "order": 6,
+            "name": "work_end",
+            "sample": "2400",
+            "range": "0000-2400",
+            "comments": "每天设备结束运行时间，可设置范围0000-2400，也就是0点到24点，暂未使用。"
+        },
+        {
+            "order": 7,
+            "name": "keep_alive_idle",
+            "sample": "60",
+            "range": "0-86400秒",
+            "comments": "TCP/IP协议连接后的keep alive设置，超过该设置的时间没有通讯时，会自动发送探测包保持连接，设置为0表示关闭keep alive功能。"
+        },
+        {
+            "order": 8,
+            "name": "keep_alive_cnt",
+            "sample": "3",
+            "range": "1-10",
+            "comments": "TCP/IP协议连接后的keep alive设置，如果发送了 keep_alive_cnt 次探测包后仍然没有收到响应，系统会认为对方已经断开连接，并且会关闭当前的连接。"
+        },
+        {
+            "order": 9,
+            "name": "keep_alive_interval",
+            "sample": "10",
+            "range": "1-120",
+            "comments": "即使没有数据传输，如果连接超过 keep_alive_idle 指定的空闲时间，系统就会每隔 keep_alive_interval 时间发送一个探测包，以确认对方是否仍然在线。"
+        }
+    ],
+    "status": "ok"
+}

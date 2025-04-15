@@ -1,0 +1,21 @@
+{
+    "moduleName": "MODULE_CONFIG",
+    "moduleComments": "周期上报设备上的配置信息到云端。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "config_upload_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "周期上报设备上的配置信息到云端。0表示关闭，1表示开启。"
+        },
+        {
+            "order": 2,
+            "name": "config_upload_interval_seconds",
+            "sample": "10",
+            "range": "1-0xffffffff秒",
+            "comments": "配置模块数据上传的间隔时间（秒）。"
+        }
+    ],
+    "status": "ok"
+}

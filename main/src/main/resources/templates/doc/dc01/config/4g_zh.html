@@ -1,0 +1,70 @@
+{
+    "moduleName": "MODULE_4G",
+    "moduleComments": "用于配置4G模块的相关参数，如开关状态、APN配置、认证信息等。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "4g_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "启用或禁用4G模块。"
+        },
+        {
+            "order": 2,
+            "name": "4g_apn",
+            "sample": "ctlte",
+            "range": "0-49个字符",
+            "comments": "4G APN配置，支持域名或IP地址。"
+        },
+        {
+            "order": 3,
+            "name": "4g_auth_need",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "是否需要4G认证。"
+        },
+        {
+            "order": 4,
+            "name": "4g_auth_type",
+            "sample": "1",
+            "range": "0-2",
+            "comments": "4G认证类型，0为无认证，1为PAP，2为CHAP。"
+        },
+        {
+            "order": 5,
+            "name": "4g_auth_user",
+            "sample": "user1",
+            "range": "0-49个字符",
+            "comments": "4G认证用户名。"
+        },
+        {
+            "order": 6,
+            "name": "4g_auth_password",
+            "sample": "password1",
+            "range": "0-49个字符",
+            "comments": "4G认证密码。"
+        },
+        {
+            "order": 7,
+            "name": "4g_cpin_seconds",
+            "sample": "60",
+            "range": "10-300秒",
+            "comments": "4G CPIN等待时间，单位秒。"
+        },
+        {
+            "order": 8,
+            "name": "4g_csq_seconds",
+            "sample": "30",
+            "range": "10-300秒",
+            "comments": "4G CSQ检查间隔时间，单位秒。"
+        },
+        {
+            "order": 9,
+            "name": "4g_creg_seconds",
+            "sample": "60",
+            "range": "10-300秒",
+            "comments": "4G CREG检查间隔时间，单位秒。"
+        }
+    ],
+    "status": "ok"
+}

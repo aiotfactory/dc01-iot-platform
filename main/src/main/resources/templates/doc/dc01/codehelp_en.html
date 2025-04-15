@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Explanation</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h3 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .sidebar ul li a:hover {
+            background-color: #34495e;
+            color: #ffffff;
+        }
+        .sidebar ul li a.active {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .main-content {
+            margin-left: 270px; 
+            padding: 20px;
+        }
+        .help-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .help-item:hover {
+            background-color: #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .help-item h5 {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .help-item a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .help-item a:hover {
+            text-decoration: underline;
+        }
+        .help-item p {
+            line-height: 1.6;
+            color: #4a4a4a;
+        }
+        .help-item h6 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #34495e;
+        }
+		
+    </style>
+</head>
+<body>
+
+<!-- Left Sidebar -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#c1" class="active">General Description</a></li>
+		<li><a href="#c2">Entry Point</a></li>
+        <li><a href="#c3">Device Configuration</a></li>
+		<li><a href="#c4">Network Transmission</a></li>
+		<li><a href="#c5">Module Processing</a></li>
+		<li><a href="#c6">Kernel Explanation</a></li>
+		<li><a href="#c7">Other Tools</a></li>
+		<li><a href="#c8">Shortcuts</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">Code Explanation</h1>
+    </div>
+    <div class="help-item" id="c1">
+        <h6>General Description</h6>
+        <p>The DC01 product is developed based on the ESP32 chip, so the code structure conforms to the IDF architecture of ESP32. In addition to referring to this explanation, users can also directly refer to the <a href="https://docs.espressif.com/projects/esp-idf/en/v5.2/esp32s3/get-started/index.html" target="_blank">development documentation</a> of ESP32.
+        Here is the <a href="https://docs.espressif.com/projects/esp-idf/en/v5.2/esp32s3/api-reference/index.html" target="_blank">API documentation</a> available for ESP32.
+        </p>
+		<p>There are many online codes, and users may only modify a part of them. The modified part will be saved separately by the system. During compilation, the system will merge the basic files of the project with the user-modified files. However, the basic files of the system may also change,
+		so it may lead to errors or changes in functionality when users recompile in the future. Therefore, each time after recompiling, even if users have not modified any files, testing should be done to ensure that the firmware runs as expected.</p>
+    </div>
+	
+	<div class="help-item" id="c2">
+	    <h6>Entry Point</h6>
+	    <p>Similar to the main function in C language, the first function called after the device starts is void app_main(void) in /main/app_main.c. Refer to the documentation of this function for more details.</p>
+	</div>
+		
+	<div class="help-item" id="c3">
+	    <h6>Device Configuration</h6>
+	    <p>To add configuration items, you can modify the /main/device_config.h and device_config.c files. These files contain detailed explanations inside.</p>
+	</div>
+	
+	<div class="help-item" id="c4">
+	    <h6>Network Transmission</h6>
+	    <p>To send messages to the cloud, you can use the functions defined in /main/network_util.h. Sending and receiving processing is defined in /main/comm_util.h.</p>
+	</div>
+
+	<div class="help-item" id="c5">
+	    <h6>Module Processing</h6>
+	    <p>From an architectural perspective, the device mainly consists of various modules. Each module can send its own information to the cloud and receive and process commands from the cloud. For example, LoRa module processing is defined in /main/lora_util.c, GPIO module processing is defined in /main/gpio_util.c, and so on.</p>
+	</div>
+
+	<div class="help-item" id="c6">
+	    <h6>Kernel Explanation</h6>
+	    <p>Kernel functions can only be used and not modified. System startup and tool-related definitions are located in /main/system_util.h. Network-related definitions are in /main/network_util.h, device configuration definitions are in /main/device_config.h, and logging tools are defined in /main/cloud_log.h.</p>
+	</div>
+	
+	<div class="help-item" id="c7">
+	    <h6>Other Tools</h6>
+	    <p>Other tools are defined in /main/util_log.h. Extended port drivers are defined in /main/ch423.h. Additionally, there are some ESP32 configuration and build-related files which should not be changed without familiarity.</p>
+	</div>
+
+	<div class="help-item" id="c8">
+	    <h6>Shortcuts</h6>
+	    <p>Ctrl + B is the shortcut for submitting a build, Ctrl + S is the shortcut for saving a file.</p>
+	</div>						
+</div>
+</body>
+</html>

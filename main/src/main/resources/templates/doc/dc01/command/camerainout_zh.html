@@ -1,0 +1,56 @@
+    <h5>说明</h5>
+    <p>设备可以配置为周期上传拍照图片，也可以通过本命令临时读取图片。</p>
+    <!-- Parameter Table -->
+    <h5>参数说明</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为15</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>		
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>拍照，并以base64格式返回图片内容:</strong>
+		<p><code>operate=15</code></p>
+        <p>返回</p>
+		<table class="table table-bordered">
+		    <tbody>
+				<tr>
+				    <td><code>picName</code></td>
+				    <td>生成的图片名称，同时存在云端。</td>
+				</tr>
+				<tr>
+				    <td><code>picContentBase64</code></td>
+				    <td>因为Json不能传输二进制数据，因此图片内容以base64方式编码。</td>
+				</tr>
+				<tr>
+				    <td><code>picId</code></td>
+				    <td>存在云端的图片ID。</td>
+				</tr>
+				<tr>
+				    <td><code>info</code></td>
+				    <td>表示读取成功。</td>
+				</tr>
+			</tbody>
+		</table>	
+		<p>成功例子</p>	
+        <p><code>{"id":"67b453c435968529457187f7","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":6,"request":{"rawString":"operate=15","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-18T09:32:51.201379348Z","upload":{"picContentBase64":"/9j/4AAQSkZJRgABAQEAAKKBhRQIKKACigAooAKKACigAooAXNSLIRQBIJM07NAgppoAjIptAxKUNigBTITTc0AJRQAlFABRQAUtACUUAFFABS0AJmkoASigAooAKKACigAooAKKACkoAWigAooAKSgAooAWkoAKKAP//Z","picName":"24587cd6ef0c-20250218173252.jpeg","picSize":9513,"picId":"67b453c435968529457187f5"},"uploadTime":"2025-02-18T09:32:52.216155138Z","command":3,"operate":15,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+		<p>失败例子</p>	
+		<p><code>{"id":"67b455c94db5084335f3d46b","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":6,"request":{"rawString":"operate=15","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-18T09:41:19.098632338Z","upload":null,"uploadTime":"2025-02-18T09:41:29.101860063Z","command":null,"operate":15,"info":"java.util.concurrent.TimeoutException","errorType":"DEVICE_REQUEST_TIMEOUT","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    </div>

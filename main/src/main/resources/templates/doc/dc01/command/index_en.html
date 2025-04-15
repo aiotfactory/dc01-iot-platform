@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help - Command Usage Instructions</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .command-intro {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #007bff;
+        }
+        .command-intro h5 {
+            margin-bottom: 15px;
+        }
+        .badge-required {
+            background-color: #dc3545;
+        }
+        .badge-optional {
+            background-color: #28a745;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container my-5">
+    <!-- Page Title -->
+    <div class="text-center mb-4">
+        <h1>Help - How to Run Commands on a Device</h1>
+        <p class="text-muted">Data Flow: Your Application → Cloud Server → Device → Cloud Server → Your Application</p>
+    </div>
+    <div class="command-intro">
+        <h5>Command Execution Mechanism Description</h5>
+        <p>Interaction between your application, the cloud server, and the device:</p>
+        <ul>
+            <li><strong>Your Application:</strong> Your application sends a JSON request to the cloud server containing specific commands.</li>
+            <li><strong>Cloud Server:</strong> The command is received and checked by the cloud server. Commands that comply with specifications are sent to the device. If the device is offline, the cloud server will know and inform your application accordingly.</li>
+            <li><strong>Device:</strong> The device receives the command from the cloud server, executes it, and returns the execution result to the cloud server.</li>
+            <li><strong>Your Application:</strong> Finally, the cloud server returns the result from the device to your application. If any errors occur during the process, the cloud server will also return the error to your application.</li>
+        </ul>
+		<p>There are three ways to send commands to a device:</p>
+		<p>1) At the bottom of the module display page, there is a black command execution window where you can directly input commands, such as <code>operate=2 gpio_ext_no=8 status=1</code> and press enter to execute them. You can use the up and down arrows to find previous commands.</p>
+		<p>2) Send a command through an HTTP request like this one, where the command is enclosed in quotes as a parameter for cmd: <code>/dc/api/call?key=e8e46491a218c1445d352490addbaabc&api=cmd&deviceId=672d80d52108ac717734bb4e&cmd="operate=2 gpio_ext_no=8 status=1"</code>. 
+		This actually calls the platform's API, inputs the command to be executed, and the platform is responsible for pushing the command to the device. For detailed usage of the API, <a href="/dc/web/doc?page=api_index&deviceType=dc01" target="_blank">click</a> to view.
+		</p>
+		<p>3) In the upper middle part of the module display page, on the right side of the 'Running Status' area, there is a refresh button; clicking it will send a refresh command to the device.</p>   </div>
+    <div class="accordion" id="commandAccordion">
+    </div>
+</div>
+<script src="/dc/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    window.onload = function() {
+        let i = 1;
+        createAccordionItem(i++, 'EXT GPIO Control', '/dc/pub/doc?page=command_extgpio&deviceType=dc01');
+        createAccordionItem(i++, 'ESP GPIO Control', '/dc/pub/doc?page=command_espgpio&deviceType=dc01');
+        createAccordionItem(i++, 'GPIO Status', '/dc/pub/doc?page=command_gpiostatus&deviceType=dc01');
+        createAccordionItem(i++, 'SPI Transfer', '/dc/pub/doc?page=command_spiinout&deviceType=dc01');
+        createAccordionItem(i++, 'SPI Status', '/dc/pub/doc?page=command_spistatus&deviceType=dc01');
+        createAccordionItem(i++, 'I2C Transfer', '/dc/pub/doc?page=command_i2cinout&deviceType=dc01');
+        createAccordionItem(i++, 'UART Transfer', '/dc/pub/doc?page=command_uartinout&deviceType=dc01');
+        createAccordionItem(i++, 'RS485 Transfer', '/dc/pub/doc?page=command_rs485inout&deviceType=dc01');
+        createAccordionItem(i++, 'TM7705 Transfer', '/dc/pub/doc?page=command_tm7705inout&deviceType=dc01');
+        createAccordionItem(i++, 'TM7705 Status', '/dc/pub/doc?page=command_tm7705status&deviceType=dc01');
+        createAccordionItem(i++, 'CAMERA Capture Photo', '/dc/pub/doc?page=command_camerainout&deviceType=dc01');
+        createAccordionItem(i++, 'CAMERA Status', '/dc/pub/doc?page=command_camerastatus&deviceType=dc01');
+        createAccordionItem(i++, 'LORA Transfer', '/dc/pub/doc?page=command_lorainout&deviceType=dc01');
+        createAccordionItem(i++, 'BATADC Battery Voltage', '/dc/pub/doc?page=command_batadc&deviceType=dc01');
+        createAccordionItem(i++, 'META Device Status', '/dc/pub/doc?page=command_metastatus&deviceType=dc01');
+        createAccordionItem(i++, 'CONFIG Configuration Information', '/dc/pub/doc?page=command_config&deviceType=dc01');
+        createAccordionItem(i++, 'AHT20 Transfer', '/dc/pub/doc?page=command_aht20&deviceType=dc01');
+    }
+
+    function createAccordionItem(index, title, url) {
+        const id = String(index).padStart(2, '0');
+        const accordion = document.getElementById('commandAccordion');
+        const accordionItem = document.createElement('div');
+        accordionItem.className = 'accordion-item';
+        accordionItem.id = `item${id}`;
+
+        const headerHtml = `
+            <h2 class="accordion-header" id="heading${id}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#collapse${id}" aria-expanded="false" aria-controls="collapse${id}" 
+                    onclick="loadAccordionContent('${id}', '${url}')">
+                    <span class="me-2 badge bg-primary">${id}</span> ${title}
+                </button>
+            </h2>
+        `;
+
+        const contentHtml = `
+            <div id="collapse${id}" class="accordion-collapse collapse" aria-labelledby="heading${id}" data-bs-parent="#commandAccordion">
+                <div class="accordion-body">Loading...</div>
+            </div>
+        `;
+
+        accordionItem.innerHTML = headerHtml + contentHtml;
+        accordion.appendChild(accordionItem);
+    }
+
+    function loadAccordionContent(id, url) {
+        const accordionBody = document.querySelector(`#collapse${id} .accordion-body`);
+        if (accordionBody.dataset.loaded === 'true') return;
+
+        fetch(url)
+            .then((response) => response.ok ? response.text() : Promise.reject('Failed to load content'))
+            .then((content) => {
+                accordionBody.innerHTML = content;
+                accordionBody.dataset.loaded = 'true';
+            })
+            .catch(() => {
+                accordionBody.innerHTML = 'Error loading content.';
+            });
+    }
+</script>
+</body>
+</html>
