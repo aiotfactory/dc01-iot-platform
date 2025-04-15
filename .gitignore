@@ -8,6 +8,8 @@
 !/main/**
 !/src/
 !/src/**
+!/lib/
+!/lib/**
 
 # select files
 !.classpath
