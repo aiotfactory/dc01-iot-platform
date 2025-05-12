@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{aiot_price_plan}">AIOT Pricing Plans</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .pricing-header {
+            background-color: #f8f9fa;
+            padding: 2rem 0;
+        }
+        .pricing-card {
+            border: 1px solid #dee2e6;
+            border-radius: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        .pricing-card:hover {
+            transform: scale(1.05);
+        }
+        .feature-comparison {
+            margin-top: 3rem;
+        }
+        .feature-category {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="pricing-header text-center">
+        <div class="container">
+            <h1 class="display-4">选择你的服务等级</h1>
+            <p class="lead">灵活的价格等级，满足不同需求，对比免费版，专业版和企业版.</p>
+        </div>
+    </header>
+
+    <main class="container py-5">
+        <div class="row g-4">
+            <!-- Free Plan -->
+            <div class="col-md-4">
+                <div class="pricing-card p-4 text-center">
+                    <h2 class="h4">免费版</h2>
+                    <p>适合个人初学者.</p>
+                </div>
+            </div>
+
+            <!-- Professional Plan -->
+            <div class="col-md-4">
+                <div class="pricing-card p-4 text-center">
+                    <h2 class="h4">专业版</h2>
+                    <p>适合资深程序员和小团队.</p>
+                </div>
+            </div>
+
+            <!-- Enterprise Plan -->
+            <div class="col-md-4">
+                <div class="pricing-card p-4 text-center">
+                    <h2 class="h4">企业版</h2>
+                    <p>适合大规模部署的企业需求.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Comparison Table -->
+        <section class="feature-comparison">
+            <h2 class="text-center">功能对比</h2>
+            <table class="table table-striped table-bordered mt-4">
+                <thead class="table-dark">
+                    <tr>
+                        <th>功能</th>
+                        <th>免费版</th>
+                        <th>专业版</th>
+                        <th>企业版</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Code and Open Source -->
+                    <tr class="feature-category">
+                        <td colspan="4">代码</td>
+                    </tr>
+                    <tr>
+                        <td>提供嵌入式源码</td>
+                        <td>✔️</td>
+                        <td>✔️</td>
+                        <td>✔️</td>
+                    </tr>
+                    <tr>
+                        <td>提供云端代码</td>
+                        <td>✔️</td>
+                        <td>✔️</td>
+                        <td>✔️</td>
+                    </tr>
+
+                    <!-- API Features -->
+                    <tr class="feature-category">
+                        <td colspan="4">API</td>
+                    </tr>
+                    <tr>
+                        <td>每分钟调用次数</td>
+                        <td>2</td>
+                        <td>10</td>
+                        <td>100</td>
+                    </tr>
+                    <tr>
+                        <td>每天调用次数</td>
+                        <td>100</td>
+                        <td>10000</td>
+                        <td>100000</td>
+                    </tr>
+					<tr>
+					    <td>EMAIL推送次数</td>
+					    <td>3</td>
+					    <td>1000</td>
+					    <td>10000</td>
+					</tr>
+					<tr>
+					    <td>设置私有SMTP</td>
+					    <td>❌</td>
+					    <td>✔️</td>
+					    <td>✔️</td>
+					</tr>
+                    <!-- Training and Support -->
+                    <tr class="feature-category">
+                        <td colspan="4">开发&调试</td>
+                    </tr>
+                    <tr>
+                        <td>在线编辑代码</td>
+                        <td>✔️</td>
+                        <td>✔️</td>
+                        <td>✔️</td>
+                    </tr>
+                    <tr>
+                        <td>在线日志查看</td>
+                        <td>✔️</td>
+                        <td>✔️</td>
+                        <td>✔️</td>
+                    </tr>
+                    <tr>
+                        <td>每天云端编译次数</td>
+                        <td>3</td>
+                        <td>50</td>
+                        <td>1000</td>
+                    </tr>
+					<tr>
+					    <td>云端保留固件数</td>
+					    <td>3</td>
+					    <td>10</td>
+					    <td>100</td>
+					</tr>
+                    <!-- Cloud Features -->
+                    <tr class="feature-category">
+                        <td colspan="4">OTA升级</td>
+                    </tr>
+                    <tr>
+                        <td>版本个数</td>
+                        <td>1</td>
+                        <td>10</td>
+                        <td>50</td>
+                    </tr>
+					<tr class="feature-category">
+					    <td colspan="4">容量</td>
+					</tr>
+					<tr>
+					    <td>设备数</td>
+					    <td>3</td>
+					    <td>1000</td>
+					    <td>10000</td>
+					</tr>
+					<tr>
+					    <td>数据保留天数</td>
+					    <td>3</td>
+					    <td>30</td>
+					    <td>100</td>
+					</tr>
+					<tr class="feature-category">
+					    <td colspan="4">私有搭建</td>
+					</tr>
+					<tr>
+					    <td>是否支持</td>
+						<td>✔️</td>
+						<td>✔️</td>
+						<td>✔️</td>
+					</tr>
+					<tr>
+					    <td>同时在线设备数</td>
+						<td>5</td>
+						<td>100</td>
+						<td>无限制</td>
+					</tr>
+					<tr>
+					    <td>最大设备数</td>
+						<td>10</td>
+						<td>200</td>
+						<td>无限制</td>
+					</tr>
+					<tr>
+					    <td>集群部署</td>
+						<td>❌</td>
+						<td>❌</td>
+						<td>✔️</td>
+					</tr>					
+					<tr class="feature-category">
+					    <td colspan="4">资料，培训和技术支持</td>
+					</tr>
+					<tr>
+					    <td>公开资料</td>
+						<td>✔️</td>
+						<td>✔️</td>
+						<td>✔️</td>
+					</tr>
+					<tr>
+					    <td>付费课程</td>
+						<td>✔️</td>
+						<td>✔️</td>
+						<td>✔️</td>
+					</tr>
+					<tr>
+					    <td>EMAIL技术支持</td>
+						<td>❌</td>
+						<td>✔️</td>
+						<td>✔️</td>
+					</tr>
+					<tr>
+					    <td>电话技术支持</td>
+						<td>❌</td>
+						<td>❌</td>
+						<td>✔️</td>
+					</tr>
+					<tr class="feature-category">
+					    <td colspan="4">硬件设备</td>
+					</tr>
+					<tr>
+					    <td>PCB定制</td>
+						<td>❌</td>
+						<td>✔️</td>
+						<td>✔️</td>
+					</tr>
+					<tr>
+					    <td>定制外壳LOGO</td>
+						<td>❌</td>
+						<td>❌</td>
+						<td>✔️</td>
+					</tr>
+					<tr>
+					    <td>定制接口</td>
+						<td>❌</td>
+						<td>❌</td>
+						<td>✔️</td>>
+					</tr>
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

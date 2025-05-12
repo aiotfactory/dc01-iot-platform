@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_4G模块介绍</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#description" class="active">模块说明</a></li>
+		<li><a href="#runtimeinfo">运行状态</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_4G模块介绍</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>模块说明</h6>
+        <p>DC01产品上有一个4G LTE模块，国际版本支持全球制式，中国大陆版本仅支持中国大陆的移动公司卡。<a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">点击</a>查看MODULE_4G章节来配置。
+		</p>
+    </div>
+	<div class="help-item" id="runtimeinfo">
+	    <h6>运行状态</h6>
+		<p>Csq 每次设备重新启动时会获取一次Csq值，该值用于评估4g网络信号强弱，一般20以上表示良好，低于10则可能中断。</p>
+		<p>Csq Min, Csq Max 云端会存储最最小值和最大值。</p>
+		<p>其他状态值由MODULE_META模块周期上报，因此要开启该模块才能获取以下数据。</p>
+		<p>Iccid 设备上Sim卡的iccid号，Imei 4g模块的imei号，一般会打印在4g模块表面，Ip，Mask，Gateway，Dns1，Dns2，Ipv6 4g模块从运营商基站获取的网络配置。</p>
+	</div>	
+</div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{log_view}">LLM Rule Log View</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+		<div class="card shadow-sm">
+            <div class="card-header bg-dark text-white text-uppercase" th:text="#{ai_rule_log_view}">
+                大语言模型规则执行日志
+            </div>
+			<div th:if="${logs != null and not #lists.isEmpty(logs)}">
+				<div th:each="log, iterStat : ${logs}" class="mb-4">
+				    <div class="card">
+				        <div class="card-body">
+				            <!-- 日志的基本信息 -->    	
+				            <p><strong>Log ID:</strong> <span th:text="${log.id}"></span></p>		
+				            <p><strong>Template System:</strong> <span th:text="${log.templateSystem}"></span></p>
+				            <p><strong>Actual System:</strong> <span th:text="${log.actualSystem}"></span></p>
+				            <p><strong>Template User:</strong> <span th:text="${log.templateUser}"></span></p>
+				            <p><strong>Actual User:</strong> <span th:text="${log.actualUser}"></span></p>
+							<div th:if="${log != null and log.images != null and !log.images.isEmpty()}">
+							    <p><strong>Actual Images:</strong></p>
+							    <div id="linksContainer" class="d-flex flex-wrap mt-2">
+							        <a th:each="image : ${log.images}"
+							           th:href="@{'/web/camera/' + ${image}}"
+							           th:text="${image}"
+							           target="_blank"
+							           class="text-decoration-none m-1 text-primary">
+							        </a>
+							    </div>
+							</div>
+				            <p><strong>Actual Output:</strong> <span th:text="${log.actualOutput}"></span></p>
+				            <p><strong>Money Used:</strong> <span th:text="${log.moneyUsed}"></span></p>
+				            <p><strong>Create Time:</strong> <span th:text="${log.createTime}"></span></p>
+				            <p><strong>Status:</strong> <span th:text="${log.status}"></span></p>
+				        </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_PIR Introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Left Navigation Bar -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#periodupload">Data Reporting - Automatic</a></li>
+		<li><a href="#commandupload">Data Reporting - Triggered</a></li> 
+		<li><a href="#forward">Data Forwarding</a></li> 
+		<li><a href="#runtimeinfo">Operational Status</a></li> 
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_PIR Introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>The product comes pre-installed with a PIR infrared motion sensor, which can detect the movement or actions of humans or animals within an effective range of approximately 2-3 meters. Upon detecting any movement or action, the sensor triggers the device to report data. The system also supports "coordinated operations", such as taking photos immediately after being triggered.
+		</p>
+    </div>
+	<div class="help-item" id="periodupload">
+	    <h6>Data Reporting - Automatic</h6>
+		<p>The meanings of the fields are relatively clear, but you can also <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">click here</a> to view the MODULE_PIR module, which explains the meanings of the reported data fields.
+		</p>
+	</div>
+	<div class="help-item" id="commandupload">
+	    <h6>Data Reporting - Triggered</h6>
+		<p>When the PIR status changes, it will immediately trigger reporting. The specific information reported is the same as in automatic reporting.
+		</p>
+	</div>
+	<div class="help-item" id="forward">
+	    <h6>Data Forwarding</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">Click here</a> to learn how to configure data forwarding for the module.
+		   <a href="/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">Click here</a> to view the format of forwarded data.
+		</p>
+	</div>	
+	<div class="help-item" id="runtimeinfo">
+	    <h6>Operational Status</h6>
+		<p><a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">Click here</a> to see the relevant section about the MODULE_PIR module to understand the meanings of various fields.
+		</p>
+	</div>	
+</div>
+</body>
+</html>

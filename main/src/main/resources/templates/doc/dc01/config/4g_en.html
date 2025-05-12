@@ -1,0 +1,70 @@
+{
+    "moduleName": "MODULE_4G",
+    "moduleComments": "Used to configure related parameters of the 4G module, such as on/off status, APN configuration, authentication information, etc.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "4g_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "Enable or disable the 4G module."
+        },
+        {
+            "order": 2,
+            "name": "4g_apn",
+            "sample": "ctlte",
+            "range": "0-49 characters",
+            "comments": "4G APN configuration, supports domain names or IP addresses."
+        },
+        {
+            "order": 3,
+            "name": "4g_auth_need",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "Whether 4G authentication is needed."
+        },
+        {
+            "order": 4,
+            "name": "4g_auth_type",
+            "sample": "1",
+            "range": "0-2",
+            "comments": "4G authentication type, 0 for no authentication, 1 for PAP, 2 for CHAP."
+        },
+        {
+            "order": 5,
+            "name": "4g_auth_user",
+            "sample": "user1",
+            "range": "0-49 characters",
+            "comments": "4G authentication username."
+        },
+        {
+            "order": 6,
+            "name": "4g_auth_password",
+            "sample": "password1",
+            "range": "0-49 characters",
+            "comments": "4G authentication password."
+        },
+        {
+            "order": 7,
+            "name": "4g_cpin_seconds",
+            "sample": "60",
+            "range": "10-300 seconds",
+            "comments": "4G CPIN waiting time, in seconds."
+        },
+        {
+            "order": 8,
+            "name": "4g_csq_seconds",
+            "sample": "30",
+            "range": "10-300 seconds",
+            "comments": "4G CSQ check interval time, in seconds."
+        },
+        {
+            "order": 9,
+            "name": "4g_creg_seconds",
+            "sample": "60",
+            "range": "10-300 seconds",
+            "comments": "4G CREG check interval time, in seconds."
+        }
+    ],
+    "status": "ok"
+}

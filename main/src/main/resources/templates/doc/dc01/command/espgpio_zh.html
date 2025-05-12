@@ -1,0 +1,127 @@
+   <h5>说明</h5>
+    <p>线路板上有两种GPIO,一种是ESP32芯片的引脚, 另外一种来自扩展模块,因为ESP32引脚数目不足，因此加了扩展模块, 但ESP32的GPIO支持功能更丰富些, 具体参阅其他文档, 扩展GPIO目前只支持输出高或者低电平。小知识，引脚就是芯片的一个焊接点，通常是较为细的类似铁丝一样的金属，这样的引脚一般会连接线路板上的接线端子/接线柱/接线插座等，方便外接其他设备。</p>
+    <!-- Parameter Table -->
+    <h5>GPIO输出</h5>
+	<p>需要控制GPIO引脚输出高或低电平时，但首先要通过GPIO页面配置引脚模式后才能控制。</p>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为9</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+            <tr>
+                <td><code>gpio_esp_no</code></td>
+                <td>ESP GPIO引脚号，可能的值为 0,2,14 这些值对应线路设计图中的gpio_esp_xx，xx是这些值，除了这些值，其他值也对应ESP32芯片的其他引脚，也是可以控制的，那些引脚已经被用于连接线路板上内部模块，因此在你熟悉这些内部控制前，不能随意控制其他引脚。</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+            <tr>
+                <td><code>status</code></td>
+                <td>引脚的开关状态，设置为1表示打开，一般英文叫pull up，或者叫输出高电平，或者叫拉高，如果用万用表测量这个引脚，其电压一般和芯片的电压相等，比如3.3v。设置为0，会把这个引脚关闭，英文叫pull down，或者叫拉低，或者叫输出低，用万用表测量电压会是0或者很接近0v电压。</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+                <td>输入</td>
+            </tr>
+			<tr>
+			    <td><code>pull_up</code></td>
+			    <td>上拉设置，1表示设置，0表示不设置，上拉意味着芯片会默认把该引脚通过一个电阻（一般约10k）与芯片电压（一般是3.3v）连接，意思是这个引脚不是悬空状态，而是和一个高电压通过电阻相连，相当于初始值为高电压的意思，即便被上拉的引脚，虽然初始值是高电平，但仍旧可以控制其为输出低电平。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+			<tr>
+			    <td><code>pull_down</code></td>
+			    <td>下拉设置，1表示设置，0表示不设置，下拉意味着芯片会默认把该引脚通过一个电阻（一般约10k）与芯片的地线（GND，表示0v的意思）连接，意思是这个引脚不是悬空状态，而是和一个0电压通过电阻相连，相当于初始值为0的意思，即便被下拉的引脚，虽然初始值是低电平，但仍旧可以控制其为输出高电平。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>ESP GPIO 0 输出高电平，设置上拉，不设置下拉:</strong>
+		<p><code>operate=9 gpio_esp_no=0 status=1 pull_up=1 pull_down=0</code></p>
+		<p>返回</p>
+        <p><code>{"id":"67aae9de64b53b7e99f1facd","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=9 gpio_esp_no=0 status=1 pull_up=1 pull_down=0","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:10:37.901050456Z","upload":{"values":null},"uploadTime":"2025-02-11T06:10:38.832747542Z","command":3,"operate":9,"info":"esp gpio no 0 set to 1 pull up 1, pull down 0","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+        <hr>
+        <strong>ESP GPIO 2 输出低电平，上拉和下拉都不设置，引脚悬空，类似c语言变量没初始化:</strong>
+		<p><code>operate=9 gpio_esp_no=2 status=0 pull_up=0 pull_down=0</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67aaead864b53b7e99f1fad1","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=9 gpio_esp_no=2 status=0 pull_up=0 pull_down=0","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:14:48.185308482Z","upload":{"values":null},"uploadTime":"2025-02-11T06:14:48.907243383Z","command":3,"operate":9,"info":"esp gpio no 2 set to 0 pull up 0, pull down 0","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+    </div>
+	<h5>GPIO读取</h5>
+	<p>读取到的是逻辑值，就是高电压是1，低电压是0，如果设置为ADC，读取的就是模拟值，值为单位mV的电压值。</p>
+	<table class="table table-bordered">
+	    <thead>
+	        <tr>
+	            <th>参数</th>
+	            <th>描述</th>
+	            <th>必须</th>
+	            <th>类型</th>
+				<th>字节</th>
+	            <th>入出</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr>
+	            <td><code>operate</code></td>
+	            <td>固定为16</td>
+	            <td><span class="badge badge-required">是</span></td>
+	            <td>数字</td>
+				<td>1</td>
+	            <td>输入</td>
+	        </tr>
+			<tr>
+			    <td><code>is_esp</code></td>
+			    <td>1表示ESP芯片GPIO引脚，0表示EXT GPIO引脚</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+	        <tr>
+	            <td><code>gpio_no</code></td>
+	            <td>ESP GPIO引脚号，可能的值为 0,2,14 这些值对应线路设计图中的gpio_esp_xx，EXT GPIO引脚号，EXT GPIO可能的值为 0,1,2,3,21,22 这些值对应线路设计图中的gpio_ext_xx。</td>
+	            <td><span class="badge badge-required">是</span></td>
+	            <td>数字</td>
+				<td>1</td>
+	            <td>输入</td>
+	        </tr>
+	    </tbody>
+	</table>
+	<h5>例子</h5>
+	<div>
+	    <strong>读取ESP GPIO 14的逻辑电平，返回逻辑高电平1:</strong>
+	    <p><code>operate=16 is_esp=1 gpio_no=14</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67aaefbc64b53b7e99f1faf7","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=1 gpio_no=14","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:35:38.887203194Z","upload":{"values":[{"pinValue":1,"pinMode":33,"pinType":"ESP","pin":14,"valueType":"ANALOG"}]},"uploadTime":"2025-02-11T06:35:40.679799242Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+		<hr>
+		<strong>读取ESP GPIO 22的逻辑电平，因为没配置开启，因此读不到数据:</strong>
+		<p><code>operate=16 is_esp=1 gpio_no=22</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67aaeb6664b53b7e99f1fad7","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=1 gpio_no=22","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:17:09.787376922Z","upload":{"values":[]},"uploadTime":"2025-02-11T06:17:10.779883185Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+		<hr>
+		<strong>读取ESP GPIO 14的ADC值，返回1593mV电压:</strong>
+		<p><code>operate=16 is_esp=1 gpio_no=14</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67aaeb9d64b53b7e99f1fad9","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=1 gpio_no=14","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:18:04.642871086Z","upload":{"values":[{"pinValue":1593,"pinMode":33,"pinType":"ESP","pin":14,"valueType":"ANALOG"}]},"uploadTime":"2025-02-11T06:18:05.359389185Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+	</div>					

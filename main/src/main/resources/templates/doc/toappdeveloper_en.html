@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Internet Software Programmers Can Understand IoT Development</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Left sidebar -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#advantage" class="active">Advantages Over Raspberry Pi and Children's Smart Hardware Training</a></li>
+        <li><a href="#overview">Viewing IoT Devices as Computers</a></li>
+        <li><a href="#sensor">Sensors + Networking + Cloud + AI</a></li>
+        <li><a href="#cpu">CPU vs. MCU</a></li>
+        <li><a href="#memory">Memory</a></li>
+        <li><a href="#flash">Flash vs. Hard Drive</a></li>
+        <li><a href="#soc">SoC</a></li>
+        <li><a href="#interface">Interfaces</a></li>
+        <li><a href="#network">Networking</a></li>
+        <li><a href="#power">Power Supply</a></li>
+        <li><a href="#encloser">Enclosure</a></li>
+        <li><a href="#package">Manual and Packaging</a></li>
+        <li><a href="#certificate">Certification</a></li>
+    </ul>
+</div>
+
+<!-- Main content area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">How Internet Application Software Programmers Can Understand IoT Development</h1>
+    </div>
+    <div class="help-item" id="advantage">
+        <h6>Advantages Over Raspberry Pi and Children's Smart Hardware Training</h6>
+        <p>"I watched my son's smart hardware training class, and it seemed very easy—just drag and drop to create a product. Also, I've heard about a small computer called Raspberry Pi that can do many things. What are the advantages of learning this?"</p>
+        <p>In one sentence: The industrial field requires IoT products that are highly stable and cost-effective. High stability is similar to developing large-scale internet programs, where we need to consider various factors like clustering, disaster recovery, and master-slave databases. This is much more complex than simply developing a "Hello World" program. Therefore, ensuring hardware stability, preventing crashes, and avoiding damage require much more consideration than what is covered in children's training classes.</p>
+        <p>Cost-effectiveness means selecting hardware tailored to the scenario. For example, Raspberry Pi is relatively expensive hardware. In many cases, we may only need 1KB of memory, so an MCU costing 1 RMB is sufficient, rather than components costing tens or even hundreds of RMB.</p>
+    </div>
+    <div class="help-item" id="overview">
+        <h6>Viewing IoT Devices as Computers</h6>
+        <p>For application software programmers, the most intuitive way to understand IoT development is to compare IoT devices to computers. For mobile app developers, they can even be seen as smartphones. Through this analogy, programmers can more easily transfer their existing knowledge to the field of IoT development. IoT development, also known as embedded development or smart device development, focuses on leveraging appropriate hardware resources to achieve specific functionalities.</p>
+    </div>
+    <div class="help-item" id="sensor">
+        <h6>Sensors + Networking + Cloud + AI</h6>
+        <p>Sensors + networking + cloud + AI are the foundation of future smart industries. Currently, AI mainly focuses on text, voice, and video fields because these data are easy to collect and thus prioritized for development. However, in the future, it will certainly expand to industrial fields, where data is not limited to text, voice, and video.</p>
+        <p>There are many sensors in various fields. For example, a camera is a sensor, a temperature sensor measures temperature, a water immersion sensor detects water, and a weight sensor measures weight. There are hundreds of thousands of sensors in the real world. Microcontrollers read sensor data through certain methods (usually by reading voltage changes output by the sensors).</p>
+        <p>After collecting the data, it needs to be uploaded to the cloud through networking methods like Wi-Fi, Bluetooth, or 4G. Once the cloud receives the data, it can process it, generate reports, and make intelligent judgments using AI.</p>
+    </div>
+    <div class="help-item" id="cpu">
+        <h6>CPU vs. MCU</h6>
+        <p>Whether in traditional computers or IoT devices, the computing core is a key component. In IoT devices, the computing core is often referred to as a Microcontroller Unit (MCU) or chip. In fact, many IoT device functionalities can be achieved using smartphones, such as display, computation, and network connectivity.</p>
+        <p>However, smartphone hardware is powerful and costly. For simple functionalities, using high-performance hardware is neither economical nor necessary. For example, an MCU in a microwave or washing machine only needs to handle basic button inputs and control logic, costing as little as a few cents, yet sufficient for the task.</p>
+    </div>
+    <div class="help-item" id="memory">
+        <h6>Memory</h6>
+        <p>Modern computers typically come with several GBs or even tens of GBs of RAM, which can be expanded. In IoT devices, many MCUs come with integrated memory. Developers need to choose the right hardware configuration based on the application scenario to maximize cost efficiency while meeting functional requirements.</p>
+        <p>For example, the STC8G1K08A MCU from STC has only 1KB of memory and costs just 0.65 RMB. Despite its limited memory, it is sufficient for many scenarios, such as button processing and timing control in washing machines. Therefore, embedded devices often use chips with integrated memory to optimize cost and performance.</p>
+    </div>
+    <div class="help-item" id="flash">
+        <h6>Flash vs. Hard Drive</h6>
+        <p>Computers use hard drives, while phones use memory cards. Although smart hardware devices may also use memory cards or hard drives, they are generally only used in more expensive devices, such as surveillance systems. In most cases, Flash is used. Flash is similar to hard drives in that data is retained after power loss, but its capacity is smaller, typically ranging from tens of KB to tens of MB, and it is cost-effective.</p>
+        <p>Many MCUs or SoCs already integrate Flash. For example, the STC8G1K08A MCU from STC has 8KB of built-in Flash. Although small, it is sufficient for storing default configurations for devices like washing machines. Of course, for scenarios requiring slightly larger storage, options like SD cards can be considered.</p>
+    </div>
+    <div class="help-item" id="soc">
+        <h6>SoC</h6>
+        <p>In many documents, you will see the term SoC (System on Chip). Simply put, SoC integrates the CPU, memory, interfaces, and networking functions into a single chip to reduce costs and size. It can be understood as integrating a computer's CPU, GPU, memory, network card, and hard drive into one chip.</p>
+        <p>Therefore, when we see a technical document referring to a product as an SoC, we know it integrates many functions. If it is referred to as an MCU, it usually only integrates the CPU, memory, and Flash modules, without networking capabilities like Wi-Fi or Bluetooth.</p>
+    </div>
+    <div class="help-item" id="interface">
+        <h6>Interfaces</h6>
+        <p>Microcontrollers need to obtain data from peripherals, such as sensors. Many sensors are referred to as analog output devices, meaning they output a small voltage change to reflect different data values. For example, a 100mV output might indicate a temperature of 60°C, while 110mV indicates 70°C. Microcontrollers typically use ADC (Analog-to-Digital Conversion) to sample analog data, converting the analog voltage into a digital value. Many sensors already integrate an MCU internally, meaning the sensor itself converts the analog signal into a digital output. Common interfaces include UART, SPI, and I2C. Microcontrollers interact with sensors through these interfaces to read and control them.</p>
+        <p>These interfaces are standardized, meaning the wiring and signal transmission protocols are well-defined. Programmers only need to use the provided drivers to operate them. Refer to the <a href="/dc/pub/doc?page=command" target="_blank">Running Commands</a> section for more details.</p>
+    </div>
+    <div class="help-item" id="network">
+        <h6>Networking</h6>
+        <p>After the MCU collects sensor data, it needs networking capabilities to send the data to the cloud. Networking methods include NFC, Wi-Fi, Bluetooth, LoRa, 433, 4G, 5G, and NB-IoT. The choice depends on the scenario, considering factors like cost, communication distance, power consumption, and data rate. For example, for periodic temperature and humidity reporting, only 2KB of data might be sent every few minutes, so data rate is less important, while power consumption and cost are more critical.</p>
+    </div>
+    <div class="help-item" id="power">
+        <h6>Power Supply</h6>
+        <p>For example, desktop computers typically use direct power, phones use batteries, and laptops use both direct power and batteries, prioritizing direct power when plugged in. These are clever power supply arrangements. In IoT devices, power supply choices are crucial. For instance, if a tracker requires daily charging, its practicality decreases. Therefore, larger batteries are needed, but this increases size and reduces comfort, creating a trade-off. Additionally, selecting low-power hardware and optimizing data reporting frequency can extend battery life.</p>
+        <p>For outdoor environments, solar power combined with batteries can be considered. For security devices, a combination of direct power and disposable batteries can be used. Under normal conditions, direct power is used, and only in emergencies when power is lost are batteries utilized. This ensures both emergency functionality and cost efficiency.</p>
+    </div>
+    <div class="help-item" id="encloser">
+        <h6>Enclosure</h6>
+        <p>Many people think enclosures are not technically significant and often overlook them. However, during the development process, enclosures often take the longest time. Enclosures generally come in two types: custom molds and standard molds. If the customer has no specific requirements, standard molds can be used. Standard molds are those readily available on platforms like Taobao, where you can choose a suitable one. Custom molds require specialized design and production. Metal enclosures are relatively easier and quicker to produce, but plastic injection molds take at least 2-3 months. The process involves communicating requirements with the customer, creating design drawings, 3D printing for confirmation, mold creation, trial production, and finally mass production and printing. Creating a plastic injection mold can cost tens of thousands or even hundreds of thousands of RMB.</p>
+    </div>
+    <div class="help-item" id="package">
+        <h6>Manual and Packaging</h6>
+        <p>Relatively speaking, the design and production of manuals and packaging have shorter cycles and lower costs, making them more flexible. However, high-quality packaging is also crucial, and technical personnel often overlook its importance.</p>
+    </div>
+    <div class="help-item" id="certificate">
+        <h6>Certification</h6>
+        <p>After completing a product, many people ask, "Is that it? Don't we need some form of national recognition to feel assured?" In reality, different countries have varying certification requirements for different product categories—some are mandatory, while others are optional. How do we decide? If you say, "Let's do them all," the cost would be astronomical. Therefore, certifications are generally done based on necessity, primarily driven by customer requirements or the platform where the product will be sold. For example, if you sell on Taobao, specific categories have their own requirements, but most of the time, a basic third-party quality certification suffices. If selling to enterprise clients, follow their requirements. Customers often think of 3C certification first, but not all electronic products require it.</p>
+    </div>
+</div>
+</body>
+</html>

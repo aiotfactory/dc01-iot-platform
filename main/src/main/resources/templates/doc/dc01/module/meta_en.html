@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_META Module Introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#periodupload">Data Reporting - Automatic</a></li>
+        <li><a href="#commandupload">Data Reporting - Command</a></li>
+        <li><a href="#forward">Data Forwarding</a></li>
+        <li><a href="#runtimeinfo">Runtime Information</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_META Module Introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>During device operation, there will be some status information such as the IP address of the 4G module, the number of operations, and error situations, etc., these information are collectively referred to as META information. Through this module, you can configure whether to report these information and the frequency of reporting.
+            <a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">Click here</a> to view the MODULE_META chapter for configuration.
+            Additionally, META information can be automatically periodically reported, executed by command reporting, or clicked on the refresh request data next to 'Runtime Information'.
+            Although there are three ways to report, the format of the reported content is the same, and you can
+            <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">click here</a> to view the META device status, which introduces the meaning of the reported data fields.
+        </p>
+    </div>
+    <div class="help-item" id="periodupload">
+        <h6>Data Reporting - Automatic</h6>
+        <p>Automatic reported data is used to display in the runtime information, the field meanings are relatively clear, and you can also
+            <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">click here</a> to view the META device status, which introduces the meaning of the reported data fields.
+        </p>
+    </div>
+    <div class="help-item" id="commandupload">
+        <h6>Data Reporting - Command</h6>
+        <p>By sending commands to the device, it will trigger the device to report data. You can
+            <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">click here</a> to view the related chapters about the commands that can be executed and the format of the reported data.
+        </p>
+    </div>
+    <div class="help-item" id="forward">
+        <h6>Data Forwarding</h6>
+        <p>You can
+            <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">click here</a> to view how to configure the data forwarding of the module.
+            You can
+            <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">click here</a> to view the format of the forwarded data.
+        </p>
+    </div>
+    <div class="help-item" id="runtimeinfo">
+        <h6>Runtime Information</h6>
+        <p>You can
+            <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">click here</a> to view the related chapters about the META device status to understand the meaning of each field.
+        </p>
+    </div>
+</div>
+</body>
+</html>

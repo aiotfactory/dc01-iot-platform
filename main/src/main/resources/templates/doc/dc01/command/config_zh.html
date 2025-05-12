@@ -1,0 +1,33 @@
+<h5>说明</h5>
+ <p>CONFIG信息可以配置为周期上报，也可以通过下发请求的方式实时获取，请求下发到设备，因此获取的数据是实时的，而不是云端存储的。</p>
+ <!-- Parameter Table -->
+ <h5>CONFIG获取</h5>
+ <table class="table table-bordered">
+     <thead>
+         <tr>
+             <th>参数</th>
+             <th>描述</th>
+             <th>必须</th>
+             <th>类型</th>
+			 <th>字节</th>
+             <th>入出</th>
+         </tr>
+     </thead>
+     <tbody>
+         <tr>
+             <td><code>operate</code></td>
+             <td>固定为18</td>
+             <td><span class="badge badge-required">是</span></td>
+             <td>数字</td>
+			<td>1</td>
+             <td>输入</td>
+         </tr>
+     </tbody>
+ </table>
+ <h5>例子</h5>
+ <div>
+    <strong>下设备请求配置信息:</strong>
+    <p><code>operate=18</code></p>
+	<p>返回内容较多，具体<a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">点击</a>查看返回内容解释</p>
+	<p><code>{"id":"67b5864d0d0a633704f77532","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":14,"request":{"rawString":"operate=18","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T07:20:41.338342578Z","upload":[{"id":"67b460755a961507ca44bc1e","deviceId":"67b460755a961507ca44bc0d","idex":0,"module":0,"type":0,"name":"config_version","valueLen":4,"valueInDevice":"1","valueInDb":null,"status":0,"minValue":0,"maxValue":9999,"enumValue":null}],"uploadTime":"2025-02-19T07:20:45.706371596Z","command":3,"operate":18,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+ </div>  							

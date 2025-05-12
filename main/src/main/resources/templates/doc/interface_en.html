@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Left Sidebar -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#c1">Key Setting</a></li>
+		<li><a href="#c4">Call Quota</a></li>
+		<li><a href="#c2">Forwarding</a></li>
+		<li><a href="#c3">Email Notifications</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+	<div class="text-center mb-4">
+	    <h1 class="display-4 font-weight-bold">API</h1>
+	</div>
+	<div class="help-item" id="c1">
+	    <h6>Key Setting</h6>
+	    <p>Before using the API, you need to set up a key. Click on the <a href="/dc/web/apisetting" target="_blank">API</a> menu, then click "Reset Key" at the top of the page to reset or generate a new key. Make sure to keep your key safe. If you need to change it, you can reset it again.
+		</p>
+	</div>
+	<div class="help-item" id="c4">
+	    <h6>Call Quota</h6>
+	    <p>Based on user levels, a certain quota for API calls is pre-assigned, divided into per-minute and daily limits. You can view your quota and usage in real-time on the page. Additionally, there is also a quota limit for the number of Email notifications that can be sent daily.
+		</p>
+	</div>
+	<div class="help-item" id="c2">
+	    <h6>Forwarding</h6>
+	    <p>The forwarding principle is that devices first report data to the system cloud platform, which then forwards the data to the URL specified by the user via HTTP POST. As a test, users can set up a URL that logs all incoming HTTP POST requests to observe the behavior and data structure of the forwarding. Click <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">here</a> to see an example of the data format.
+		</p>
+		<p>The "Test" link on the left side allows you to test if your URL is valid. The URL should be a complete path, such as http://www.xxx.com/abc/ccc. After entering it, you can click Test.</p>
+		<p>The "Update" link on the left side allows you to update your URL. To clear the URL, simply enter an empty string and click Update.</p>
+		<p>The "Pause"/"Resume" links on the left side allow you to pause or resume forwarding. For instance, if your server is temporarily down, you can click "Pause". Once paused, it will show "Resume". When your server is back online, click "Resume", and it will switch back to showing "Pause".</p>
+	</div>
+	<div class="help-item" id="c3">
+	    <h6>Email Notifications</h6>
+	    <p>If customers do not have a server capable of receiving forwarded data (e.g., small customers), they can receive events via Email. This means when device-reported data matches a regular expression, the system sends the data to the customer's specified Email address.
+		   Since Emails cannot be sent too frequently, it's important to carefully configure the matching regular expressions to minimize the sending frequency.
+		</p>
+		<p>Enter a valid Email address in the input box and click "Update". The system will automatically send an activation Email to the specified address. Users need to retrieve the activation code from the Email and enter it in the input box, then click "Update" again. To delete, simply clear the input box and click "Update".</p>
+		<p>The "Pause"/"Resume" links on the left side allow you to pause or resume forwarding.</p>
+		<p>You can enter any keywords in the keyword field. If the forwarded JSON string contains the entered keyword, an Email notification will be sent. For example, entering "picContentBase64" will trigger Email notifications for image reports.
+		   More complex conditions can be defined using regular expressions, such as: "moduleTypeId"\s*:\s*11[^}]*"adcValue"\s*:\s*(\d{7,}) indicates module type 11 (BAT ADC module) with a read value of 7 digits or more before sending an Email.
+		</p>
+	</div>	 
+</div>
+</body>
+</html>

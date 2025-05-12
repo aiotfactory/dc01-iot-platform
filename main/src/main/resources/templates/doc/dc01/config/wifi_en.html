@@ -1,0 +1,63 @@
+{
+    "moduleName": "MODULE_WIFI",
+    "moduleComments": "Used to configure WiFi related information, including mode, SSID, password, etc.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "wifi_mode",
+            "sample": "0",
+            "range": "0, 1, 2, 3",
+            "comments": "0: Turn off WiFi, 1: STA mode, used to connect to other WiFi routers, 2: AP mode, the device acts as a WiFi router allowing other devices to connect to it, 3: Operate in both STA and AP modes simultaneously."
+        },
+        {
+            "order": 2,
+            "name": "wifi_ap_sta_ssid",
+            "sample": "second",
+            "range": "1-29 characters",
+            "comments": "SSID for WiFi AP or STA."
+        },
+        {
+            "order": 3,
+            "name": "wifi_ap_sta_password",
+            "sample": "fuxiaohu1%",
+            "range": "0-19 characters",
+            "comments": "Password for WiFi AP or STA."
+        },
+        {
+            "order": 4,
+            "name": "wifi_ap_channel",
+            "sample": "6",
+            "range": "1-14",
+            "comments": "WiFi AP channel number."
+        },
+        {
+            "order": 5,
+            "name": "wifi_ap_max_connection",
+            "sample": "5",
+            "range": "1-10",
+            "comments": "Maximum number of connections for WiFi AP, indicating how many other devices can connect to this device simultaneously."
+        },
+        {
+            "order": 6,
+            "name": "wifi_ap_ssid_hidden",
+            "sample": "0",
+            "range": "0, 1",
+            "comments": "Whether to hide the WiFi AP SSID (0 indicates not hidden, 1 indicates hidden)."
+        },
+        {
+            "order": 7,
+            "name": "wifi_ap_dns_update_seconds",
+            "sample": "20",
+            "range": "1-0xffffffff seconds",
+            "comments": "Interval time for DNS updates on WiFi AP."
+        },
+        {
+            "order": 8,
+            "name": "wifi_ap_dns_default",
+            "sample": "0",
+            "range": "0-49 characters",
+            "comments": "Default DNS address for WiFi AP. Setting it to 0 means no default DNS is set."
+        }
+    ],
+    "status": "ok"
+}

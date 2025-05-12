@@ -1,0 +1,45 @@
+    <h5>说明</h5>
+    <p>配置好TM7705后，设备会周期上报数据，也可以通过命令随时读取数据，两者不冲突。</p>
+    <!-- Parameter Table -->
+    <h5>参数说明</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为14</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+			<tr>
+			    <td><code>pin</code></td>
+			    <td>1表示读取管脚1的值，2表示读取管脚2的值，3表示同时读取2个的值。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>			
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>读取管脚1，pin1的值放大了10的7次方倍，因此除以10的7次后的值为单位福特的电压值，如果电压值为-100，表示读取出错:</strong>
+        <p><code>operate=14 pin=1</code></p>
+        <p>返回</p>
+        <p><code>{"id":"67ac7dda8545421273252f37","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":5,"request":{"rawString":"operate=14 pin=1","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-12T10:54:17.230674654Z","upload":{"pin1Value":2145,"pin2Value":null},"uploadTime":"2025-02-12T10:54:18.076961433Z","command":3,"operate":14,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+		<strong>读取管脚1，2，pin1，pin2的值放大了10的7次方倍，因此除以10的7次后的值为单位福特的电压值，如果电压值为-100，表示读取出错:</strong>
+		<p><code>operate=14 pin=3</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67ac7e048545421273252f3d","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":5,"request":{"rawString":"operate=14 pin=3","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-12T10:54:58.815282294Z","upload":{"pin1Value":2193,"pin2Value":5245},"uploadTime":"2025-02-12T10:55:00.020887917Z","command":3,"operate":14,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    </div>

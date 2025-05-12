@@ -1,0 +1,35 @@
+{
+    "moduleName": "MODULE_THERMAL",
+    "moduleComments": "Thermal imaging, measuring multi-point temperature data of the target.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "thermal_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "Used to set the on/off state of the module. 0 means off, and 1 means on."
+        },
+        {
+            "order": 2,
+            "name": "thermal_upload_interval_seconds",
+            "sample": "10",
+            "range": "0-0xffffffff seconds",
+            "comments": "Configure the interval time (in seconds) for uploading module data."
+        },
+        {
+            "order": 3,
+            "name": "thermal_emissivity",
+            "sample": "95",
+            "range": "0-0xffffffff seconds",
+            "comments": "Thermal emissivity. For example, if the main object is a human body, it's about 0.98. If it's a very smooth metal surface, it may be only 0.05. However, this value is multiplied by 100 in configuration. Use 98 and 5 respectively."
+        },
+        {
+            "order": 4,
+            "name": "thermal_shift",
+            "sample": "800",
+            "range": "0-0xffffffff seconds",
+            "comments": "Thermal shift. If the ambient temperature is too high, increase this value accordingly. The value is also multiplied by 100. For example, 800 represents 8 degrees."
+        }
+    ],
+    "status": "ok"
+}

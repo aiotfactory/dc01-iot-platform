@@ -1,0 +1,63 @@
+{
+    "moduleName": "MODULE_PIR",
+    "moduleComments": "Detects movements of humans and animals.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "pir_mode",
+            "sample": "1",
+            "range": "0-5",
+            "comments": "Mode switch, 0: Off, 1: Triggered by activity, 2: Triggered by inactivity, 3: Triggered by any change, such as from inactive to active or vice versa."
+        },
+        {
+            "order": 2,
+            "name": "pir_upload_interval_seconds",
+            "sample": "10",
+            "range": "0-0xffffffff seconds",
+            "comments": "Configures the interval for periodic data uploads (in seconds)."
+        },
+        {
+            "order": 3,
+            "name": "pir_valid_times",
+            "sample": "3",
+            "range": "0-0xffffffff times",
+            "comments": "Used to filter out noise; must be triggered a specified number of times to be considered valid. If set to 0, any trigger is considered valid."
+        },
+        {
+            "order": 4,
+            "name": "pir_not_repeat_upload_seconds",
+            "sample": "3",
+            "range": "0-0xffffffff seconds",
+            "comments": "To prevent frequent data uploads, set to upload only once within X seconds. Setting to 0 means uploading on every trigger."
+        },
+        {
+            "order": 5,
+            "name": "pir_gpio_num",
+            "sample": "14",
+            "range": "Valid ESP chip GPIO pins",
+            "comments": "Specifies the ESP chip GPIO pin number. Pin 14 is convenient and recommended."
+        },
+        {
+            "order": 6,
+            "name": "pir_action",
+            "sample": "1",
+            "range": "0 or 1",
+            "comments": "Action to take upon triggering. Currently supports 1, indicating taking a photo after being triggered. 0 indicates no additional action."
+        },
+        {
+            "order": 7,
+            "name": "pir_action_times",
+            "sample": "3",
+            "range": "0-0xffffffff",
+            "comments": "Number of times to perform the associated action, e.g., taking X photos."
+        },
+        {
+            "order": 8,
+            "name": "pir_action_interval_seconds",
+            "sample": "3",
+            "range": "0-0xffffffff",
+            "comments": "Interval Y seconds between performing associated actions, e.g., taking X photos with Y seconds between each photo."
+        }
+    ],
+    "status": "ok"
+}

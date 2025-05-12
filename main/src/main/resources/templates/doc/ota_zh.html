@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTA在线升级</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#c1">原理</a></li>
+		<li><a href="#c2">修改版本号</a></li>
+		<li><a href="#c3">编译固件</a></li>
+		<li><a href="#c4">推送固件</a></li>
+		<li><a href="#c5">查询固件属性</a></li>
+		<li><a href="#c6">删除固件</a></li>
+		<li><a href="#c7">开始升级</a></li>
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+	<div class="text-center mb-4">
+	    <h1 class="display-4 font-weight-bold">OTA在线升级</h1>
+	</div>
+	<div class="help-item" id="c1">
+	    <h6>原理</h6>
+	    <p>嵌入式设备工作地点一般不在办公室，因此工程师很难临近设备升级，因此OTA很有必要，OTA就是通过网络的方式从云端下载新版本固件，然后设备自我升级后重新启动。
+		   设备启动时以及运行中会不定期的向云端服务器询问是否有新版本，询问请求会带着设备当前的版本号，这样云端检查设备上传的版本号以及云端最新固件版本号，
+		   如果有新固件，云端会下发升级指令，指令包含固件的MD5值，以及固件的下载地址。设备接收到下载地址后开始下载固件，下载完毕后会核对固件的MD5值，如果匹配，设备会自我升级，然后进行重启。
+		   重启后有一个判断新固件是否可用的过程，重启后设备首先向云端发送一条指令来验证设备基本的通讯功能是否可用，如果可用，设备就确认本次升级，如果不可用，设备会自动再次重启并回滚到前一个版本。
+		</p>
+	 </div>
+	 <div class="help-item" id="c2">
+	     <h6>修改版本号</h6>
+	     <p>项目根目录下version.txt文件存放版本号，每次提交编译，系统会自动把该值+1，当然用户也可以自己修改为指定值，但系统还是会自动+1，因此如果想修改为100，可以修改为99，这样自动+1后为100。
+	     该文件会和其他代码一起编译到固件内，然后把固件上传到云端时，云端会自动解析并获取到改文件内容，这样下次设备上报升级询问时，云端会用新版本号和设备当前版本号对比，如果不同会启动升级流程。
+	     设备当前固件版本在<a href="/dc/web/devicelist" target="_blank">设备列表</a>中查看。
+		 </p>
+	 </div>	 	
+	 <div class="help-item" id="c3">
+	     <h6>编译固件</h6>
+	     <p>可以通过<a href="/pub/doc?page=helloworld#localedit" target="_blank">本地编译</a>或者<a href="/dc/pub/doc?page=helloworld#onlineedit" target="_blank">在线编译</a>方式生成固件。
+		    如果是本地方式编译，还需要把固件上传到云端。 本地编译的固件生成为build\usb_cdc_4g_module.bin，点击<a href="/dc/web/otalist" target="_blank">升级</a>菜单，然后点击"新建"，
+			给固件取个名字，如"abc01"。在生成的新记录右侧点击上传固件图标<span><i class="bi bi-upload"></i></span>，选择usb_cdc_4g_module.bin文件上传。
+			上传成功后，系统会自动识别版本号，以及文件大小。
+		</p>
+	 </div>
+	 <div class="help-item" id="c4">
+	     <h6>推送固件</h6>
+	     <p>点击<a href="/dc/web/otalist" target="_blank">升级</a>菜单，查看现有固件，无论是本地编译后上传的固件还是在线编译生成的固件都会出现在这个页面的列表中。
+			通过调整"目标","策略"和"范围"来决定如何逐步推送固件。
+	    </p>
+		<p>"目标"，因为当前运行的设备可能有很多台，而且其运行的固件版本未必都一样，因此目标输入框内可以输入需要推送的设备，比如100台设备有30台正在运行的固件版本为1,
+			有30台为2，有40台为3，目前制作的新固件版本为4，如果打算100台设备都升级，目标输入框可以为空，如果只想升级版本为1的那30台，可以输入1，如果希望升级当前版本为1和2的设备，输入1,2即可。
+		</p>
+		<p>"策略"，如果设备当前版本和云端新固件版本一样是否强制升级，一般正常都选择忽略即可，也是默认设置，但有时候出于调试的目的，也可以选择强制升级，一般配合"范围"只选择有限的几台设备进行强制覆盖。
+		</p>
+		<p>"范围"，当有很多台设备时，我们决定升级那些，不升级那些。"NONE"这是默认值，新创建的固件默认不升级，避免意外的麻烦。"ALL"升级所有，也就是当"目标"和"策略"都符合的设备范围内，全部升级。
+			"EXCEPT_EXCLUDE"当"目标"和"策略"都符合时，我们仍旧希望排除一些设备，选择这个范围，同时也要点击图标<span><i class="bi bi-box-arrow-up-left"></i></span>来上传需要排除的设备序列号。
+			注意，每次上传都会先清空旧数据，然后用新数据替换，如果只想删除旧数据，可以留空，然后提交。
+			"INCLUDE_ONLY"当"目标"和"策略"都符合时，我们仍旧希望只升级在列表内的一些设备，选择这个范围，同时也要点击图标<span><i class="bi bi-box-arrow-in-down-right"></i></span>来上传需要包含的设备序列号。
+			注意，每次上传都会先清空旧数据，然后用新数据替换，如果只想删除旧数据，可以留空，然后提交。
+		</p>
+	 </div>	
+	 <div class="help-item" id="c5">
+	     <h6>查询固件属性</h6>
+	     <p>点击<a href="/dc/web/otalist" target="_blank">升级</a>菜单，查看现有固件列表，在每一行固件的右侧，点击图标<span><i class="bi bi-eye"></i></span>可以查看固件的更多属性，比如被下载的次数等。
+	     </p>
+	 </div>	 
+	 <div class="help-item" id="c6">
+	     <h6>删除固件</h6>
+	     <p>点击<a href="/dc/web/otalist" target="_blank">升级</a>菜单，查看现有固件列表，在每一行固件的右侧，点击图标<span><i class="bi bi-trash"></i></span>可以删除固件。
+	     </p>
+	 </div>
+	 <div class="help-item" id="c7">
+	     <h6>开始升级</h6>
+	     <p>给设备上电启动，只要设备通过任何一种方式(wifi, 4g, 网线)与云端成功建立连接即自动开始升级，点击<a href="/dc/web/devicelist" target="_blank">设备列表</a>可以查看设备是否连线成功。
+	     </p>
+	 </div>
+</div>
+</body>
+</html>

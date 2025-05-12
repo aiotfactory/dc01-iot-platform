@@ -1,0 +1,54 @@
+<h5>说明</h5>
+<p>模块用侦测人体和动物的移动，目前只有周期上报和触发上报，没有下发命令模式。</p>
+<h5>例子</h5>
+<div>
+	 <table class="table table-bordered">
+	     <tbody>
+            <tr>
+                <td><code>type</code></td>
+                <td>0表示周期上报，1表示触发上报。</td>
+            </tr>
+			<tr>
+			    <td><code>triggerTimesTotal</code></td>
+			    <td>设备上电以来触发的总次数。</td>
+			</tr>
+			<tr>
+			    <td><code>triggerTimesFromPreviousUpload</code></td>
+			    <td>上一次上报后，触发的次数。</td>
+			</tr>
+			<tr>
+			    <td><code>stateKeepSeconds</code></td>
+			    <td>当前状态保持了多少秒。</td>
+			</tr>
+			<tr>
+			    <td><code>pirStatus</code></td>
+			    <td>1表示有活动，0表示无活动。</td>
+			</tr>
+		</tbody>
+	</table>	
+	<p>返回正常</p>											
+    <p><code> {
+        "id": "680df2b2c95f942609d2ede0",
+        "deviceId": "680de1467d4420689ff9aada",
+        "deviceNo": "24587cd0624c",
+        "moduleTypeId": 20,
+        "request": null,
+        "requestTime": null,
+        "upload": {
+            "type": 0,
+            "triggerTimesTotal": 3,
+            "triggerTimesFromPreviousUpload": 3,
+            "stateKeepSeconds": 4,
+            "pirStatus": 0
+        },
+        "uploadTime": "2025-04-27T09:02:42.296+00:00",
+        "command": 14,
+        "operate": null,
+        "deviceRequestPack": null,
+        "deviceUploadPack": 14,
+        "info": null,
+        "errorType": "OK",
+        "dataCommType": "PERIOD_UPLOAD",
+        "dataCommSource": "DEVICE_AUTO"
+    } </code></p>
+</div>

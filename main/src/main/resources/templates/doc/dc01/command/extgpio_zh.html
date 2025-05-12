@@ -1,0 +1,104 @@
+<h5>说明</h5>
+ <p>线路板上有两种GPIO,一种是ESP32芯片的引脚, 另外一种来自扩展模块,因为ESP32引脚数目不足，因此加了扩展模块, 但ESP32的GPIO支持功能更丰富些, 具体参阅其他文档, 扩展GPIO目前只支持输出高或者低电平。小知识，引脚就是芯片的一个焊接点，通常是较为细的类似铁丝一样的金属，这样的引脚一般会连接线路板上的接线端子/接线柱/接线插座等，方便外接其他设备。</p>
+ <!-- Parameter Table -->
+ <h5>GPIO输出</h5>
+ <table class="table table-bordered">
+     <thead>
+         <tr>
+             <th>参数</th>
+             <th>描述</th>
+             <th>必须</th>
+             <th>类型</th>
+			 <th>字节</th>
+             <th>入出</th>
+         </tr>
+     </thead>
+     <tbody>
+         <tr>
+             <td><code>operate</code></td>
+             <td>固定为2</td>
+             <td><span class="badge badge-required">是</span></td>
+             <td>数字</td>
+			<td>1</td>
+             <td>输入</td>
+         </tr>
+         <tr>
+             <td><code>gpio_ext_no</code></td>
+             <td>7=gpio_ext_io7 9=gpio_ext_oc1 13=gpio_ext_oc5 14=gpio_ext_oc6 17=gpio_ext_oc9 18=gpio_ext_oc10 19=gpio_ext_oc11 20=gpio_ext_oc12 21=gpio_ext_oc13 22=gpio_ext_oc14 0=gpio_ext_io0 1=gpio_ext_io1 2=gpio_ext_io2 3=gpio_ext_io3</td>
+             <td><span class="badge badge-required">是</span></td>
+             <td>数字</td>
+			<td>1</td>
+             <td>输入</td>
+         </tr>
+         <tr>
+             <td><code>status</code></td>
+             <td>引脚的开关状态，设置为1表示打开，一般英文叫pull up，或者叫输出高电平，或者叫拉高，如果用万用表测量这个引脚，其电压一般和芯片的电压相等，比如3.3v。设置为0，会把这个引脚关闭，英文叫pull down，或者叫拉低，或者叫输出低，用万用表测量电压会是0或者很接近0v电压。</td>
+             <td><span class="badge badge-required">是</span></td>
+             <td>数字</td>
+			<td>1</td>
+             <td>输入</td>
+         </tr>
+     </tbody>
+ </table>
+ <h5>例子</h5>
+ <div>
+     <strong>gpio_ext_io0 (因为0=gpio_ext_io0，因此这里用0) 输出高电平:</strong>
+     <p><code>operate=2 gpio_ext_no=0 status=1</code></p>
+	<p>返回</p>
+	<p><code>{"id":"67aaec4064b53b7e99f1fadf","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=2 gpio_ext_no=0 status=1","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T06:20:45.600353615Z","upload":{"values":null},"uploadTime":"2025-02-11T06:20:48.712225589Z","command":3,"operate":2,"info":"ext gpio no 0 set to 1","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+     <hr>
+     <strong>gpio_ext_oc1 (因为9=gpio_ext_oc1，因此这里用9) 输出低电平:</strong>
+     <p><code>operate=2 gpio_ext_no=9 status=0</code></p>
+	<p>返回</p>
+	<p><code>{"id":"67aafe5364b53b7e99f1fafe","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=2 gpio_ext_no=9 status=0","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T07:37:55.340840473Z","upload":{"values":null},"uploadTime":"2025-02-11T07:37:55.569098984Z","command":3,"operate":2,"info":"ext gpio no 9 set to 0","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+	<h5>GPIO读取</h5>
+	<p>读取到的是逻辑值，就是高电压是1，低电压是0。</p>
+	<table class="table table-bordered">
+	    <thead>
+	        <tr>
+	            <th>参数</th>
+	            <th>描述</th>
+	            <th>必须</th>
+	            <th>类型</th>
+				<th>字节</th>
+	            <th>入出</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	        <tr>
+	            <td><code>operate</code></td>
+	            <td>固定为16</td>
+	            <td><span class="badge badge-required">是</span></td>
+	            <td>数字</td>
+				<td>1</td>
+	            <td>输入</td>
+	        </tr>
+			<tr>
+			    <td><code>is_esp</code></td>
+			    <td>1表示ESP芯片GPIO引脚，0表示EXT GPIO引脚</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+	        <tr>
+	            <td><code>gpio_no</code></td>
+	            <td>7=gpio_ext_io7 9=gpio_ext_oc1 13=gpio_ext_oc5 14=gpio_ext_oc6 17=gpio_ext_oc9 18=gpio_ext_oc10 19=gpio_ext_oc11 20=gpio_ext_oc12 21=gpio_ext_oc13 22=gpio_ext_oc14 0=gpio_ext_io0 1=gpio_ext_io1 2=gpio_ext_io2 3=gpio_ext_io3</td>
+	            <td><span class="badge badge-required">是</span></td>
+	            <td>数字</td>
+				<td>1</td>
+	            <td>输入</td>
+	        </tr>
+	    </tbody>
+	</table>
+	<h5>例子</h5>
+	<div>
+	    <strong>读取gpio_ext_io2 (因为2=gpio_ext_io2，因此用2) 的逻辑电平，返回逻辑高电平1:</strong>
+	    <p><code>operate=16 is_esp=0 gpio_no=2</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67aaff3b64b53b7e99f1fb05","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=0 gpio_no=2","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T07:41:47.694480570Z","upload":{"values":[{"pinValue":1,"pinMode":2,"pinType":"EXT","pin":2,"valueType":"DIGITAL"}]},"uploadTime":"2025-02-11T07:41:47.969551710Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+		<strong>读取gpio_ext_oc5 (因为13=gpio_ext_oc5，因此用13) 的逻辑电平，因为未配置开启，因此读不到值:</strong>
+		<p><code>operate=16 is_esp=0 gpio_no=13</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67aaffbc64b53b7e99f1fb08","deviceId":"67a9b3f7fc9137775691004f","moduleTypeId":13,"request":{"rawString":"operate=16 is_esp=0 gpio_no=13","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-11T07:43:55.486612585Z","upload":{"values":[]},"uploadTime":"2025-02-11T07:43:56.038617448Z","command":3,"operate":16,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+	</div>								

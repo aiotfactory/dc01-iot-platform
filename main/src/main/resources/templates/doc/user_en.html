@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User System</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#user1">User Registration</a></li>
+        <li><a href="#user2">User Types</a></li>
+        <li><a href="#user3">User Cloning</a></li>
+        <li><a href="#user4">User Status</a></li>
+        <li><a href="#user5">User Level</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">User System</h1>
+    </div>
+    <div class="help-item" id="user1">
+        <h6>User Registration</h6>
+        <p>A user can register themselves or be created by a parent user. It is recommended that the username is an email address to facilitate password recovery. A parent user can create child users, but child users cannot create their own child users.
+        </p>
+    </div>
+    <div class="help-item" id="user2">
+        <h6>User Types</h6>
+        <p>Users are categorized into parent and child users. Parent users can manage child users and also view devices under child users.
+        </p>
+    </div>
+    <div class="help-item" id="user3">
+        <h6>User Cloning</h6>
+        <p>For example, if a parent user creates two child users, a1 and b, and wants b to only view but not modify the devices of a1 and a2, then b can be set to "clone from" a1 and a2. Multiple users can be specified using commas. Only parent users can operate on their own child users.
+        </p>
+    </div>
+    <div class="help-item" id="user4">
+        <h6>User Status</h6>
+        <p>ENABLED, DISABLED, FREEZED, WAIT_ACTIVATION represent normal, disabled, frozen, and pending activation respectively. Parent users can set the status of child users.
+        </p>
+    </div>
+    <div class="help-item" id="user5">
+        <h6>User Level</h6>
+        <p>PERSONAL, PROFESSIONAL, ENTERPRISE, ADMIN represent personal, professional, enterprise, and administrator users respectively. Administrators can perform all management operations and change other user levels. Different levels correspond to different permissions and functionalities. For more details, see <a href="/dc/pub/doc?page=membership" target="_blank">Membership Documentation</a>.
+        </p>
+    </div>
+</div>
+</body>
+</html>

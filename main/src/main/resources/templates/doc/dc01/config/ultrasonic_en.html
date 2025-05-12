@@ -1,0 +1,77 @@
+{
+    "moduleName": "MODULE_ULTRASONIC",
+    "moduleComments": "Ultrasonic distance measurement module.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "ultrasonic_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "Used to control the module's on/off status. 0 means off, 1 means on."
+        },
+        {
+            "order": 2,
+            "name": "ultrasonic_upload_interval_seconds",
+            "sample": "10",
+            "range": "0-0xffffffff seconds",
+            "comments": "Configures the interval (in seconds) for uploading module data."
+        },
+        {
+            "order": 3,
+            "name": "ultrasonic_pin_trig",
+            "sample": "1",
+            "range": "0-255",
+            "comments": "Pin used to trigger ultrasonic measurement. The lower 7 bits indicate the pin number. The highest bit indicates: 1 = ESP chip GPIO pin, 0 = external expansion pin."
+        },
+        {
+            "order": 4,
+            "name": "ultrasonic_pin_echo",
+            "sample": "21",
+            "range": "0-255",
+            "comments": "Pin used to receive ultrasonic echo. Must be an ESP chip GPIO pin."
+        },
+        {
+            "order": 5,
+            "name": "ultrasonic_measure_milli_seconds",
+            "sample": "1000",
+            "range": "1-0xffffffff",
+            "comments": "Interval between ultrasonic measurements in milliseconds."
+        },
+        {
+            "order": 6,
+            "name": "ultrasonic_compensation_mode",
+            "sample": "1",
+            "range": "0, 1, 2",
+            "comments": "Due to the significant impact of temperature and humidity on sound speed, compensation is required. 0 = no compensation, 1 = compensate using onboard temperature/humidity sensor (must be enabled), 2 = fixed-value compensation, configured via ultrasonic_compensation_value."
+        },
+        {
+            "order": 7,
+            "name": "ultrasonic_compensation_value",
+            "sample": "70",
+            "range": "0-0xffff",
+            "comments": "This value is in degrees Celsius, with 50 subtracted for internal use. For example, setting to 70 represents an assumed ambient temperature of 20°C (70 - 50)."
+        },
+        {
+            "order": 8,
+            "name": "ultrasonic_trigger_times",
+            "sample": "1",
+            "range": "0-0xffff",
+            "comments": "Trigger after meeting condition X times."
+        },
+        {
+            "order": 9,
+            "name": "ultrasonic_trigger_min",
+            "sample": "0",
+            "range": "1-0xffffffff",
+            "comments": "In millimeters. A measured distance within the min-max range triggers an event. This defines the minimum."
+        },
+        {
+            "order": 10,
+            "name": "ultrasonic_trigger_max",
+            "sample": "100",
+            "range": "1-0xffffffff",
+            "comments": "In millimeters. A measured distance within the min-max range triggers an event. This defines the maximum."
+        }
+    ],
+    "status": "ok"
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>接口</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#c1">Key设置</a></li>
+		<li><a href="#c4">调用次数配额</a></li>
+		<li><a href="#c2">转发</a></li>
+		<li><a href="#c3">Email通知</a></li>
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+	<div class="text-center mb-4">
+	    <h1 class="display-4 font-weight-bold">接口</h1>
+	</div>
+	<div class="help-item" id="c1">
+	    <h6>Key设置</h6>
+	    <p>使用接口前要先设置密钥，点击<a href="/dc/web/apisetting" target="_blank">接口</a>菜单，然后在页面顶部点击"重置Key"即可重置或者生成密钥。密钥要妥善保存，如果需要修改，可以再次重置。
+		</p>
+	</div>
+	<div class="help-item" id="c4">
+	    <h6>调用次数配额</h6>
+	    <p>根据用户等级，预先分配一定调用配额，分为每分钟和每天限制，页面上可以实时查看自己的配额和使用量。另外，每天能通知的Email事件也有配额限制。
+		</p>
+	</div>
+	<div class="help-item" id="c2">
+	    <h6>转发</h6>
+	    <p>转发原理就是设备首先上报数据到系统云平台，云平台按照用户在这里设置的URL进行转发，转发通过http post进行，作为测试用户可以先设置一个接收所有http post的URL然后在自己服务器端把接收到的内容进行日志记录，
+		   这样可以观察转发的行为和数据结构。点击<a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">数据格式</a>查看例子。
+		</p>
+		<p>转发左侧的"测试"链接可以用来测试客户的URL是否有效，URL格式应该为完整路径，http://www.xxx.com/abc/ccc，输入后可以点击测试。</p>
+		<p>转发左侧的"更新"链接可以用来更新URL，如果想清除链接，输入空然后更新即可。</p>
+		<p>转发左侧的"暂停"/"继续"链接可以用来暂停或者继续转发，比如客户服务器暂时关闭，可以点击这里的"暂停"，暂停成功后显示"继续"，等服务器恢复后，可以点击"继续"，点击成功后显示"暂停"。</p>
+	</div>
+	<div class="help-item" id="c3">
+	    <h6>Email通知</h6>
+	    <p>如果客户没有能够接收转发的服务器，比如小客户，也可以通过Email接收事件，也就是当设备上报的数据符合正则表达式判断时，系统会把数据发送到客户指定的Email地址。
+		   因为Email不能非常频繁发送，所以需要仔细设置判定的正则表达式，尽量减少发送频率。
+		</p>
+		<p>Email输入框输入合法的Email地址，然后点击"更新"，系统会自动发送一封激活Email到指定地址，用户读取Email获取激活码填写在输入框，然后再次点击"更新"即可。如果想删除，只要清空，然后点击"更新"即可</p>
+		<p>转发左侧的"暂停"/"继续"链接可以用来暂停或者继续转发。</p>
+		<p>关键字里面可以输入任意字母，只要转发的JSON格式字符串包含所输入的关键字，就会发送Email，比如输入picContentBase64，可以只Email通知图片上报信息。
+		   复杂一点的情况可以用正则表达，"moduleTypeId"\s*:\s*11[^}]*"adcValue"\s*:\s*(\d{7,}) 表示module为11(BAT ADC模块)，且其读取的数值为7位以上数字才发送Email。
+		</p>
+	</div>	 
+</div>
+</body>
+</html>

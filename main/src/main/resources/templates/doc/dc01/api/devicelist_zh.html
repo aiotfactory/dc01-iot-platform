@@ -1,0 +1,13 @@
+{
+  "params": null,
+  "inputComments": "无需输入",
+  "inputDefinition": null,
+  "inputExample": null,
+  "outputComments": "返回用户、用户的子用户及由该用户克隆的所有设备。",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>iccid</td><td>SIM卡号</td></tr><tr><td>imei</td><td>4G模块的IMEI</td></tr><tr><td>ownerShip</td><td>Child，设备属于当前用户的子用户；clone，设备属于由当前用户克隆的用户；空，设备由当前用户拥有。</td></tr><tr><td>uploadTime</td><td>上传最新数据到云端的时间</td></tr><tr><td>deviceStatus</td><td>0，未上传数据；1，最近24小时内上传；2，最近30分钟内上传。</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"deviceList\": [\r\n    {\r\n      \"iccid\": \"\",\r\n      \"ownerShip\": \"\",\r\n      \"colorStatus\": 0,\r\n      \"imei\": \"\",\r\n      \"id\": \"6728af1db4fffe5cd00fd2d2\",\r\n      \"deviceNo\": \"24587cf06b91\",\r\n      \"uploadTime\": \"\",\r\n      \"deviceName\": \"abc\",\r\n      \"deviceStatus\": \"ENABLED\"\r\n    }\r\n\t...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"deviceList\": [\r\n    {\r\n      \"iccid\": \"\",\r\n      \"ownerShip\": \"\",\r\n      \"colorStatus\": 0,\r\n      \"imei\": \"\",\r\n      \"id\": \"6728af1db4fffe5cd00fd2d2\",\r\n      \"deviceNo\": \"24587cf06b91\",\r\n      \"uploadTime\": \"\",\r\n      \"deviceName\": \"abc\",\r\n      \"deviceStatus\": \"ENABLED\"\r\n    }\r\n\t...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey":"[[${apiKey}]]",
+  "apiRunning":"[[${apiRunning}]]"
+}

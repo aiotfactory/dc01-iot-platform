@@ -1,0 +1,48 @@
+   <h5>说明</h5>
+    <p>为了便于客户扩展功能，提供本模块，客户可以通过WEB页面或者API调用方式执行命令，命令原文会传送到设备上，目前设备没有任何处理，
+   			客户可以修改设备上的C语言代码(forward_util.c)来处理，然后返回自定义内容，返回的内容上报到云端后，云端不进行业务处理，只是转发给调用方。</p>
+    <!-- Parameter Table -->
+    <h5>参数说明</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为17</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+			<tr>
+			    <td><code>hex_input</code></td>
+				<td>向设备下发数据的hex值，因为可能含有不可见字符，因此全部转为hex传输 (如 0x303132)，接收端要解码hex字符串。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>	
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>下发0x303132 (对应可见字符012的ascii码):</strong>
+        <p><code>operate=17 hex_input=0x303132</code></p>
+        <p>返回，正常</p>
+		<table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td><code>base64Data</code></td>
+                    <td>设备可以按二进制上报到云端，云端会把收到的二进制内容进行base64编码，方便通过json传输。</td>
+                </tr>
+			</tbody>
+		</table>										
+        <p><code>{"id":"67b58cf24b64812e70c5c8f1","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":15,"request":{"rawString":"operate=17 hex_input=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T07:49:06.322604263Z","upload":{"base64Data":"aGVsbG8sIHJlc3BvbnNlIHRvIHlvdXIgcmVxdWVzdCAwLg=="},"uploadTime":"2025-02-19T07:49:06.589931883Z","command":3,"operate":17,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    </div>

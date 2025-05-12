@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帮助</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .help-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .help-item:hover {
+            background-color: #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .help-item h5 {
+            margin-bottom: 10px;
+        }
+        .help-item a {
+            text-decoration: none;
+            color: #007bff;
+        }
+        .help-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container my-5">
+    <div class="text-center mb-4">
+        <h1>帮助中心</h1>
+        <p class="text-muted">选择您需要的帮助项目了解更多详细信息。</p>
+    </div>
+	<div class="help-item">
+	    <h5><a href="/dc/pub/doc?page=toappdeveloper" target="_blank">互联网软件程序员如何理解物联网开发</a></h5>
+	    <p>应用软件程序员，如互联网开发程序员，对包含硬件内容的物联网开发会比较陌生，通过本章学习可以对物联网的方方面面有个基础认知。</p>
+	</div>	
+	<div class="help-item">
+	    <h5><a href="/dc/pub/doc?page=helloworld" target="_blank">从Hello World开始</a></h5>
+	    <p>如同学习其他编程语言一样，我们从Hello World开始，看看如何修改，编译和烧录硬件设备。</p>
+	</div>
+	<div class="help-item">
+	    <h5><a href="/dc/pub/doc?page=dataflow&deviceType=dc01" target="_blank">数据流</a></h5>
+	    <p>了解下传感器，PCB设备，云平台，客户服务器间数据如何流动就能掌握系统能为我们做什么</p>
+	</div>	
+    <div class="help-item">
+        <h5><a href="/dc/web/doc?page=api_index&deviceType=dc01" target="_blank">对外提供的API</a></h5>
+        <p>注册的用户点击导航栏的API菜单，然后重置API Key即可生成key，通过key可以调用云端的API，API内容很丰富。</p>
+    </div>
+	<div class="help-item">
+	    <h5><a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">向设备下发命令</a></h5>
+	    <p>通过对云端发起API调用的方式，可以在设备上执行命令，云端收到用户的API调用后，会推送命令到设备，并且把设备返回的结果转发给用户程序，这大大减少开发的复杂性，用户不需要修改嵌入式C语言代码和烧录设备，即可执行不同命令。</p>
+	</div>
+	<div class="help-item">
+	    <h5><a href="/dc/pub/doc?page=config_index&deviceType=dc01" target="_blank">如何配置设备</a></h5>
+	    <p>通过云端页面配置参数，当设备下一次上报数据时，配置参数会作为返回结果推送到设备，设备会更新本地配置，并把最新配置上报到云端。</p>
+	</div>
+	<div class="help-item">
+	    <h5><a href="/dc/pub/doc?page=ota" target="_blank">OTA远程升级</a></h5>
+	    <p>通过云端向设备推送新固件，远程升级。</p>
+	</div>
+</div>
+</body>
+</html>

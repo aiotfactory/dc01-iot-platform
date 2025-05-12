@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_ULTRASONIC模块介绍</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#description" class="active">模块说明</a></li>
+        <li><a href="#periodupload">数据上报-自动</a></li>
+        <li><a href="#interruptupload">数据上报-中断</a></li> 
+		<li><a href="#commandupload">数据上报-命令</a></li> 
+		<li><a href="#forward">数据转发</a></li> 
+		<li><a href="#runtimeinfo">运行状态</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_ULTRASONIC模块介绍</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>模块说明</h6>
+        <p>产品可以外接超声波测距模块，超声波模块通过发送超声波以及测量声波返回时间，通过声速换算距离，一般超声波模块都有4个引脚，一个地一个电，另外两个一个是触发声波发送引脚和接收声波中断引脚。</p>
+		<p>触发引脚可以是esp芯片gpio引脚也可以是ext扩展引脚，但接收引脚必须是esp引脚。</p>
+		<p>声速并不是恒定值，和气温，气压，湿度等相关，因此可以通过模块配置开启补偿机制，也就是根据不同温度，湿度用不同声速值进行计算。</p>
+    </div>
+	<div class="help-item" id="periodupload">
+	    <h6>数据上报-自动</h6>
+		<p>字段意思比较明确，也可以<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看MODULE_ULTRASONIC模块，里面介绍了上报的数据字段含义。
+		</p>
+	</div>
+	<div class="help-item" id="interruptupload">
+	    <h6>数据上报-中断</h6>
+		<p>通过配置距离区间，只要测到的距离落在找个区间就自动上报，<a href="/dc/pub/doc?page=config_index&deviceType=dc01" target="_blank">点击</a>查看MODULE_ULTRASONIC模块进行配置。
+		</p>
+	</div>
+	<div class="help-item" id="commandupload">
+	    <h6>数据上报-命令</h6>
+		<p>通过向设备发送命令也会触发设备上报数据，<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看MODULE_ULTRASONIC模块相关章节了解可以执行那些命令，以及上报的数据格式。
+		</p>
+	</div>
+	<div class="help-item" id="forward">
+	    <h6>数据转发</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">点击</a>查看如何配置模块的数据转发。
+		   <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">点击</a>查看转发的数据格式。
+		</p>
+	</div>	
+	<div class="help-item" id="runtimeinfo">
+	    <h6>运行状态</h6>
+		<p><a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看MODULE_ULTRASONIC模块相关章节可以了解各个字段含义。
+		</p>
+	</div>	
+</div>
+</body>
+</html>

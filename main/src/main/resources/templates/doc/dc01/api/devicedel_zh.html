@@ -1,0 +1,12 @@
+{
+  "params": "action=deviceDel&deviceId=xxxxxxxxxxxxxxxxxxxxxxxx",
+  "inputComments": "指定设备ID。",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>要删除的设备的ID。</td></tr></tbody></table>",
+  "outputComments": "根据deviceId删除当前用户或当前用户的子用户下的设备，并且还会返回剩余的设备列表。",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>如果成功，将返回ok以及剩余的设备列表。</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"deviceList\": [\r\n    {\r\n      \"iccid\": \"\",\r\n      \"ownerShip\": \"\",\r\n      \"colorStatus\": 0,\r\n      \"imei\": \"\",\r\n      \"id\": \"6728af1db4ccfe5fd00fd2d2\",\r\n      \"deviceNo\": \"245872206b91\",\r\n      \"uploadTime\": \"\",\r\n      \"deviceName\": \"\",\r\n      \"deviceStatus\": \"ENABLED\"\r\n    }\r\n	...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"deviceList\": [\r\n    {\r\n      \"iccid\": \"\",\r\n      \"ownerShip\": \"\",\r\n      \"colorStatus\": 0,\r\n      \"imei\": \"\",\r\n      \"id\": \"6728af1db4ccfe5fd00fd2d2\",\r\n      \"deviceNo\": \"245872206b91\",\r\n      \"uploadTime\": \"\",\r\n      \"deviceName\": \"\",\r\n      \"deviceStatus\": \"ENABLED\"\r\n    }\r\n	...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

@@ -1,0 +1,12 @@
+{
+  "params": "fields=alert&deviceId=xxxxxxxxxxxx&moduleTypeId=xxx",
+  "inputComments": "指定设备ID和模块类型ID。",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>设备的ID。</td></tr><tr><td>moduleTypeId</td><td>模块的ID。</td></tr></tbody></table>",
+  "outputComments": "返回该模块的前100条告警，不同模块的数据可能有所不同，请查阅模块的视图页面以了解字段含义。",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>如果成功，将返回ok。</td></tr><tr><td>alertList</td><td>告警容器。</td></tr><tr><td>ruleOperator</td><td>规则操作，当前在代码中定义。</td></tr><tr><td>reasonId</td><td>触发原因，在代码中定义。</td></tr><tr><td>ruleName</td><td>在代码中定义。</td></tr><tr><td>status in alertList</td><td>告警的状态（INIT,CANCEL,PROCESS,DONE,PENDING）。</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"alertList\": [\r\n    {\r\n      \"ruleOperator\": \"avg\",\r\n      \"reasonContent\": \"adc2 current value 0 < recent 10 records avg 28377.00*0.50=14188.50\",\r\n      \"reasonId\": \"1\",\r\n      \"ruleName\": \"moving_check\",\r\n      \"id\": \"6731a3b0bc3de55f4dd9a37d\",\r\n      \"ruleId\": \"1\",\r\n      \"uploadTime\": \"11-11 14:26\",\r\n      \"status\": \"INIT\"\r\n    }\r\n    ...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"alertList\": [\r\n    {\r\n      \"ruleOperator\": \"avg\",\r\n      \"reasonContent\": \"adc2 current value 0 < recent 10 records avg 28377.00*0.50=14188.50\",\r\n      \"reasonId\": \"1\",\r\n      \"ruleName\": \"moving_check\",\r\n      \"id\": \"6731a3b0bc3de55f4dd9a37d\",\r\n      \"ruleId\": \"1\",\r\n      \"uploadTime\": \"11-11 14:26\",\r\n      \"status\": \"INIT\"\r\n    }\r\n    ...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

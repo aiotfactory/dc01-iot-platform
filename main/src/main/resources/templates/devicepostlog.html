@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{log_view}">Log View</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .log-text {
+            max-height: 500000px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 10;
+            -webkit-box-orient: vertical;
+        }
+
+        .log-text.expanded {
+            max-height: none;
+            -webkit-line-clamp: unset;
+        }
+
+        .btn-toggle {
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: Consolas, "Courier New", monospace;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white text-uppercase" th:text="#{log_details}">
+                Log Details
+            </div>
+            <div class="card-body">
+                <p><strong th:text="#{post_log_id}">Log ID:</strong> <span th:text="${id}"></span></p>
+                <p><strong th:text="#{post_log_device_id}">Device ID:</strong> <span th:text="${deviceId}"></span></p>
+                <p><strong th:text="#{post_log_device_no}">Device No:</strong> <span th:text="${deviceNo}"></span></p>
+                <p><strong th:text="#{post_log_module_name}">Module Name:</strong> <span th:text="${moduleName}"></span></p>
+                <p><strong th:text="#{post_log_pack}">Pack:</strong> <span th:text="${pack}"></span></p>
+				<p><strong th:text="#{post_log_type}">Type:</strong> <span th:text="${type}"></span></p>
+                <p><strong th:text="#{post_log_error}">Error:</strong> <span th:text="${error}"></span></p>
+                <p><strong th:text="#{post_log_create_time}">Create Time:</strong> <span th:text="${createTime}"></span></p>
+
+                <p><strong th:text="#{post_log_rx_data}">RX Data (URL encoded):</strong></p>
+
+                <button class="btn btn-secondary btn-sm btn-toggle" id="rxToggleButton">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <div class="log-text" id="rxData"><pre><code th:text="${rx}"></code></pre></div>
+                <p class="mt-3"><strong th:text="#{post_log_tx_data}">TX Data (URL encoded):</strong></p>
+
+                <button class="btn btn-secondary btn-sm btn-toggle mt-2" id="txToggleButton">
+                    <i class="bi bi-three-dots"></i>
+                </button>
+                <div class="log-text mt-3" id="txData"><pre><code th:text="${tx}"></code></code></div>
+            </div>
+        </div>
+    </div>
+    <script src="/dc/js/bootstrap.bundle.min.js"></script>
+    <th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+    <script  th:inline="javascript">
+        window.onload = function () {
+            const txData = document.getElementById('txData');
+            const rawTx = txData.textContent.trim();
+            try {
+                const formattedJson = JSON.stringify(JSON.parse(rawTx), null, 4); // 格式化为 4 空格缩进
+                txData.innerHTML = `<pre><code>${formattedJson}</code></pre>`;
+            } catch (e) {
+                console.error('Invalid JSON in TX Data:', e);
+                txData.innerHTML = `<pre><code>${rawTx}</code></pre>`;
+            }
+        };
+
+        document.getElementById('rxToggleButton').addEventListener('click', function () {
+            var rxData = document.getElementById('rxData');
+            if (rxData.classList.contains('expanded')) {
+                rxData.classList.remove('expanded');
+                this.innerHTML = '<i class="bi bi-three-dots"></i>';
+            } else {
+                rxData.classList.add('expanded');
+                this.innerHTML = [[#{show_less}]] ;
+            }
+        });
+
+        document.getElementById('txToggleButton').addEventListener('click', function () {
+            var txData = document.getElementById('txData');
+            if (txData.classList.contains('expanded')) {
+                txData.classList.remove('expanded');
+                this.innerHTML = '<i class="bi bi-three-dots"></i>';
+            } else {
+                txData.classList.add('expanded');
+                this.innerHTML = [[#{show_less}]] ;
+            }
+        });
+    </script>
+</body>
+</html>

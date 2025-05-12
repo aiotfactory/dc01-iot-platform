@@ -1,0 +1,543 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{fragments/nav :: head(#{llm_setting})}"></th:block>
+<body>
+	<th:block th:insert="~{fragments/nav :: search}"></th:block>
+	<div class="container-fluid">
+		<div class="row">
+			<th:block th:insert="~{fragments/nav :: menu}"></th:block>
+			<main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+				<th:block th:insert="~{fragments/nav :: breadcrumb}"></th:block>
+				<div class="card shadow-sm border">
+					<div class="accordion">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="headingOne">
+								<button class="accordion-button" type="button"
+									data-bs-toggle="collapse" data-bs-target="#collapseOne"
+									aria-expanded="false" aria-controls="collapseOne">
+									<span th:text="#{llm_setting_title}">大语言模型分析示例说明</span></button>
+							</h2>
+							<div id="collapseOne" class="accordion-collapse collapse show"
+								aria-labelledby="headingOne">
+								<div class="accordion-body">
+									<p class="text-muted" th:text="#{llm_setting_flow1}">平台支持将设备数据与大语言模型(LLM)联动分析，自动触发智能决策。</p>
+									<div class="row g-4">
+										<!-- 流程说明 -->
+										<div class="col-lg-6">
+											<div class="card h-100 border">
+												<div class="card-header bg-light border-bottom py-2" th:text="#{llm_setting_flow2}">
+													工作流程</div>
+												<div class="card-body">
+													<ul class="list-unstyled mb-0">
+														<li class="d-flex align-items-center py-1"><i
+															class="bi bi-arrow-right-short me-2"></i> <span th:text="#{llm_setting_step1}">用户预编辑模板和变量</span></li>
+														<li class="d-flex align-items-center py-1"><i
+															class="bi bi-arrow-right-short me-2"></i> <span th:text="#{llm_setting_step2}">设备触发实时数据上报</span></li>
+														<li class="d-flex align-items-center py-1"><i
+															class="bi bi-arrow-right-short me-2"></i> <span th:text="#{llm_setting_step3}">系统匹配规则执行条件</span></li>
+														<li class="d-flex align-items-center py-1"><i
+															class="bi bi-arrow-right-short me-2"></i> <span th:text="#{llm_setting_step4}">实时数据替换模板变量</span></li>
+														<li class="d-flex align-items-center py-1"><i
+															class="bi bi-arrow-right-short me-2"></i> <span th:text="#{llm_setting_step5}">系统调用语言模型接口</span></li>
+														<li class="d-flex align-items-center py-1"><i
+															class="bi bi-arrow-right-short me-2"></i> <span th:text="#{llm_setting_step6}">根据结果执行推送策略</span></li>
+													</ul>
+
+												</div>
+											</div>
+										</div>
+
+										<!-- 示例说明 -->
+										<div class="col-lg-6">
+											<div class="card h-100 border">
+												<div class="card-header bg-light border-bottom p-0">
+													<ul class="nav nav-tabs">
+														<li class="nav-item"><a
+															class="nav-link active text-muted" data-bs-toggle="tab"
+															href="#scene1" th:text="#{llm_setting_sample1}">家庭安防</a></li>
+														<li class="nav-item"><a class="nav-link text-muted"
+															data-bs-toggle="tab" href="#scene2" th:text="#{llm_setting_sample2}">车位检测</a></li>
+														<li class="nav-item"><a class="nav-link text-muted"
+															data-bs-toggle="tab" href="#scene3" th:text="#{llm_setting_sample3}">厨房干烧</a></li>
+													</ul>
+												</div>
+												<div class="card-body">
+													<div class="tab-content">
+														<!-- 场景1 -->
+														<div class="tab-pane fade show active" id="scene1">
+															<div class="border p-2 rounded">
+																<small class="d-block text-muted mb-2 mt-3"> <i
+																	class="bi bi-terminal me-1"></i><span th:text="#{llm_setting_sample}">模板举例：</span>
+																</small>
+																<div class="bg-light p-2 rounded border">
+																	<code class="text-dark"  th:utext="#{llm_setting_sample_detail1}">
+																		请根据家庭监控设备数据判断是否有小偷闯入：<br/> -
+																		PIR触发时间{module_pir.active}，摄像头拍摄图片如下{module_camera.content}，地点卧室<br/>
+																		- 回复仅接受：是/否<br/>
+																	</code>
+																</div>
+																<small class="d-block text-muted mb-2"> <i
+																	class="bi bi-exclamation-square me-1"></i> <span th:text="#{llm_settings_sample_status}">设备触发状态：</span>
+																</small>
+																<p class="mb-2">
+																	<span class="badge bg-secondary" th:text="#{llm_settings_sample_pir}">PIR传感器</span> <span th:text="#{llm_settings_sample_pir2 }">探测到人体活动</span><br>
+																	<span class="badge bg-secondary" th:text="#{llm_settings_sample_camera}">摄像头</span> <span th:text="#{llm_settings_sample_camera2}">拍摄到关联影像</span>
+																</p>
+
+																<small class="d-block text-muted mb-2 mt-3"> <i
+																	class="bi bi-terminal me-1"></i> <span th:text="#{llm_settings_sample_send}">发送文本到大语言模型接口：</span>
+																</small>
+																<div class="bg-light p-2 rounded border">
+																	<code class="text-dark" th:utext="#{llm_setting_sample_detail2}">
+																		请根据家庭监控设备数据判断是否有小偷闯入：<br> -
+																		PIR触发时间21:00，摄像头拍摄图片如下，地点卧室<br> - 回复仅接受：是/否<br>
+																	</code>
+																</div>
+																<div class="mt-3">  
+																	<span class="badge bg-secondary" th:text="#{llm_setting_sample_response1}">模型响应：是</span> <small
+																		class="text-muted ms-2" th:text="#{llm_setting_sample_response2}">（系统推送信息给用户提醒）</small>
+																</div>
+															</div>
+														</div>
+														<!-- 场景2 -->
+														<div class="tab-pane fade" id="scene2">
+															<div class="border p-2 rounded">
+																<small class="d-block text-muted mb-2 mt-3"> <i
+																	class="bi bi-terminal me-1"></i> <span th:text="#{llm_setting_sample}">模板举例：</span>
+																</small>
+																<div class="bg-light p-2 rounded border">
+																	<code class="text-dark" th:utext="#{llm_setting_sample2_detail1}">
+																		以下提交的是停车场图片{module_camera.content}，请判断是否有空车位：<br>
+																		- 回复仅接受：是/否<br>
+																	</code>
+																</div>
+																<small class="d-block text-muted mb-2"> <i
+																	class="bi bi-exclamation-square me-1"></i> <span th:text="#{llm_settings_sample_status}">设备触发状态：</span>
+																</small>
+																<p class="mb-2"> 
+																	<span class="badge bg-secondary" th:text="#{llm_settings_sample_camera}">摄像头</span> <span th:text="#{llm_setting_sample2_detail2}">拍摄到最新照片</span> 
+																</p>
+
+																<small class="d-block text-muted mb-2 mt-3"> <i
+																	class="bi bi-terminal me-1"></i> <span th:text="#{llm_settings_sample_send}">发送文本到大语言模型接口：</span>
+																</small>
+																<div class="bg-light p-2 rounded border">
+																	<code class="text-dark" th:utext="#{llm_setting_sample2_detail3}">
+																		以下提交的是停车场图片，请判断是否有空车位：<br> - 回复仅接受：是/否<br>
+																	</code>
+																</div>
+
+																<div class="mt-3">
+																	<span class="badge bg-secondary" th:text="#{llm_setting_sample_response1}">模型响应：是</span> <small
+																		class="text-muted ms-2" th:text="#{llm_setting_sample_response2}">（系统推送信息给用户提醒）</small>
+																</div>
+															</div>
+														</div>
+														<!-- 场景3 -->
+														<div class="tab-pane fade" id="scene3">
+															<div class="border p-2 rounded">
+																<small class="d-block text-muted mb-2 mt-3"> <i
+																	class="bi bi-terminal me-1"></i> <span th:text="#{llm_setting_sample}">模板举例：</span>
+																</small>
+																<div class="bg-light p-2 rounded border"> 
+																	<code class="text-dark"  th:utext="#{llm_setting_sample3_detail1}">
+																		"请判断是否厨房灶台在燃烧，长时间无人，导致锅要被烧毁：<br> -
+																		PIR传感器探测到无人活动时间{module_pir.active.time}，并已持续{module_pir.inactive.seconds}秒，热成像传感器探测到的最高温度{module_thermal.temperature.max}摄氏度，最近60秒上升了{module_thermal.temperature.change(60)}摄氏度，摄像头拍摄图片如下{module_camera.content}，地点厨房<br>
+																		- 回复仅接受：是/否<br>
+																	</code>
+																</div>
+																<small class="d-block text-muted mb-2"> <i
+																	class="bi bi-exclamation-square me-1"></i> <span th:text="#{llm_settings_sample_status}">设备触发状态：</span>
+																</small>
+																<p class="mb-2">
+																	<span class="badge bg-secondary" th:text="#{llm_settings_sample_pir}">PIR传感器</span> <span th:text="#{llm_settings_sample3_pir}">探测到无人活动</span> <br>
+																	<span class="badge bg-secondary" th:text="#{llm_settings_sample3_thermal1}">热成像传感器</span> <span th:text="#{llm_settings_sample3_thermal2}">探测到温度</span> <br>
+																	<span class="badge bg-secondary" th:text="#{llm_settings_sample_camera}">摄像头</span> <span th:text="#{llm_settings_sample_camera2}">拍摄到关联影像</span> 
+																</p>
+
+																<small class="d-block text-muted mb-2 mt-3"> <i
+																	class="bi bi-terminal me-1"></i> <span th:text="#{llm_settings_sample_send}">发送文本到大语言模型接口：</span>
+																</small>
+																<div class="bg-light p-2 rounded border">
+																	<code class="text-dark" th:utext="#{llm_setting_sample3_detail2}"> 
+																		请判断是否厨房灶台在燃烧，长时间无人，导致锅要被烧毁：<br> -
+																		PIR传感器探测到无人活动时间13:31:07，并已持续600秒，热成像传感器探测到的最高温度250摄氏度，最近60秒上升了30摄氏度，摄像头拍摄图片如下，地点厨房<br>
+																		- 回复仅接受：是/否<br>
+																	</code>
+																</div>
+
+																<div class="mt-3">
+																	<span class="badge bg-secondary" th:text="#{llm_setting_sample_response1}">模型响应：是</span> <small
+																		class="text-muted ms-2" th:text="#{llm_setting_sample_response2}">（系统推送信息给用户提醒）</small>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="row g-0">
+					<!-- 规则列表 -->
+					<div class="col-5 p-2">
+						<div class="d-flex justify-content-between mb-3">
+							<h5 th:text="#{llm_setting_all_rules_title}">现有规则</h5>
+							<button class="btn btn-sm btn-primary" onclick="resetForm()" th:text="#{llm_setting_rule_create}">新建规则</button>
+						</div>
+					    <div id="accountBalanceInfo" class="alert alert-light d-flex align-items-center" style="background-color: #f8f9fa; color: #000;">
+					        <p id="balanceMsg" class="m-0 flex-grow-1" th:text="#{llm_setting_account_balance}">余额</p>
+					    </div>
+						<div id="ruleList" class="list-group">
+						</div>
+					</div>
+
+					<!-- 规则详情 -->
+					<div class="col-7 p-2 selected-preview">
+						<div id="ruleDetail" class="h-100">
+							<h4 class="mb-4" th:text="#{llm_setting_rule_detail}">规则详情</h4>
+							<form onsubmit="createRule(event)">
+								<!-- 规则名称 -->
+								<div class="mb-4">
+									<label class="form-label" th:text="#{llm_setting_rule_name}">规则名称</label> <input type="text"
+										id="ruleName" class="form-control" required>
+								</div>
+
+								<!-- 模块选择区域 -->
+								<div class="row module-selector mb-5">
+									<div class="col-6">
+										<div class="card">
+											<div class="card-header" th:text="#{llm_setting_all_modules}">可用模块</div>										
+											<select id="moduleSelect" class="form-select h-100" size="10" onchange="updateSelected()"></select>
+										</div>
+									</div>
+									<!-- 新增模块使用说明 -->
+									<div class="col-6" id="moduleInstructions">
+										<div class="card">
+											<div class="card-header" th:text="#{llm_setting_rule_usage}">使用说明</div>
+											<div class="card-body" id="instructionContent" th:utext="#{llm_setting_rule_usage1}">
+											模块提供一些变量，可以嵌在发送给大语言模型的文本中，发送时会替换为实际内容，点击模块可以显示模块支持的变量。<br>
+											如aht20传感器：<br>最近的温度 {module_aht20.temperature}<br>100秒内最近的温度 {module_aht20.temperature(100)}<br>前10分钟到20分钟内最近的温度 {module_aht20.temperature(600-1200)}
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<!-- 触发条件设置 -->
+								<div class="mb-4">
+									<div class="card shadow-sm">
+										<div class="card-header bg-light py-2 border-bottom">
+											<h6 class="mb-0" th:text="#{llm_setting_rule_set_name}">规则设置</h6>
+										</div>
+										<div class="card-body">
+											<div class="row g-3">
+												<div class="col-md-6">
+													<label class="form-label" th:text="#{llm_setting_rule_trigger_num}">触发变量数量 (X)</label> 
+													<input type="number" id="triggerVariableCount" class="form-control" min="0" max="3600" value="1" required>
+													<div class="form-text text-muted mt-1" th:text="#{llm_setting_rule_trigger_num2 }">至少X个变量获取到有效数据才触发。</div>
+												</div>
+												<div class="col-md-6">
+													<label class="form-label" th:text="#{llm_setting_rule_quota1}">每天触发上限次数 (防止消耗过多)</label> 
+													<input type="number" id="limitTimesPerDay" class="form-control" min="0" max="999999" value="5" required>
+													<div class="form-text text-muted mt-1" th:text="#{llm_setting_rule_quota2}">范围：0-999999次</div>
+												</div>
+												<!-- 有效时间 -->
+												<div class="col-12">
+													<label for="exeTime" class="form-label" th:text="#{llm_setting_rule_time1}">每天生效时间段</label>
+													<textarea id="exeTime" class="form-control" rows="3"
+														placeholder="Sample: 08:00:00-16:59:59,02:00:01-07:23:45" title=""></textarea>
+													<div class="form-text text-muted mt-1">
+														<span th:text="#{llm_setting_rule_time2 }">可输入多个时间段，使用以下任意分隔符： </span> <span class="badge bg-secondary mx-1">,</span>
+														<span class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_space}">空格</span> <span
+															class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_enter}">换行</span>
+													</div>
+												</div>
+												<!-- 新增设备关联输入 -->
+												<div class="col-12">
+													<label for="deviceNos" class="form-label" th:text="#{llm_setting_rule_device1}">针对那些设备生效 (设备上粘贴的标签)</label>
+													<textarea id="deviceNos" class="form-control" rows="3"
+														placeholder="Sample: 24587cd6ef0c 24587cd6ef0d 24587cd6ef0e"
+														title=""></textarea>
+													<div class="form-text text-muted mt-1">
+														<span th:text="#{llm_setting_rule_device2}">可输入多个设备ID，使用以下任意分隔符： </span><span class="badge bg-secondary mx-1">,</span>
+														<span class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_space}">空格</span> <span
+															class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_enter}">换行</span>
+													</div>
+												</div>
+												<!-- 系统消息 -->
+												<div class="col-12">
+													<label for="sysMsg" class="form-label" th:text="#{llm_setting_rule_sysmsg1}">系统消息</label>
+													<textarea id="sysMsg" class="form-control" rows="3" 
+														th:placeholder= "#{llm_setting_rule_sysmsg2}" placeholder="示例:你是帮助助理。" title=""></textarea>
+													<div class="form-text text-muted mt-1">
+														<span th:text="#{llm_setting_rule_sysmsg3}">指定系统的角色如：</span> 
+														<span class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_sysmsg_sample1}">你是帮助助理</span>
+														<span class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_sysmsg_sample2}">你是建筑工地安全员</span> 
+														<span class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_sysmsg_sample3}">也可以不填写</span> 
+													</div>
+												</div>
+												<!-- 用户消息 -->
+												<div class="col-12">
+													<label for="userMsg" class="form-label" th:text="#{llm_setting_rule_usermsg1}">用户消息</label>
+													<textarea id="userMsg" class="form-control" rows="3" 
+														th:placeholder= "#{llm_setting_rule_usermsg2}" placeholder="示例:这张照片{module_camera.content(60)}有多少人？" title="" required></textarea>
+													<div class="form-text text-muted mt-1">
+														<span th:text="#{llm_setting_rule_usermsg3}">用户消息，如： </span> 
+														<span class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_usermsg4}">这张照片{module_camera.content(60)}有多少人？</span>
+													</div>
+												</div>
+												<!-- 期望匹配 -->
+												<div class="col-12">
+												    <label for="expectMsg" class="form-label" th:text="#{llm_setting_rule_expect1}">匹配词</label>
+												    <textarea id="expectMsg" class="form-control" rows="3" 
+												              th:placeholder= "#{llm_setting_rule_expect2}" placeholder="示例: 电池起火" title=""></textarea>
+													<div class="form-text text-muted mt-1">
+												        <span th:text="#{llm_setting_rule_expect3}">返回结果包含匹配词，进行转发通知，如：</span> 
+												        <span class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_expect4}">电池起火</span>
+												    </div>
+												    <div class="form-check mt-2">
+												        <input class="form-check-input" type="checkbox" value="" id="expectStatus">
+												        <label class="form-check-label" for="expectStatus" th:text="#{llm_setting_rule_expect5}">
+												            全部通知
+												        </label>
+												        <span class="badge bg-secondary mx-1" th:text="#{llm_setting_rule_expect6}">勾选后，忽略匹配词，全部转发通知</span>
+												    </div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- 操作按钮 -->
+								<div class="mt-4 d-flex justify-content-end gap-2">
+									<button type="submit" class="btn btn-primary" th:text="#{llm_setting_rule_submit}">提交</button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+
+			</main>
+			<th:block th:insert="~{fragments/nav :: modalError}"></th:block>
+			<th:block th:insert="~{fragments/nav :: modalConfirm}"></th:block>
+			<th:block th:insert="~{fragments/nav :: modalCreateItem}"></th:block>
+		</div>
+	</div>
+
+<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+
+<script th:inline="javascript">
+
+document.addEventListener('DOMContentLoaded', async () => {
+	const result = await (await makeRequest('POST', '/dc/web/llmsettingrefresh', null, false)).json();
+	//load modules
+    if (result.allModules && Array.isArray(result.allModules)) {
+        fillAllModules(result.allModules);
+    } 
+	//balance
+    if (result.balanceMsg) {
+    	document.getElementById('balanceMsg').textContent=result.balanceMsg;
+    }
+    //load rules
+    if (result.allRules && Array.isArray(result.allRules)) {
+    	fillAllRules(result.allRules);
+        //rules click
+        const ruleListContainer = document.getElementById('ruleList');
+        ruleListContainer.addEventListener('click', function(event) {
+            const listItem = event.target.closest('.list-group-item');  
+            if (listItem) {
+                const ruleId = listItem.getAttribute('data-id');
+                if(ruleId) { 
+                    loadRuleDetails(ruleId);
+                } 
+            }
+        });
+    } 
+});
+
+function updateSelected() {
+    const select = document.getElementById('moduleSelect');
+    const instructionContent = document.getElementById('instructionContent');
+    const selectedIndex = select.selectedIndex;
+    const selectedOption = select.options[selectedIndex];
+    instructionContent.innerHTML = `<p class="mb-2">${selectedOption.dataset.description}</p>`;
+}
+
+// 创建规则
+async function createRule(e) {
+    e.preventDefault(); 
+    const ruleName = document.getElementById('ruleName').value;
+    if(!ruleName) {
+    	showErrorModal([[#{llm_setting_check_rule_name}]]);
+        return;
+    }
+    const triggerVariableCount = document.getElementById('triggerVariableCount').value;
+    const limitTimesPerDay = document.getElementById('limitTimesPerDay').value;
+    const exeTime = document.getElementById('exeTime').value;
+    const deviceNos = document.getElementById('deviceNos').value;
+    const sysMsg = document.getElementById('sysMsg').value;
+    const userMsg = document.getElementById('userMsg').value;
+    const ruleId=document.getElementById('ruleDetail').getAttribute('data-rule-id');
+    const expectMsg = document.getElementById('expectMsg').value;
+    const expectStatus = document.getElementById('expectStatus').checked;
+    
+    const requestData = {
+    		ruleId: ruleId,
+            ruleName: ruleName,
+            triggerVariableCount:triggerVariableCount,
+            deviceNos:deviceNos,
+            exeTime:exeTime,
+            limitTimesPerDay:limitTimesPerDay,
+            sysMsg:sysMsg,
+            userMsg:userMsg,
+            expectMsg:expectMsg,
+            expectStatus:expectStatus
+        };
+	const result = await (await makeRequest('POST', '/dc/web/llmsettingrefresh?action=ruleAdd', requestData, false)).json();
+    if (result.status && result.status!="ok") {
+    	showErrorModal(result.status);
+    } else {
+        if (result.allRules && Array.isArray(result.allRules)) {
+        	fillAllRules(result.allRules);
+        }
+    	resetForm();
+    }
+}
+function fillAllModules(allModules)
+{
+    var selectElement = document.getElementById('moduleSelect');
+    if(allModules) {
+    	selectElement.innerHTML = ''; 
+        allModules.forEach(function(module) {
+            var option = document.createElement('option');
+            option.value = module.id.toString(); 
+            option.text = module.name;
+            option.dataset.description = module.description;
+            selectElement.add(option);
+        });
+    }
+}
+function fillAllRules(data) {
+    const ruleListContainer = document.getElementById('ruleList');
+    ruleListContainer.innerHTML = ''; // Clear current list content    
+    data.forEach(rule => {
+        // Create list item
+        const listItem = document.createElement('div');
+        listItem.className = 'list-group-item d-flex flex-column'; // Use flex-column to arrange child elements vertically
+        listItem.setAttribute('data-id', rule.id); 
+        
+        // Create content container
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'd-flex justify-content-between align-items-center mb-2'; // Add bottom margin for spacing
+        
+        // Left side: Rule name and module badges
+        const leftDiv = document.createElement('div');
+        
+        const ruleName = document.createElement('h6');
+        ruleName.className = 'mb-1';
+        ruleName.textContent = rule.name;
+        
+        
+        leftDiv.appendChild(ruleName);
+        
+        // Right side: Creation time
+        const createTimeText = document.createElement('small');
+        createTimeText.className = 'text-muted';
+        createTimeText.textContent = rule.createTime;
+        
+        contentDiv.appendChild(leftDiv);
+        contentDiv.appendChild(createTimeText);
+        listItem.appendChild(contentDiv);
+
+		// button container
+		const buttonContainer = document.createElement('div');
+		buttonContainer.className = 'd-flex align-items-center'; 
+		
+		// Delete button with an icon
+		const deleteButton = document.createElement('button');
+		deleteButton.className = 'btn btn-sm mr-2'; 
+		deleteButton.style.width = 'fit-content'; 
+		
+		// Adding Bootstrap Icon for delete
+		const deleteIcon = document.createElement('i');
+		deleteIcon.className = 'bi bi-trash'; // Bootstrap Icons trash icon
+		deleteIcon.style.color = '#6c757d';
+		deleteButton.appendChild(deleteIcon);
+		
+		deleteButton.onclick = () => deleteRule(rule.id); 
+		
+		buttonContainer.appendChild(deleteButton);
+		
+		// Log button with an icon
+		const logButton = document.createElement('button');
+		logButton.className = 'btn btn-sm'; 
+		logButton.style.width = 'fit-content'; 
+		
+		// Adding Bootstrap Icon for log
+		const logIcon = document.createElement('i');
+		logIcon.className = 'bi bi-journal-text'; 
+		logIcon.style.color = '#6c757d';
+		logButton.appendChild(logIcon);
+		
+		logButton.onclick = () => viewRuleLog(rule.id); 
+		
+		buttonContainer.appendChild(logButton);
+		
+		listItem.appendChild(buttonContainer);
+        
+        ruleListContainer.appendChild(listItem);
+    });  
+}
+function viewRuleLog(ruleId){
+	const url='/dc/web/llmrulelog?ruleId='+ruleId;
+	window.open(url, '_blank');
+}
+async function deleteRule(ruleId) {
+	showConfirmModal([[#{confirm}]],[[#{ai_rule_del_confirm}]] ,async function() {
+		const result = await (await makeRequest('POST', '/dc/web/llmsettingrefresh?action=ruleDel&ruleId='+ruleId,null, false)).json();
+	    if (result.allRules && Array.isArray(result.allRules)) {
+	    	fillAllRules(result.allRules);
+	    }
+	});
+}
+async function loadRuleDetails(ruleId) {
+	const result = await (await makeRequest('POST', '/dc/web/llmsettingrefresh?action=ruleDetail&ruleId='+ruleId,null, false)).json();
+    if (result.ruleDetail) {
+    	const ruleDetail=result.ruleDetail;
+    	document.getElementById('ruleDetail').setAttribute('data-rule-id', ruleDetail.id);
+        document.getElementById('ruleName').value = ruleDetail.name;
+        document.getElementById('triggerVariableCount').value = ruleDetail.triggerVariableCount;
+        document.getElementById('limitTimesPerDay').value = ruleDetail.limitTimesPerDay;
+        document.getElementById('exeTime').value = ruleDetail.exeTime;
+        document.getElementById('deviceNos').value = ruleDetail.deviceNos;
+        document.getElementById('sysMsg').value = ruleDetail.sysMsg;
+        document.getElementById('userMsg').value = ruleDetail.userMsg;
+        document.getElementById('expectMsg').value = ruleDetail.expectMsg;
+        document.getElementById('expectStatus').checked = ruleDetail.expectStatus;
+    }
+}
+function resetForm() {
+	document.getElementById('ruleDetail').removeAttribute('data-rule-id');
+    document.getElementById('ruleName').value = '';
+    document.getElementById('moduleSelect').selectedIndex = -1;
+    document.getElementById('triggerVariableCount').value = '1';
+    document.getElementById('limitTimesPerDay').value = '5';
+    document.getElementById('exeTime').value = '';
+    document.getElementById('deviceNos').value = '';
+    document.getElementById('sysMsg').value = '';
+    document.getElementById('userMsg').value = '';
+    document.getElementById('instructionContent').innerHTML='';
+    document.getElementById('expectMsg').value = '';
+    document.getElementById('expectStatus').checked = false;
+}
+
+
+</script>
+</body>
+</html>

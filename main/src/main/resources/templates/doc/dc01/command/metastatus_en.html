@@ -1,0 +1,147 @@
+<h5>Description</h5>
+<p>Retrieve device operational data. This command fetches various operational data of the device, such as IMEI, ICCID, etc.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 13</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Retrieve Device Operational Status:</strong>
+    <p><code>operate=13</code></p>
+    <p>Response</p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><code>imei</code></td>
+                <td>The IMEI serial number of the 4G module.</td>
+            </tr>
+            <tr>
+                <td><code>iccid</code></td>
+                <td>The ICCID of the SIM card in the 4G module.</td>
+            </tr>
+            <tr>
+                <td><code>aliveRunSeconds</code></td>
+                <td>The number of seconds the device has been running since startup.</td>
+            </tr>
+            <tr>
+                <td><code>aliveTimesReconn</code></td>
+                <td>The number of times the network was reconnected since the device started.</td>
+            </tr>
+            <tr>
+                <td><code>aliveTimesMeta</code></td>
+                <td>The number of times status data was reported since the device started.</td>
+            </tr>
+            <tr>
+                <td><code>runtimeRestartReason</code></td>
+                <td>If a controllable exception occurs (note that uncontrollable exceptions like power loss or errors may occur which cannot be captured or logged in time), the device will record the reason in flash memory, which can be read after the next startup but is not cleared. This means the value could have been written during the previous or earlier runs. Values: 0 = unknown, 1 = 4G modem error 1, 2 = 4G modem error 2, 3 = config change, 4 = user_malloc error, 5-8 = SPI error.</td>
+            </tr>
+            <tr>
+                <td><code>runtimeRestartReasonSeconds</code></td>
+                <td>The runtime duration of the device when <code>runtimeRestartReason</code> was recorded.</td>
+            </tr>
+            <tr>
+                <td><code>runtimeRestartReasonTimes</code></td>
+                <td>The number of reboots when <code>runtimeRestartReason</code> was recorded. The device maintains a counter in flash memory, incrementing it automatically each time it starts, indicating how many times it has restarted.</td>
+            </tr>
+            <tr>
+                <td><code>runtimeRestartTimes</code></td>
+                <td>The device maintains a counter in flash memory, incrementing it automatically each time it starts, indicating how many times it has restarted.</td>
+            </tr>
+            <tr>
+                <td><code>runtimeResetReason</code></td>
+                <td>Each time the device restarts, ESP determines a reason: 0 = Reset reason cannot be determined, 1 = Reset due to power-on event, 2 = Reset by external pin (not applicable for ESP32), 3 = Software reset via esp_restart, 4 = Software reset due to exception/panic, 5 = Reset (software or hardware) due to interrupt watchdog, 6 = Reset due to task watchdog, 7 = Reset due to other watchdogs, 8 = Reset after exiting deep sleep mode, 9 = Brownout reset (software or hardware), 10 = Reset over SDIO, 11 = Reset by USB peripheral, 12 = Reset by JTAG, 13 = Reset due to efuse error, 14 = Reset due to power glitch detected, 15 = Reset due to CPU lockup.</td>
+            </tr>
+            <tr>
+                <td><code>module4gIp</code></td>
+                <td>The IP address obtained by the 4G module.</td>
+            </tr>
+            <tr>
+                <td><code>module4gMask</code></td>
+                <td>The subnet mask obtained by the 4G module.</td>
+            </tr>
+            <tr>
+                <td><code>module4gGw</code></td>
+                <td>The gateway obtained by the 4G module.</td>
+            </tr>
+            <tr>
+                <td><code>module4gDns1</code></td>
+                <td>The primary DNS obtained by the 4G module.</td>
+            </tr>
+            <tr>
+                <td><code>module4gDns2</code></td>
+                <td>The secondary DNS obtained by the 4G module.</td>
+            </tr>
+            <tr>
+                <td><code>module4gIpv6</code></td>
+                <td>The IPv6 address obtained by the 4G module. If the carrier does not support IPv6, this value will not be available.</td>
+            </tr>
+            <tr>
+                <td><code>moduleWifiStaIp</code></td>
+                <td>If the device connects to another Wi-Fi router as a station (STA), this is the IP address obtained.</td>
+            </tr>
+            <tr>
+                <td><code>moduleWifiStaMask</code></td>
+                <td>If the device connects to another Wi-Fi router as a station (STA), this is the subnet mask obtained.</td>
+            </tr>
+            <tr>
+                <td><code>moduleWifiStaGw</code></td>
+                <td>If the device connects to another Wi-Fi router as a station (STA), this is the gateway obtained.</td>
+            </tr>
+            <tr>
+                <td><code>moduleWifiApDns</code></td>
+                <td>If the device connects to another Wi-Fi router as a station (STA), this is the DNS used.</td>
+            </tr>
+            <tr>
+                <td><code>rt_wifi_ap_sta_num</code></td>
+                <td>If the device operates as an access point (AP), similar to a router mode, this value represents the number of Wi-Fi terminals (STAs) connected to the device.</td>
+            </tr>
+            <tr>
+                <td><code>moduleW5500Ip</code></td>
+                <td>If the device connects to another gateway or router via Ethernet cable, this is the IP address obtained.</td>
+            </tr>
+            <tr>
+                <td><code>moduleW5500Mask</code></td>
+                <td>If the device connects to another gateway or router via Ethernet cable, this is the subnet mask obtained.</td>
+            </tr>
+            <tr>
+                <td><code>moduleW5500Gw</code></td>
+                <td>If the device connects to another gateway or router via Ethernet cable, this is the gateway obtained.</td>
+            </tr>
+            <tr>
+                <td><code>moduleW5500Dns1</code></td>
+                <td>If the device connects to another gateway or router via Ethernet cable, this is the primary DNS obtained.</td>
+            </tr>
+            <tr>
+                <td><code>moduleW5500Dns2</code></td>
+                <td>If the device connects to another gateway or router via Ethernet cable, this is the secondary DNS obtained.</td>
+            </tr>
+            <tr>
+                <td><code>moduleW5500Ipv6</code></td>
+                <td>If the device connects to another gateway or router via Ethernet cable, this is the IPv6 address obtained. If IPv6 is not supported, this value will not be available.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><code>
+        {"id":"67aebf1ed2f82019b996baef","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":12,"request":{"rawString":"operate=13","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-14T03:57:17.917329955Z","upload":{"moduleWifiApDns":"0.0.0.0","aliveRunSeconds":179,"aliveTimesMeta":41,"module4gIpv6":"0:0:0:0:0:0:0:0","module4gDns1":"222.66.251.8","moduleWifiStaMask":"255.255.255.0","moduleW5500Gw":"192.168.18.1","module4gDns2":"116.236.159.8","moduleW5500Ip":"192.168.18.111","module4gMask":"255.255.255.255","moduleW5500Mask":"255.255.255.0","moduleW5500Dns1":"116.228.111.118","iccid":"89861120040212010789","module4gIp":"10.143.20.107","moduleWifiApStaNum":0,"runSeconds":325,"moduleW5500Dns2":"180.168.255.18","timesReconn":2,"moduleWifiStaGw":"192.168.18.1","moduleW5500Ipv6":"0:0:0:0:0:0:0:0","imei":"864643060018951","aliveTimesReconn":1,"module4gGw":"10.64.64.64","moduleWifiStaIp":"192.168.18.108"},"uploadTime":"2025-02-14T03:57:18.124877038Z","command":3,"operate":13,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}
+    </code></p>
+</div>

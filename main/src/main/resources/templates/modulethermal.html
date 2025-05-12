@@ -1,0 +1,575 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{thermal_view_title}">热成像视图</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+		<div class="card-header bg-dark text-white text-uppercase d-flex align-items-center">
+		    <div class="d-flex align-items-center">
+		        <span th:text="#{thermal_view_detail}">热成像信息 </span>
+		        <span th:text="${deviceNo}" class="ms-2"></span>
+		    </div>
+		</div>
+        <div class="card-body p-0">
+            <div class="row no-gutters h-100">
+                <!-- 左侧操作功能 -->
+                <div class="col-md-3 bg-light border-right d-flex flex-column justify-content-center align-items-center py-4">
+                    <label class="form-label" for="contrastSlider" th:text="#{thermal_contrast}">对比度</label>
+                    <input type="range" class="form-range w-75" id="contrastSlider" min="1" max="10" value="8">
+
+                    <label class="form-label mt-3" for="colorSchemeSelect" th:text="#{thermal_color}">颜色方案</label>
+                    <select class="form-select w-75" id="colorSchemeSelect">
+                    </select>
+
+                    <!-- 新增：选择显示图像还是原始数据 -->
+                    <label class="form-label mt-3" for="displayModeSelect"  th:text="#{thermal_display_mode}">显示模式</label>
+                    <select class="form-select w-75" id="displayModeSelect">
+                        <option value="image" th:text="#{thermal_display_image}">图像</option>
+                        <option value="raw" th:text="#{thermal_display_number}">温度数据</option>
+                    </select>
+                </div>
+
+                <!-- 中央画布区域 -->
+                <div class="col-md-6 d-flex justify-content-center align-items-center">
+                    <canvas id="canvas" width="512" height="384"></canvas>
+                </div>
+
+                <!-- 右侧控制面板 -->
+                <div class="col-md-3 bg-light border-left d-flex flex-column justify-content-center align-items-center py-4">
+                    <label class="form-label" for="timeSelect" th:text="#{thermal_start_time1}">选择时间</label>
+                    <input type="datetime-local" class="form-control w-100" id="timeSelect">
+
+                    <label class="form-label mt-3" for="playbackModeSelect" th:text="#{thermal_play_mode}">播放模式</label>
+                    <select class="form-select w-100" id="playbackModeSelect">
+                        <option value="static" th:text="#{thermal_play_mode_static}">静态显示</option>
+                        <option value="dynamic" th:text="#{thermal_play_mode_dynamic}">实时播放</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/dc/js/bootstrap.bundle.min.js"></script>
+<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+
+<script th:inline="javascript">    
+
+const deviceId = /*[[${deviceId}]]*/ '';
+const moduleTypeId = /*[[${moduleTypeId}]]*/ '';
+ 
+
+const ColorSchemes = {
+    0: [[#{thermal_color1}]],
+    1: [[#{thermal_color2}]],
+    2: [[#{thermal_color3}]],
+    3: [[#{thermal_color4}]],
+    4: [[#{thermal_color5}]],
+    5: [[#{thermal_color6}]],
+    6: [[#{thermal_color7}]],
+    7: [[#{thermal_color8}]],
+    8: [[#{thermal_color9}]],
+    9: [[#{thermal_color10}]]
+};
+var contrastValue=10,displaySchema=0,displayMode=1;
+var rawPixels,expendedPixels;
+var intervalId = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
+	
+	//color
+	const colorSchemeSelect = document.getElementById('colorSchemeSelect');
+    for (let key in ColorSchemes) {
+        let option = document.createElement('option');
+        option.value = key;
+        option.textContent = ColorSchemes[key];
+        colorSchemeSelect.appendChild(option);
+    }
+    colorSchemeSelect.value = '1';
+    
+    loadData(null);
+
+});
+
+async function loadData(data)
+{
+    //load data
+	const result = await (await makeRequest('POST', '/dc/web/modulecustrefresh?deviceId='+deviceId+'&moduleTypeId='+moduleTypeId, data, false)).json();
+	if (result.pixels && typeof result.pixels === 'string') {
+    	let pixelsNumber = result.pixels.split(',').map(item => item.trim()).filter(item => item !== '' && !isNaN(item)).map(Number);
+    	rawPixels = convertPixels(pixelsNumber);
+    	expendedPixels = PolynomialInterpolationPage(rawPixels);
+    	PixelDraw();
+    } else
+    	clearDraw();
+}
+//constrast
+document.getElementById('contrastSlider').addEventListener('input', function() {
+	contrastValue = this.value;
+	PixelDraw();
+});
+
+//color
+document.getElementById('colorSchemeSelect').addEventListener('change', function() {
+	displaySchema = this.value;
+	PixelDraw();
+});
+
+//display mode
+document.getElementById('displayModeSelect').addEventListener('change', function() {
+    const selectedValue = this.value;
+    if (selectedValue === 'image') {
+    	displayMode=1;
+    } else if (selectedValue === 'raw') {
+    	displayMode=2;
+    }
+    PixelDraw();
+});
+
+//play mode
+document.getElementById('playbackModeSelect').addEventListener('change', function() {
+    const selectedValue = this.value;
+    if(intervalId!=null)
+    	clearInterval(intervalId);
+    if (selectedValue === 'dynamic') {
+    	intervalId = setInterval(() => {
+    	    loadData(null);
+    	}, 3000);
+    }
+});
+
+//date time
+document.getElementById('timeSelect').addEventListener('input', function() {
+    const selectedTime = new Date(this.value);
+    const jsonData = { endDate: selectedTime };
+    loadData(jsonData);
+});
+
+
+function convertPixels(pixels) {
+    return pixels.map(pixel => {
+        let result = (pixel / 10).toFixed(1);
+        return parseFloat(result);
+    });
+}
+function clearDraw() {
+	var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function PixelDraw() {
+	var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = 'black';
+    ctx.font = '16px Arial';
+
+    if (displayMode==1) {
+        PixelDrawPoly(ctx, expendedPixels);
+    } else {
+        PixelDrawRaw(ctx, rawPixels);
+    }
+}
+
+//32 24
+function PixelDrawRaw(ctx,pixellist)
+{
+	for(var y=0;y<24;y++)
+	{
+		for(var x=0;x<32;x++)
+		{
+			var pixelvalue=pixellist[y*24+x];
+			var pixelcolor=GrayToPseColor(displaySchema,pixelvalue*contrastValue);
+			ctx.fillStyle = pixelcolor;
+			ctx.fillRect(x*16,y*16,16,16);
+			ctx.fillStyle='black';
+            ctx.font='12px Arial';
+            ctx.fillText(parseInt(pixelvalue)+"",x*16,(y+1)*16);
+		}
+	}
+}
+//512 384 
+function PixelDrawPoly(ctx,pixellist)
+{
+	for(var y=0;y<384;y++)
+	{
+		for(var x=0;x<512;x++)
+		{
+			var pixelvalue=pixellist[y][x]*contrastValue;
+			var pixelcolor=GrayToPseColor(displaySchema,pixelvalue);
+			ctx.fillStyle = pixelcolor;
+			//ctx.fillStyle = 'red';
+			ctx.fillRect(x,y,1,1);
+		}
+	}
+}
+function PolynomialInterpolationPolyData(OriginData, times, coes)
+{
+	var x1, x2, x3, x4;
+	var y1, y2, y3, y4;
+	if ((times < 2) || (times > 4))
+		times = 2;
+	if (times == 2) {
+		x1 = OriginData[0][0];
+		x2 = OriginData[0][1];
+		y1 = OriginData[1][0];
+		y2 = OriginData[1][1];
+		coes[1] = (y2 - y1) / x2;
+		coes[0] = y1;
+	} else if (times == 3) {
+		x1 = OriginData[0][0];
+		x2 = OriginData[0][1];
+		x3 = OriginData[0][2];
+		y1 = OriginData[1][0];
+		y2 = OriginData[1][1];
+		y3 = OriginData[1][2];
+		coes[2] = ((y3 - y1) * x2 - (y2 - y1) * x3) / (x2 * x3 * x3 - x2 * x2 * x3);
+		coes[1] = (y2 - y1) / x2 - coes[2] * x2;
+		coes[0] = y1;
+	}
+	else if (times == 4) {
+		x1 = OriginData[0][0];
+		x2 = OriginData[0][1];
+		x3 = OriginData[0][2];
+		x4 = OriginData[0][3];
+		y1 = OriginData[1][0];
+		y2 = OriginData[1][1];
+		y3 = OriginData[1][2];
+		y4 = OriginData[1][3];
+		coes[3] = ((y4 - y1) * x2 - (y2 - y1) * x4) / x2 - ((y3 - y1) * x2 - (y2 - y1) * x3)
+				/ (x2 * x3 * x3 - x2 * x2 * x3) * (x2 * x4 * x4 - x2 * x2 * x4) / x2;
+		coes[3] = coes[3] / ((x2 * x4 * x4 * x4 - x2 * x2 * x2 * x4) / x2 - (x2 * x3 * x3 * x3 - x2 * x2 * x2 * x3)
+				/ (x2 * x3 * x3 - x2 * x2 * x3) * (x2 * x4 * x4 - x2 * x2 * x4) / x2);
+		coes[2] = ((y3 - y1) * x2 - (y2 - y1) * x3) / (x2 * x3 * x3 - x2 * x2 * x3)
+				- coes[3] * ((x2 * x3 * x3 * x3 - x2 * x2 * x2 * x3) / (x2 * x3 * x3 - x2 * x2 * x3));
+		coes[1] = ((y2 - y1) - coes[2] * x2 * x2 - coes[3] * x2 * x2 * x2) / x2;
+		coes[0] = y1;
+	}
+	return coes;
+}	
+function PolynomialInterpolationArr(SourceDatas,Dir,times)
+{
+	var i,j;
+	var startIndex;
+	var OriginDatas=new Array(2);
+	OriginDatas[0]=new Array(times).fill(0);
+	OriginDatas[1]=new Array(times).fill(0);
+	var OriginDatas2=new Array(2);
+	OriginDatas2[0]=new Array(2).fill(0);
+	OriginDatas2[1]=new Array(2).fill(0);
+	var tempDou=0.0;
+	var coes=new Array(5).fill(0);
+    var arrCount=SourceDatas.length;
+    var Result=new Array(arrCount*4).fill(0);
+    if(Dir==0)
+    	startIndex=2;
+    else            
+    	startIndex=1;
+    for(i=0;i<=(arrCount-1);i++) 
+    {
+        Result[startIndex+i*4]=SourceDatas[i];
+    }
+    for(i=0;i<=(arrCount-times);i++)
+    {
+        for(j=0;j<=(times-1);j++)
+        {
+            OriginDatas[0][j]=j*4;
+            OriginDatas[1][j]=SourceDatas[i+j];
+        }
+        coes=PolynomialInterpolationPolyData(OriginDatas,times,coes);
+        for(j=1;j<=(4-1);j++)
+        {
+            if(times>=2) 
+            	tempDou=coes[0]+j*coes[1];
+            if(times>=3)
+            	tempDou=tempDou+j*j*coes[2];
+            if(times>=4)
+            	tempDou=tempDou+j*j*j*coes[3];
+            Result[startIndex+i*4+j]=tempDou;
+        }
+    }
+    OriginDatas2[0][0]=0;
+    OriginDatas2[1][0]=SourceDatas[0];
+    OriginDatas2[0][1]=4;
+    OriginDatas2[1][1]=SourceDatas[1];
+    coes=PolynomialInterpolationPolyData(OriginDatas2,2,coes);
+    if(Dir==0)
+    {
+        tempDou=coes[0]+(-1)*coes[1];
+        Result[1]=tempDou;
+        tempDou=coes[0]+(-2)*coes[1];
+        Result[0]=tempDou;
+    }
+    else
+    {
+        tempDou=coes[0]+(-1)*coes[1];
+        Result[0]=tempDou;
+    }
+    for(i=(arrCount-times); i<=(arrCount-2);i++)
+    {
+        for(j=0;j<=(2-1);j++)
+        {
+        	OriginDatas2[0][j]=j*4;
+        	OriginDatas2[1][j]=SourceDatas[i+j];
+        }
+        coes=PolynomialInterpolationPolyData(OriginDatas2,2,coes);
+        for(j=1;j<(4-1);j++)
+        {
+            tempDou=coes[0]+j*coes[1];
+            Result[startIndex+i*4+j]=tempDou;
+        }
+    }
+    if(Dir==0)
+    {
+        tempDou=coes[0]+(5)*coes[1];
+        Result[arrCount*4-1]=tempDou;
+    }
+    else
+    {
+        tempDou=coes[0]+(5)*coes[1];
+        Result[arrCount*4-2]=tempDou;
+        tempDou=coes[0]+(6)*coes[1];
+        Result[arrCount*4-1]=tempDou;
+    }
+    return Result;
+}
+function PolynomialInterpolationPage(listpixelinteger)
+{
+	var result=new Array();
+	for(var i=0;i<384;i++)
+		result[i]=new Array(512).fill(0);
+	for(var i=0;i<24;i++)
+	{
+		var onerow=new Array(32).fill(0);
+		for(var j=0;j<32;j++)
+			onerow[j]=listpixelinteger[i*32+j];
+		onerow=PolynomialInterpolationArr(onerow,0,2);
+		onerow=PolynomialInterpolationArr(onerow,1,2);
+		result[i*16]=onerow;
+	}
+	for(var i=0;i<512;i++)
+	{
+		var onecol=new Array(24).fill(0);
+		for(var j=0;j<24;j++)
+			onecol[j]=result[j*16][i];
+		onecol=PolynomialInterpolationArr(onecol,0,2);
+		onecol=PolynomialInterpolationArr(onecol,1,2);
+		for(var k=0;k<384;k++)
+		{
+			result[k][i]=onecol[k];
+		}
+	}
+	return result;
+}
+function GrayToPseColor(type,grayValue) 
+{
+	var colorR = 0, colorG = 0, colorB = 0;
+	grayValue=parseInt(grayValue);
+	if (type == 0) // 伪彩1
+	{
+		colorR = Math.abs(0 - grayValue);
+		colorG = Math.abs(127 - grayValue);
+		colorB = Math.abs(255 - grayValue);
+	} else if (type == 1) // 伪彩2
+	{
+		if ((grayValue >= 0) && (grayValue <= 63)) {
+			colorR = 0;
+			colorG = 0;
+			colorB = Math.round(grayValue / 64 * 255);
+		} else if ((grayValue >= 64) && (grayValue <= 127)) {
+			colorR = 0;
+			colorG = Math.round((grayValue - 64) / 64 * 255);
+			colorB = Math.round((127 - grayValue) / 64 * 255);
+		} else if ((grayValue >= 128) && (grayValue <= 191)) {
+			colorR = Math.round((grayValue - 128) / 64 * 255);
+			colorG = 255;
+			colorB = 0;
+		} else if ((grayValue >= 192) && (grayValue <= 255)) {
+			colorR = 255;
+			colorG = Math.round((255 - grayValue) / 64 * 255);
+			colorB = 0;
+		}
+	} else if (type == 2) // GCM_Metal1 金属1
+	{
+		if ((grayValue >= 0) && (grayValue <= 63)) {
+			colorR = 0;
+			colorG = 0;
+			colorB = Math.round(grayValue / 64 * 255);
+		} else if ((grayValue >= 64) && (grayValue <= 95)) {
+			colorR = Math.round((grayValue - 63) / 32 * 127);
+			colorG = Math.round((grayValue - 63) / 32 * 127);
+			colorB = 255;
+		} else if ((grayValue >= 96) && (grayValue <= 127)) {
+			colorR = Math.round((grayValue - 95) / 32 * 127) + 128;
+			colorG = Math.round((grayValue - 95) / 32 * 127) + 128;
+			colorB = Math.round((127 - grayValue) / 32 * 255);
+		} else if ((grayValue >= 128) && (grayValue <= 191)) {
+			colorR = 255;
+			colorG = 255;
+			colorB = 0;
+		} else if ((grayValue >= 192) && (grayValue <= 255)) {
+			colorR = 255;
+			colorG = 255;
+			colorB = Math.round((grayValue - 192) / 64 * 255);
+		}
+	} else if (type == 3) // GCM_Metal2 金属2
+	{
+		colorR = 0;
+		colorG = 0;
+		colorB = 0;
+		if ((grayValue >= 0) && (grayValue <= 16)) {
+			colorR = 0;
+		} else if ((grayValue >= 17) && (grayValue <= 140)) {
+			colorR = Math.round((grayValue - 16) / (140 - 16) * 255);
+		} else if ((grayValue >= 141) && (grayValue <= 255)) {
+			colorR = 255;
+		}
+
+		if ((grayValue >= 0) && (grayValue <= 101)) {
+			colorG = 0;
+		} else if ((grayValue >= 102) && (grayValue <= 218)) {
+			colorG = Math.round((grayValue - 101) / (218 - 101) * 255);
+		} else if ((grayValue >= 219) && (grayValue <= 255)) {
+			colorG = 255;
+		}
+
+		if ((grayValue >= 0) && (grayValue <= 91)) {
+			colorB = 28 + Math.round((grayValue - 0) / (91 - 0) * 100);
+		} else if ((grayValue >= 92) && (grayValue <= 120)) {
+			colorB = Math.round((120 - grayValue) / (120 - 91) * 128);
+		} else if ((grayValue >= 129) && (grayValue <= 214)) {
+			colorB = 0;
+		} else if ((grayValue >= 215) && (grayValue <= 255)) {
+			colorB = Math.round((grayValue - 214) / (255 - 214) * 255);
+		}
+	} else if (type == 4) // 彩虹1
+	{
+		if ((grayValue >= 0) && (grayValue <= 31)) {
+			colorR = 0;
+			colorG = 0;
+			colorB = Math.round(grayValue / 32 * 255);
+		} else if ((grayValue >= 32) && (grayValue <= 63)) {
+			colorR = 0;
+			colorG = Math.round((grayValue - 32) / 32 * 255);
+			colorB = 255;
+		} else if ((grayValue >= 64) && (grayValue <= 95)) {
+			colorR = 0;
+			colorG = 255;
+			colorB = Math.round((95 - grayValue) / 32 * 255);
+		} else if ((grayValue >= 96) && (grayValue <= 127)) {
+			colorR = Math.round((grayValue - 96) / 32 * 255);
+			colorG = 255;
+			colorB = 0;
+		} else if ((grayValue >= 128) && (grayValue <= 191)) {
+			colorR = 255;
+			colorG = Math.round((191 - grayValue) / 64 * 255);
+			colorB = 0;
+		} else if ((grayValue >= 192) && (grayValue <= 255)) {
+			colorR = 255;
+			colorG = Math.round((grayValue - 192) / 64 * 255);// 0
+			colorB = Math.round((grayValue - 192) / 64 * 255);
+		}
+	} else if (type == 5) // 彩虹2
+	{
+		if ((grayValue >= 0) && (grayValue <= 63)) {
+			colorR = 0;
+			colorG = Math.round((grayValue - 0) / 64 * 255);
+			colorB = 255;
+		} else if ((grayValue >= 64) && (grayValue <= 95)) {
+			colorR = 0;
+			colorG = 255;
+			colorB = Math.round((95 - grayValue) / 32 * 255);
+		} else if ((grayValue >= 96) && (grayValue <= 127)) {
+			colorR = Math.round((grayValue - 96) / 32 * 255);
+			colorG = 255;
+			colorB = 0;
+		} else if ((grayValue >= 128) && (grayValue <= 191)) {
+			colorR = 255;
+			colorG = Math.round((191 - grayValue) / 64 * 255);
+			colorB = 0;
+		} else if ((grayValue >= 192) && (grayValue <= 255)) {
+			colorR = 255;
+			colorG = Math.round((grayValue - 192) / 64 * 255);
+			colorB = Math.round((grayValue - 192) / 64 * 255);
+		}
+	} else if (type == 6) // 彩虹3
+	{
+		if ((grayValue >= 0) && (grayValue <= 51)) {
+			colorR = 0;
+			colorG = grayValue * 5;
+			colorB = 255;
+		} else if ((grayValue >= 52) && (grayValue <= 102)) {
+			colorR = 0;
+			colorG = 255;
+			colorB = 255 - (grayValue - 51) * 5;
+		} else if ((grayValue >= 103) && (grayValue <= 153)) {
+			colorR = (grayValue - 102) * 5;
+			colorG = 255;
+			colorB = 0;
+		} else if ((grayValue >= 154) && (grayValue <= 204)) {
+			colorR = 255;
+			colorG = Math.round(255 - 128 * (grayValue - 153) / 51);
+			colorB = 0;
+		} else if ((grayValue >= 205) && (grayValue <= 255)) {
+			colorR = 255;
+			colorG = Math.round(127 - 127 * (grayValue - 204) / 51);
+			colorB = 0;
+		}
+	} else if (type == 7) // GCM_Zhou
+	{
+		if ((grayValue >= 0) && (grayValue <= 63)) {
+			colorR = 0;
+			colorG = Math.round((64 - grayValue) / 64 * 255);
+			colorB = 255;
+		} else if ((grayValue >= 64) && (grayValue <= 127)) {
+			colorR = 0;
+			colorG = Math.round((grayValue - 64) / 64 * 255);
+			colorB = Math.round((127 - grayValue) / 64 * 255);
+		} else if ((grayValue >= 128) && (grayValue <= 191)) {
+			colorR = Math.round((grayValue - 128) / 64 * 255);
+			colorG = 255;
+			colorB = 0;
+		} else if ((grayValue >= 192) && (grayValue <= 255)) {
+			colorR = 255;
+			colorG = Math.round((255 - grayValue) / 64 * 255);
+			colorB = 0;
+		}
+	} else if (type == 8) // GCM_Ning
+	{
+		if ((grayValue >= 0) && (grayValue <= 63)) {
+			colorR = 0;
+			colorG = 254 - 4 * grayValue;
+			colorB = 255;
+		} else if ((grayValue >= 64) && (grayValue <= 127)) {
+			colorR = 0;
+			colorG = 4 * grayValue - 254;
+			colorB = 510 - 4 * grayValue;
+		} else if ((grayValue >= 128) && (grayValue <= 191)) {
+			colorR = 4 * grayValue - 510;
+			colorG = 255;
+			colorB = 0;
+		} else if ((grayValue >= 192) && (grayValue <= 255)) {
+			colorR = 255;
+			colorG = 1022 - 4 * grayValue;
+			colorB = 0;
+		}
+	} else if (type == 9) // GCM_Gray
+	{
+		colorR = grayValue;
+		colorG = grayValue;
+		colorB = grayValue;
+	}
+	var result="rgb("+colorR+","+colorG+","+colorB+")";
+	return result;
+}
+</script>
+</body>
+</html>

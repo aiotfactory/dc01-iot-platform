@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{sim_view}">SIM View</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .log-text {
+            max-height: 500000px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 10;
+            -webkit-box-orient: vertical;
+        }
+
+        .log-text.expanded {
+            max-height: none;
+            -webkit-line-clamp: unset;
+        }
+
+        .btn-toggle {
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: Consolas, "Courier New", monospace;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white text-uppercase" th:text="#{sim_details}">
+                SIM Details
+            </div>
+            <div class="card-body">
+                <p><strong th:text="#{sim_iccid}">ICCID:</strong> <span th:text="${iccid}"></span></p>
+                <p><strong th:text="#{sim_msg}">Message:</strong> <span th:text="${msg}"></span></p>
+                <p><strong th:text="#{sim_vendor}">Vendor:</strong> <span th:text="${vendor}"></span></p>
+                <p><strong th:text="#{sim_expired}">Expired:</strong> <span th:text="${expired}"></span></p>
+                <p><strong th:text="#{sim_used}">Used:</strong> <span th:text="${used}"></span></p>
+            </div>
+        </div>
+    </div>
+    <script src="/dc/js/bootstrap.bundle.min.js"></script>
+    <th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+   
+</body>
+</html>

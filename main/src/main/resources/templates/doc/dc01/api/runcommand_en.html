@@ -1,0 +1,12 @@
+{
+  "params": "deviceId=xxxxxxxxxxxx&cmd=xxx",
+  "inputComments": "Specify the deviceId and what command needs to be executed on the device side.",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>The id of the device.</td></tr><tr><td>cmd</td><td>Command, which will run in device side, for example:cmd=\"operate=2 gpio_ext_no=8 status=1\", and a list of commands can be found <a href=\"/dc/pub/doc?page=command_index&deviceType=dc01\" target=\"_blank\">here</a>.</td></tr></tbody></table>",
+  "outputComments": "Return the execution result of command from device.",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>If success, it will return ok.</td></tr><tr><td>cmdStatus</td><td>The execution result of command.</td></tr><tr><td>cmdCode</td><td>The execution code of command.</td></tr><tr><td>module</td><td>The command is processed by this module.</td></tr><tr><td>cmdResponse</td><td>The response, it could be normal string or json string, and will be different for different commands.</td></tr></tbody></table>",
+  "outputExample": "Failed example1\r\n{\r\n  \"cmdStatus\": \"unknown exception with device\",\r\n  \"cmdCode\": -22,\r\n  \"status\": \"Exe failed\"\r\n}\r\nFailed example2\r\n{\r\n  \"cmdStatus\": \"device not online\",\r\n  \"module\": \"MODULE_CAMERA\",\r\n  \"cmdCode\": -2,\r\n  \"status\": \"ok\"\r\n}\r\nFailed example3\r\n{\r\n  \"cmdStatus\": \"short of parameters pin\",\r\n  \"module\": \"MODULE_GPIO\",\r\n  \"cmdCode\": -26,\r\n  \"status\": \"ok\"\r\n}\r\nSuccess example\r\n{\r\n  \"cmdStatus\": \"exe ok\",\r\n  \"module\": \"MODULE_CAMERA\",\r\n  \"cmdResponse\": \"ext gpio no 8 set to 1\",\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"cmdStatus\": \"exe ok\",\r\n  \"module\": \"MODULE_CAMERA\",\r\n  \"cmdResponse\": \"ext gpio no 8 set to 1\",\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

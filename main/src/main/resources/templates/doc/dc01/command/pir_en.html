@@ -1,0 +1,54 @@
+<h5>Description</h5>
+<p>The module is used for detecting the movement of humans and animals. Currently, it only supports periodic reporting and trigger reporting, without a command issuance mode.</p>
+<h5>Example</h5>
+<div>
+	 <table class="table table-bordered">
+	     <tbody>
+            <tr>
+                <td><code>type</code></td>
+                <td>0 indicates periodic reporting, 1 indicates trigger reporting.</td>
+            </tr>
+			<tr>
+			    <td><code>triggerTimesTotal</code></td>
+			    <td>Total number of triggers since the device was powered on.</td>
+			</tr>
+			<tr>
+			    <td><code>triggerTimesFromPreviousUpload</code></td>
+			    <td>Number of triggers since the last report.</td>
+			</tr>
+			<tr>
+			    <td><code>stateKeepSeconds</code></td>
+			    <td>How many seconds the current state has been maintained.</td>
+			</tr>
+			<tr>
+			    <td><code>pirStatus</code></td>
+			    <td>1 indicates activity, 0 indicates no activity.</td>
+			</tr>
+		</tbody>
+	</table>	
+	<p>Returns normal</p>											
+    <p><code> {
+        "id": "680df2b2c95f942609d2ede0",
+        "deviceId": "680de1467d4420689ff9aada",
+        "deviceNo": "24587cd0624c",
+        "moduleTypeId": 20,
+        "request": null,
+        "requestTime": null,
+        "upload": {
+            "type": 0,
+            "triggerTimesTotal": 3,
+            "triggerTimesFromPreviousUpload": 3,
+            "stateKeepSeconds": 4,
+            "pirStatus": 0
+        },
+        "uploadTime": "2025-04-27T09:02:42.296+00:00",
+        "command": 14,
+        "operate": null,
+        "deviceRequestPack": null,
+        "deviceUploadPack": 14,
+        "info": null,
+        "errorType": "OK",
+        "dataCommType": "PERIOD_UPLOAD",
+        "dataCommSource": "DEVICE_AUTO"
+    } </code></p>
+</div>

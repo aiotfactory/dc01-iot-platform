@@ -1,0 +1,243 @@
+    <h5>说明</h5>
+    <p>用户对LORA可能比较陌生，大概可以类比WIFI，但LORA比WIFI传输距离更远，空旷地带可以超过10公里距离，但传输速度慢，不过很省电，很多场合通过电池供电可以用一年多，除了这些之外，LORA虽然也有复杂的LoRaWAN协议
+	但我们这里只用到点对点通讯，比如用户写socket通讯程序，其实驱动底层是处理了大量的网络相关的协议，比如握手等，即便应用层也需要处理诸如打开连接，关闭连接这些协议，但点对点简单很多，就是发射端以一定的无线波段广播发送一些bit数据，
+	在附近的接收端都能收到，也没有握手，打开连接，确认等步骤，仅仅就是把数据以无线编码的形式广播出去，因此更省电，但需要应用端处理确认等操作。</p>
+	<h5>接收数据</h5>
+	<p>因为点对点设备间是对等关系，因此对方设备可能随时会发送数据到本设备，本设备随时按预定义的配置待命，收到数据后上报到云端，云端会存储进而转发数据。因此有两种方式获得数据，一是通过api查询云端的最新接收数据，另外一个更好办法是事先注册一个第三方系统URL，这样云端收到设备数据后即可推送给指定URL。</p>
+	<p>查询方式点击<a href="/dc/web/doc?page=api&deviceType=dc01" target="_blank">这里</a>通过API "Data Forward List" 可以查询上报的数据。</p>
+	<p>推送转发方式点击<a href="/dc/web/apisetting" target="_blank">这里</a>配置你的接收URL,接收到的LORA消息会以HTTP POST方式转发给你的URL</p>
+	<table class="table table-bordered">
+	    <thead>
+	        <tr>
+	            <th>参数</th>
+	            <th>描述</th>
+	            <th>必须</th>
+	            <th>类型</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+			<tr>
+			    <td><code>deviceId</code></td>
+			    <td>上报数据的设备ID。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>
+			<tr>
+			    <td><code>deviceNo</code></td>
+			    <td>上报数据的设备编码，通常会粘贴在设备表面。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>
+			<tr>
+			    <td><code>uploadDatatype</code></td>
+				<td>LORA上报数据类型，dtu rx收到数据，property 设备上报的LORA状态信息。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>		
+			<tr>
+			    <td><code>rxData</code></td>
+				<td>上报的数据的hex值，因为可能含有不可见字符，因此全部转为hex传输，接收端要解码hex字符串。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>	
+			<tr>
+			    <td><code>txTimes,txTimesTimeout,rxTimes,rxTimesTimeout,rxTimesError</code></td>
+				<td>设备内部启动以来记录的次数信息。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>					
+	    </tbody>
+	</table>
+	<h5>例子</h5>
+	<div>
+	     <p><strong>你的服务器会以HTTP POST接收到上报的数据:</strong></p>
+	    <code>{
+		    "key": "050b354d1fafb3f1ae5b59e1a326f2b0",
+		    "content": {
+		        "id": "67c983a0ca195b006fba5514",
+		        "deviceId": "67c561d2cbc9eb4b857adc42",
+		        "deviceNo": "24587cd6ef0c",
+		        "moduleTypeId": 7,
+		        "request": null,
+		        "requestTime": null,
+		        "upload": {
+		            "uploadDatatype": "dtu",
+		            "rxData": "YWJjMDAwMDAwMDA0Mw==",
+		            "txTimes": 0,
+		            "txTimesTimeout": 0,
+		            "rxTimes": 0,
+		            "rxTimesTimeout": 0,
+		            "rxTimesError": 0
+		        },
+		        "uploadTime": "2025-03-06T11:14:40.017933688Z",
+		        "command": 7,
+		        "operate": null,
+		        "deviceRequestPack": null,
+		        "deviceUploadPack": 8,
+		        "info": null,
+		        "errorType": "OK",
+		        "dataCommType": "INTERRUPT_UPLOAD",
+		        "dataCommSource": "DEVICE_AUTO"
+		    }
+		}}</code>
+	</div>
+	
+	<h5>发送数据</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为10</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+			<tr>
+			    <td><code>flag</code></td>
+				<td>1表示只初始化，开启接收，2表示沿用之前的初始化配置，仅发送数据，3表示重新初始化同时发送数据。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+            <tr>
+                <td><code>fre</code></td>
+                <td>LORA设备的频率，单位是赫兹，只有同频率的设备才能互相通信，一般用43300000。</td>
+                <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+                <td>数字</td>
+				<td>4</td>
+                <td>输入</td>
+            </tr>
+			<tr> 
+			    <td><code>tx_output_power</code></td>
+			    <td>发射功率，范围为0~22，数值越大距离越远，但也更费电。</td>
+			    <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+            <tr>
+                <td><code>bandwidth</code></td>
+                <td>0: 125 kHz,1: 250 kHz,2: 500 kHz, 带宽越大通讯越远，但抗干扰越差，反之亦然。</td>
+                <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>	
+			<tr>
+			    <td><code>spreading_factor</code></td>
+			    <td>7-12，扩频因子，大概可以理解为用多少bits表示1个bit信息，这样有一定的纠错能力，数值越大距离越远，但速度越慢，最大一般不超过10。</td>
+			    <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>	
+			<tr>
+			    <td><code>codingrate</code></td>
+			    <td>纠错编码率[1: 4/5,2: 4/6,3: 4/7,4: 4/8]，一般用1。</td>
+			    <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>				
+			<tr>
+			    <td><code>preamble_length</code></td>
+			    <td>前导码长度，一般用8。</td>
+			    <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>				
+			<tr>
+			    <td><code>fix_length_payload_on</code></td>
+			    <td>是否为固定长度包，一般为0，表示否。</td>
+			    <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>				
+			<tr>
+			    <td><code>iq_inversion_on</code></td>
+			    <td>设置是否翻转中断电平，一般为0，表示否。</td>
+			    <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>			
+			<tr>
+			    <td><code>tx_timeout</code></td>
+			    <td>发送超时时间，毫秒。</td>
+			    <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+			    <td>数字</td>
+				<td>4</td>
+			    <td>输入</td>
+			</tr>				
+			<tr>
+			    <td><code>rx_timeout</code></td>
+			    <td>接收超时时间，毫秒。</td>
+			    <td><span class="badge badge-optional">初始化参数，要传入就要传入全部初始化参数</span></td>
+			    <td>数字</td>
+				<td>4</td>
+			    <td>输入</td>
+			</tr>	
+			<tr>
+			    <td><code>tx_times</code></td>
+			    <td>发送次数，设备收到指令后，会重复广播发送多次一样的数据，这里设定次数。</td>
+			    <td><span class="badge badge-optional">发送参数，要传入就要传入全部发送参数</span></td>
+			    <td>数字</td>
+				<td>4</td>
+			    <td>输入</td>
+			</tr>	
+			<tr>
+			    <td><code>tx_interval_min_ms，tx_interval_max_ms</code></td>
+			    <td>重复发送间隔周期，设备收到指令后，会重复广播发送多次一样的数据，这里设定最大值和最小值（毫秒），设备会自动在这个范围取随机数。</td>
+			    <td><span class="badge badge-optional">发送参数，要传入就要传入全部发送参数</span></td>
+			    <td>数字</td>
+				<td>4</td>
+			    <td>输入</td>
+			</tr>		
+			<tr>
+			    <td><code>tx_data</code></td>
+			    <td>发送的数据，用hex格式表示，前缀为0x，比如0x303132。</td>
+			    <td><span class="badge badge-optional">发送参数，要传入就要传入全部发送参数</span></td>
+			    <td>数字</td>
+				<td>x</td>
+			    <td>输入</td>
+			</tr>						
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>初始化并发送数据:</strong>
+        <p><code>operate=10 flag=3 fre=442800000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132</code></p>
+		<p>返回，发送成功</p>
+		<code>{"id":"67c981f5ca195b006fba5506","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=10 flag=3 fre=442800000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-06T11:07:32.310153626Z","upload":null,"uploadTime":"2025-03-06T11:07:33.032603026Z","command":3,"operate":10,"deviceRequestPack":27,"deviceUploadPack":27,"info":"lora tx success","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code> 
+		<p>返回，LORA没有配置开启</p>
+		<code>{"id":"67ca515fca195b006fba551e","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=10 flag=3 fre=442800000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-07T01:52:31.240263242Z","upload":null,"uploadTime":"2025-03-07T01:52:31.688551666Z","command":3,"operate":10,"deviceRequestPack":28,"deviceUploadPack":28,"info":"lora is off in device","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code>
+        <hr>
+        <strong>只发送数据:</strong>
+        <p><code>operate=10 flag=2 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132</code></p>
+		<p>返回</p>
+		<code>{"id":"67c9802eca195b006fba54d9","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=10 flag=2 tx_times=3 tx_interval_min_ms=300 tx_interval_max_ms=2000 tx_data=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-06T10:59:55.766960163Z","upload":null,"uploadTime":"2025-03-06T10:59:58.923583455Z","command":3,"operate":10,"deviceRequestPack":20,"deviceUploadPack":20,"info":"lora tx success","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code>
+		<hr>
+		<strong>只初始化:</strong>
+		<p><code>operate=10 flag=1 fre=442800000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000</code></p>
+		<p>返回</p>
+		<code>{"id":"67c980c8ca195b006fba54ec","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=10 flag=1 fre=433000000 tx_output_power=2 bandwidth=1 spreading_factor=10 codingrate=1 preamble_length=8 fix_length_payload_on=0 iq_inversion_on=0 tx_timeout=3000 rx_timeout=3000","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-06T11:02:31.391464193Z","upload":null,"uploadTime":"2025-03-06T11:02:32.783787415Z","command":3,"operate":10,"deviceRequestPack":23,"deviceUploadPack":23,"info":"lora tx success","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code> 
+		<hr>
+		<strong>只请求运行状态:</strong>
+		<p><code>operate=21</code></p>
+		<p>返回</p>
+		<code>{"id":"67ca51d6ca195b006fba5521","deviceId":"67c561d2cbc9eb4b857adc42","deviceNo":"24587cd6ef0c","moduleTypeId":7,"request":{"rawString":"operate=21","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-03-07T01:54:29.508172635Z","upload":{"uploadDatatype":"property","rxData":null,"txTimes":0,"txTimesTimeout":0,"rxTimes":0,"rxTimesTimeout":0,"rxTimesError":0},"uploadTime":"2025-03-07T01:54:30.161922949Z","command":3,"operate":21,"deviceRequestPack":29,"deviceUploadPack":29,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code> 
+	</div>

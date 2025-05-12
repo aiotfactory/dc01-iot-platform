@@ -1,0 +1,70 @@
+{
+    "moduleName": "MODULE_GENERAL",
+    "moduleComments": "Used to configure general device information such as reporting address, port, working hours, etc.",
+    "configInfo": [
+        {
+            "order": 0,
+            "name": "server_host",
+            "sample": "123.123.123.123",
+            "range": "10-49 characters",
+            "comments": "The cloud server IP address where the device reports data. It can be either an IP address or a domain name."
+        },
+        {
+            "order": 1,
+            "name": "server_port",
+            "sample": "8080",
+            "range": "50-65535",
+            "comments": "Port number of the cloud server for device data reporting."
+        },
+        {
+            "order": 2,
+            "name": "upload_timeout_seconds",
+            "sample": "30",
+            "range": "10-255 seconds",
+            "comments": "Timeout setting for sending data to the cloud. This timeout is also used by other modules."
+        },
+        {
+            "order": 3,
+            "name": "keep_alive_idle",
+            "sample": "60",
+            "range": "0-86400 seconds",
+            "comments": "Keep-alive idle time for TCP/IP connections. If no communication occurs within this time, the system will send a probe packet to maintain the connection. A value of 0 disables keep alive functionality."
+        },
+        {
+            "order": 4,
+            "name": "keep_alive_cnt",
+            "sample": "3",
+            "range": "1-10",
+            "comments": "Number of keep-alive probes sent before considering the connection lost. If no response is received after sending this many probes, the system will close the connection."
+        },
+        {
+            "order": 5,
+            "name": "keep_alive_interval",
+            "sample": "10",
+            "range": "1-120",
+            "comments": "If the connection has been idle longer than keep_alive_idle, the system sends a probe packet every keep_alive_interval seconds to check if the peer is still online."
+        },
+        {
+            "order": 6,
+            "name": "no_communicate_seconds",
+            "sample": "1200",
+            "range": "60-0xffffffff",
+            "comments": "Device will restart if no successful data upload occurs within X seconds."
+        },
+        {
+            "order": 7,
+            "name": "sleep_after_running_x_seconds",
+            "sample": "60",
+            "range": "0-0xffffffff",
+            "comments": "Device will enter sleep mode after running for X seconds. A value of 0 means sleep is disabled."
+        },
+        {
+            "order": 8,
+            "name": "sleep_for_x_seconds",
+            "sample": "120",
+            "range": "0-0xffffffff",
+            "comments": "Device will sleep for X seconds. A value of 0 means sleep is disabled."
+        }
+    ],
+    "status": "ok"
+}

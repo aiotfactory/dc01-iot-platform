@@ -1,0 +1,83 @@
+    <h5>说明</h5>
+    <p>对应用程序开发工程师来说，I2C这些概念不容易理解，简单来说，我们写程序时比如调用socket，程序帮我们封装了物理层，但实际物理层肯定是电信号的交换，比如某一时刻，一个引脚是高电平，那么就表示1，否则表示0的意思，硬件就是通过这些高低电平的变化来是实现信息交互。</p>
+    <p>比如我们自己设计一个交互逻辑，用a,b两根线，分别连接到两个芯片的对应引脚，为了交互信息，比如我们约定b这跟线的电压每1ms变化一次，那么a用于数据传输，当b电压变化时，比如高到低变化或者低到高变化，我们接收芯片就测量a线的电压，如果那时是高，就是数据1，如果是低，就是数据0，那么发送芯片只要控制好节奏，在规定的1ms变化间把a线的电压控制为高或者低电平就可以传输数据，这就是一种简单的硬件接口定义，业界实际上定义了很多类似接口，有的用到2根线，有的用到3根线或者更多根线，但实际原理都是大同小异，一般我们也不需要去了解协议的所有细节，因为底层驱动已经实现了这些电平控制。</p>
+	<p>I2C就是其中的一个协议，很多传感器采用I2C协议传输。</p>
+	<p>线路板上用GPIO_ESP_42 (sda)，GPIO_ESP_41 (scl)这二个引脚作为I2C通讯，I2C是可以连接多个设备的，比如发送芯片A可以发送给其他设备B1，B2，B3，为了避免冲突，I2C协议引入了设备物理地址的概念，不像SPI通过拉低CS引脚选择传感器，I2C发送和接收数据时都带一个地址字节，比如B1的地址是0x10，B2的是0x11，B3的是0x12，那么通过地址就能区分要和那个设备通讯，每个支持I2C的传感器，它的说明书里都会写明自己的地址是多少，那么不同厂家的设备地址是否会冲突呢？的确是可能的，并没有一个专门的国际机构来统筹分配，因此为了解决这个问题，一个传感器往往会提供2个地址，通过硬件线路连接，比如把传感器某个引脚接到GND或者电源电压来选择使用那个地址。</p>
+	<h5>参数说明</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为11</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+			<tr>
+			    <td><code>clock_speed_hz</code></td>
+			    <td>I2C的时钟频率，ESP手册和传感器手册都会注明自己的I2C支持的频率范围，在两者的交叉区间选定即可，一般选100000也就是100k赫兹。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>4</td>
+			    <td>输入</td>
+			</tr>
+            <tr>
+                <td><code>flag</code></td>
+                <td>1表示本次是写操作，0表示本次是读操作。</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+			<tr>
+			    <td><code>addr</code></td>
+			    <td>传感器的I2C地址。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+            <tr>
+                <td><code>rx_data_len</code></td>
+                <td>本次要读取的字节数。</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>4</td>
+                <td>输入</td>
+            </tr>				
+			<tr>
+			    <td><code>tx_data</code></td>
+			    <td>这个表示要传输的数据，这里并不再有tx_data_len，云端会根据tx_data实际设置的数值在传输给设备前补充数据长度。这里用hex表示数值，以0x开头，比如想传输数值3，那就是0x03，其中0表示数值3的高4bits是0，3表示低4bits是3。比如传输小写字母a，那就是0x61，因为十六进制0x61正好是字母a的ascii码。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>x</td>
+			    <td>输入</td>
+			</tr>							
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>向I2C地址为0x44的传感器写入数据0x2c0d:</strong>
+        <p><code>operate=11 clock_speed_hz=100000 addr=0x44 flag=1 tx_data=0x2c0d</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67b593ec64c9f35cc7bf5260","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":10,"request":{"rawString":"operate=11 clock_speed_hz=100000 addr=0x44 flag=1 tx_data=0x2c0d","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T08:18:51.312693111Z","upload":null,"uploadTime":"2025-02-19T08:18:52.905734597Z","command":3,"operate":11,"info":"i2c write addr 0x44 size 2 success","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+        <hr>
+        <strong>从I2C地址为0x44的传感器读取数据6字节:</strong>
+        <p><code>operate=11 clock_speed_hz=100000 addr=0x44 flag=0 rx_data_len=6</code></p>
+		<p>返回，cmdResponse内容为返回值的hex格式</p>
+		<p><code>{"id":"67b593ec64c9f35cc7bf5260","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":10,"request":{"rawString":"operate=11 clock_speed_hz=100000 addr=0x44 flag=0 rx_data_len=6","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T08:18:51.312693111Z","upload":{"hexContent":"63ca65cc8421"},"uploadTime":"2025-02-19T08:18:52.905734597Z","command":3,"operate":11,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+		<p>返回，失败</p>
+		<p><code>{"id":"67b593ec64c9f35cc7bf5260","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":10,"request":{"rawString":"operate=11 clock_speed_hz=100000 addr=0x44 flag=1 tx_data=0x30a2","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T08:18:51.312693111Z","upload":null,"uploadTime":"2025-02-19T08:18:52.905734597Z","command":3,"operate":11,"info":"i2c write addr 0x44 size 2 failed due to 0xffffffff","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+		
+    </div>

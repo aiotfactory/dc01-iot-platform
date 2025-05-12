@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_CAMERA Module Introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#periodupload">Data Upload - Automatic</a></li>
+		<li><a href="#commandupload">Data Upload - Command</a></li> 
+		<li><a href="#forward">Data Forwarding</a></li> 
+		<li><a href="#runtimeinfo">Runtime Information</a></li> 
+		<li><a href="#alertinfo">Alert Information</a></li> 
+    </ul>
+</div>
+
+<!-- Main content area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_CAMERA Module Introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>The DC01 product has a camera interface. Although it can capture video, the performance is poor and it is generally used for taking photos. The lens can be replaced with ordinary, fisheye, infrared, etc., usually equipped with an ov2640 or ov5640 camera at the factory. Click <a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">here</a> to view the MODULE_CAMERA section for configuration.
+		</p>
+    </div>
+	<div class="help-item" id="periodupload">
+	    <h6>Data Upload - Automatic</h6>
+		<p>The camera can take photos on schedule and report JPEG images. Click <a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">here</a> to view the MODULE_CAMERA section for configuration. You can check the most recent captured images in the module page.
+		</p>
+	</div>
+	
+	<div class="help-item" id="commandupload">
+	    <h6>Data Upload - Command</h6>
+		<p>By sending commands to the device will also trigger the device to upload data. Click <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">here</a> to view the CAMERA camera photo chapter to understand which commands can be executed and the format of the uploaded data.
+		</p>
+	</div>
+	<div class="help-item" id="forward">
+	    <h6>Data Forwarding</h6>
+		<p>Click <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">here</a> to view how to configure the data forwarding of the module. Click <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">here</a> to view the format of the forwarded data.
+		</p>
+	</div>	
+	<div class="help-item" id="runtimeinfo">
+	    <h6>Runtime Information</h6>
+		<p>Pins Camera Interface Used Pins, if not installing a camera, these pins can be used for other purposes.</p>
+		<p>Camera Status Example {"times_failed":0,"times_inited":1,"times_take":19}, indicating that since the camera was turned on, its status, times_failed failure count, times_inited whether already initialized ready, times_take number of photos taken.</p>
+	</div>	
+</div>
+</body>
+</html>

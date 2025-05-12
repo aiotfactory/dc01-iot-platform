@@ -1,0 +1,12 @@
+{
+  "params": "fields=history&startDate=2025-02-03T00:00:00.000Z&endDate=2025-02-26T00:00:00.000Z&page=0&deviceId=xxxxxxxxxxxx&moduleTypeId=xxx",
+  "inputComments": "指定设备ID和模块类型ID以获取该模块的历史数据。",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>page</td><td>页码序列，每页的数量由系统定义，从0开始。</td></tr><tr><td>startDate endDate</td><td>ISO日期格式如2024-11-11T00:00:00.000Z，如果不提供，则默认使用当前日期。</td></tr><tr><td>deviceId</td><td>设备的ID。</td></tr><tr><td>moduleTypeId</td><td>模块的ID。</td></tr></tbody></table>",
+  "outputComments": "返回该模块的数据，数据将以名称/值对的形式显示，不同模块之间会有所不同。您可以查看模块的查看页面以了解具体含义。",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>如果成功，将返回ok。</td></tr><tr><td>value</td><td>值的内容是此模块返回的数据，不同模块的值定义会有所不同。</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"dataList\": [\r\n    {\r\n      \"value\": \"ADC1=0\"\r\n    },\r\n    {\r\n      \"value\": \"ADC2=0\"\r\n    },\r\n    {\r\n      \"value\": \"UPLOAD_TIME=11-11 11:39:16\"\r\n    }\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"dataList\": [\r\n    {\r\n      \"value\": \"ADC1=0\"\r\n    },\r\n    {\r\n      \"value\": \"ADC2=0\"\r\n    },\r\n    {\r\n      \"value\": \"UPLOAD_TIME=11-11 11:39:16\"\r\n    }\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

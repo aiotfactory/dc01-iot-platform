@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="zh" data-bs-theme="dark" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{code_editor}">Code Editor</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<script src="/dc/js/bootstrap.bundle.min.js"></script>
+    <script src="/dc/thirdparty/monaco-editor/min/vs/loader.js"></script>
+    <style>
+		   .sidebar {
+		       min-width: 250px; 
+			   width: 250px;
+		       background-color: #343a40;
+		       color: white;
+		       padding: 10px;
+		   }
+		   .sidebar.hidden {
+		       min-width: 0;
+			   width: 0;
+		       padding: 0;
+		   }
+		   #editor {
+		       flex-grow: 1;
+		       height: 100%;
+		       margin-left: 0px;
+		       margin-right: 0px; 
+		   }
+		   .toggle-button {
+		       position: absolute;
+		       top: 0px;
+		       z-index: 1000;
+		       background: none;
+		       border: none;
+		       color: white;
+		       cursor: pointer;
+		   }
+		   .toggle-left {
+		       left: 0;
+		   }
+		   .toggle-right {
+		       right: 0;
+		   }
+		
+        .editor-container {
+            height: 500vh;
+            display: flex;
+            flex-direction: row;
+            position: relative;
+        }
+
+        .file-list {
+            list-style-type: none;
+            padding-left: 0;
+            cursor: pointer;
+			white-space: nowrap; /* 禁止换行 */
+			overflow: hidden; /* 超出部分隐藏 */
+			text-overflow: ellipsis; /* 添加省略号 */
+        }
+        .file-list li {
+            margin: 1px 0;
+            color: #ddd;
+        }
+		.file-list li i {
+		    margin-right: 1px;
+		}
+        .file-list li:hover {
+            background-color: #495057;
+        }
+        .folder > ul {
+            display: none;
+            margin-left: 0px;
+        }
+		.folder > i {
+		     color: #ffc107;
+		}
+		.file > i {
+		     color: #17a2b8; 
+		}
+        .folder.open > ul {
+            display: block;
+        }
+		
+		
+    </style>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<button class="btn btn-dark" id="save-button" onclick="saveFile()" th:title="#{save_comments}">
+		    <span style="font-size: 20px; font-weight: bold; color: white;" th:text="#{save}">Save</span>
+		</button>
+		<button class="btn btn-dark" id="build-button" onclick="buildProject()" th:title="#{build_comments}">
+		    <span style="font-size: 20px; font-weight: bold; color: white;" th:text="#{build}">Build</span>
+		</button>
+		<button class="btn btn-dark" th:title="#{check_build_log}">
+		    <a th:href="@{'/web/codelog?projectId='+${projectId}}" target="_blank" style="text-decoration: none; color: white;">
+		        <span style="font-size: 20px; font-weight: bold;color: white;" th:text="#{log}">Log</span>
+		    </a>
+		</button>
+		<button class="btn btn-dark" th:title="#{check_help}">
+		    <a th:href="@{'/pub/doc?page=codehelp&deviceType=dc01'}" target="_blank" style="text-decoration: none; color: white;">
+		        <span style="font-size: 20px; font-weight: bold;color: white;" th:text="#{help}">Help</span>
+		    </a>
+		</button>
+		
+	    <a class="navbar-brand mx-auto" id="file-name-display"></a>
+	</nav>
+
+	<div class="toast-container position-fixed top-0 end-0 p-3" id="toast-container">
+	    <div id="saveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+	        <div class="toast-header">
+	            <strong class="me-auto" th:text="#{status_tb_device}">Status</strong>
+	            <small></small>
+	            <button type="button" class="btn-close" data-bs-dismiss="toast" th:aria-label="#{error_modal_close}"></button>
+	        </div>
+	        <div class="toast-body" id="toast-body" th:text="#{save}">
+	            Save
+	        </div>
+	    </div>
+	</div>
+	
+    <div class="container-fluid editor-container">
+        <!-- 左侧边栏 -->
+        <div class="sidebar" id="file-sidebar">
+            <ul class="file-list" id="file-list"></ul>
+        </div>
+        <button class="toggle-button toggle-left" onclick="toggleSidebar('file-sidebar', 'left')">
+            <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <!-- 编辑器 -->
+        <div id="editor"></div>
+
+    </div>
+
+
+	
+    <th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+    <script th:inline="javascript">
+        let editor;
+        const projectId = [[${projectId}]];
+        const fileData =  JSON.parse([[${projectFolder}]]);
+	
+        window.onload = function () {
+            renderFile([[${filePath}]]);
+            renderFileTree(fileData, document.getElementById('file-list'));
+			
+			document.addEventListener('keydown', (event) => {
+			    if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+			        event.preventDefault();  
+			        saveFile();  
+			    }else if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+					 event.preventDefault();  
+				     buildProject();  
+				}
+			});
+        };
+
+        function renderFile(filePath) {
+            (async () => {
+                const result = await (await makeRequest('POST', '/dc/web/coderefresh', { 'projectId': projectId, 'filePath': filePath }, false)).json();
+                if (result.fileContent) {
+                    editor.setValue(result.fileContent);
+                    editor.revealLine(1);
+					// 更新顶部导航栏的文件名
+					const fileNameDisplay = document.getElementById('file-name-display');
+					fileNameDisplay.textContent = filePath || 'noname file';
+                }
+            })();
+        }
+
+        require.config({ paths: { vs: '/dc/thirdparty/monaco-editor/min/vs' } });
+        require(['vs/editor/editor.main'], function () {
+            editor = monaco.editor.create(document.getElementById('editor'), {
+                value: '',
+                language: 'c',
+                theme: 'vs-dark',
+                automaticLayout: true
+            });
+        });
+
+        function renderFileTree(folder, parentElement) {
+            const ul = document.createElement('ul');
+			const parentPath = parentElement.dataset.path || '';
+            Object.keys(folder).forEach(key => {
+                const file = folder[key];
+                const li = document.createElement('li');
+				const icon = document.createElement('i');
+				const fullPath = parentPath ? `${parentPath}/${key}` : key; 
+				li.dataset.path = fullPath;
+				li.title = fullPath;
+                if (file.type === 'folder') {
+                    li.classList.add('folder');
+					icon.className = 'bi bi-folder';
+                    const folderName = document.createElement('span');
+                    folderName.textContent = key;
+                    folderName.onclick = () => toggleFolder(li);
+					li.appendChild(icon);
+                    li.appendChild(folderName);
+                    renderFileTree(file.children, li);
+                } else {
+					li.classList.add('file');
+					icon.className = 'bi bi-file-earmark'; 
+					li.textContent = key;
+					li.prepend(icon);
+					li.onclick = () => openFile(li);
+                }
+                ul.appendChild(li);
+            });
+            parentElement.appendChild(ul);
+        }
+
+        function toggleFolder(folderElement) {
+            folderElement.classList.toggle('open');
+        }
+
+        function openFile(fileElement) {
+            const filePath = getFilePath(fileElement);
+            renderFile(filePath);
+			
+        }
+
+		function getFilePath(fileElement) {
+		    let path = '';
+		    let currentElement = fileElement;
+
+		    while (currentElement && currentElement !== document.body) {
+		        if (currentElement.tagName === 'LI') {
+		            const spanElement = currentElement.querySelector('span');
+		            if (spanElement && spanElement.textContent) {
+		                path = spanElement.textContent + (path ? '/' + path : '');
+		            } 
+		            else if (!spanElement && currentElement.textContent) {
+		                path = currentElement.textContent + (path ? '/' + path : '');
+		            }
+		        }
+		        currentElement = currentElement.parentElement;
+		    }
+		    return path;
+		}
+
+
+
+		function adjustEditorWidth() {
+		    const leftSidebar = document.getElementById('file-sidebar');
+		    const editor = document.getElementById('editor');
+		    const leftWidth = leftSidebar.classList.contains('hidden') ? 0 : leftSidebar.offsetWidth;
+		    editor.style.width = `calc(100vw - ${leftWidth+100}px)`;
+		}
+
+		function toggleSidebar(sidebarId, side) {
+			const sidebar = document.getElementById(sidebarId);
+			const button = document.querySelector(`.toggle-${side}`);
+			const icon = button.querySelector('i');
+			if (sidebar.classList.contains('hidden')) {
+			    sidebar.classList.remove('hidden');
+			    icon.className = side === 'left' ? 'bi bi-chevron-left' : 'bi bi-chevron-right';
+			} else {
+			    sidebar.classList.add('hidden');
+			    icon.className = side === 'left' ? 'bi bi-chevron-right' : 'bi bi-chevron-left';
+			}
+			adjustEditorWidth();
+	    }
+		
+		async function saveFile() {
+		    const fileContent = editor.getValue(); 
+		    const filePath = document.getElementById('file-name-display').textContent.trim();
+	        const result = await (await makeRequest('POST', '/dc/web/coderefresh', {
+				action: 'saveFile',
+	            projectId: projectId,
+	            filePath: filePath,
+	            fileContent: fileContent
+	        },false)).json();
+
+			
+
+            const toastBody = document.getElementById('toast-body');
+            const toastContainer = document.getElementById('toast-container');
+            const toastElement = new bootstrap.Toast(document.getElementById('saveToast'));
+
+            if (result.status && result.status == 'ok') {
+                toastBody.textContent = [[#{save_success}]];
+                toastBody.classList.remove('text-danger');
+                toastBody.classList.add('text-success');
+            } else {
+                toastBody.textContent = (result.status || 'Unknown error');
+                toastBody.classList.remove('text-success');
+                toastBody.classList.add('text-danger');
+            }
+            toastElement.show();
+		}	
+		async function buildProject() {
+		    const result = await (await makeRequest('POST', '/dc/web/coderefresh', {
+				action: 'buildSubmit',
+		        projectId: projectId
+		    },false)).json();
+		    const toastBody = document.getElementById('toast-body');
+		    const toastContainer = document.getElementById('toast-container');
+		    const toastElement = new bootstrap.Toast(document.getElementById('saveToast'));
+
+		    if (result.status && result.status == 'ok') {
+		        toastBody.textContent = [[#{build_submit_success}]];
+		        toastBody.classList.remove('text-danger');
+		        toastBody.classList.add('text-success');
+		    } else {
+		        toastBody.textContent = (result.status || 'Unknown error');
+		        toastBody.classList.remove('text-success');
+		        toastBody.classList.add('text-danger');
+		    }
+		    toastElement.show();
+		}	
+    </script>
+</body>
+</html>

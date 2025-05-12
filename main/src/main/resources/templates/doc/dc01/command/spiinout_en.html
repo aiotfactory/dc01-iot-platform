@@ -1,0 +1,158 @@
+<h5>Description</h5>
+<p>For application development engineers, concepts like I2C can be difficult to understand. Simply put, when we write programs and call functions like socket, the program abstracts the physical layer for us. However, the physical layer always involves the exchange of electrical signals. For example, at a certain moment, if a pin is at a high voltage level, it represents a "1", otherwise, it represents a "0". Hardware uses these changes in high and low voltage levels to exchange information.</p>
+<p>For instance, if we design our own communication protocol using two wires, labeled "a" and "b," each connected to corresponding pins on two chips, we can define a simple interaction logic. Suppose we agree that the voltage on wire "b" changes every 1ms. In this case, wire "a" is used for data transmission. When the voltage on "b" changes (e.g., from high to low or low to high), the receiving chip measures the voltage on wire "a". If it's high, it represents data "1"; if it's low, it represents data "0". The transmitting chip only needs to control the timing and adjust the voltage on wire "a" to high or low within the specified 1ms interval to transmit data. This is an example of a simple hardware interface definition. The industry has defined many similar interfaces, some using two wires, others using three or more, but the underlying principles are generally similar. Typically, we don't need to understand all the details of the protocol because the underlying driver already handles these voltage controls.</p>
+<p>UART is one such protocol. Many devices use UART for communication. Compared to SPI or I2C, UART is a peer-to-peer protocol. As described above, in SPI or I2C, ESP acts as the master, initiating read/write operations with sensors, meaning the sensor does not send data unless ESP requests it. Thus, ESP is the "master" and the sensor is the "slave." However, in UART, both devices (A and B) are equal, and either A or B can initiate data transmission. Additionally, UART supports only point-to-point communication, meaning only two devices can be connected, not three or more.</p>
+<p>UART typically uses two wires for communication, called TX (transmit) and RX (receive). Therefore, the pins of the two devices must be cross-connected: the TX of device A connects to the RX of device B, and the RX of device A connects to the TX of device B. If you only want to read or send data, connecting one wire is sufficient. Additionally, the GND (ground) of both devices must be connected.</p>
+<p>What is RS485? Its principle and wiring are almost identical to UART, and the internal chip processing is also the same. The difference lies in the voltage levels of the pins. RS485 uses differential voltage, allowing for long-distance transmission—up to tens of meters without issues. In contrast, UART typically supports transmission distances of only a few dozen centimeters. In practical designs, the ESP itself provides UART capabilities, and the circuit board includes an additional RS485 chip to convert voltage levels. By default, the connection is not enabled and requires jumper caps J3, J10, and J12 to be installed. Once installed, it connects esp_gpio_1, 2, and 21 to the RS485 chip. Alternatively, instead of using jumper caps, other GPIO pins of the ESP can be connected via flying wires.</p>
+<h5>Receiving Data</h5>
+<p>Because the devices are peers, the other device may send data to the RX pin of this device at any time. This device remains on standby according to predefined configurations and reports received data to the cloud, where it is stored and forwarded. There are two ways to retrieve data: one is by querying the latest received data from the cloud via API, and the other (better) method is to pre-register a third-party system URL so that the cloud can push received data to the specified URL.</p>
+<p>To query data, click <a href="/dc/web/doc?page=api&deviceType=dc01" target="_blank">here</a> and use the "Data Forward List" API to query the reported data.</p>
+<p>To configure push forwarding, click <a href="/dc/web/apisetting" target="_blank">here</a> to set your receiving URL. Received RS485 messages will be forwarded to your URL via HTTP POST.</p>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>deviceId</code></td>
+            <td>The ID of the device reporting the data.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td><code>deviceNo</code></td>
+            <td>The code of the device reporting the data, usually pasted on the surface of the device.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td><code>protocolType</code></td>
+            <td>Distinguishes between UART and RS485.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td><code>dataType</code></td>
+            <td>The type of data reported by RS485: DTU (data received by RX), PROPERTY (status information reported by UART).</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+        <tr>
+            <td><code>rxData</code></td>
+            <td>The hexadecimal value of the reported data. Since it may contain invisible characters, it is transmitted as hex. The receiving end must decode the hex string.</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>String</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Example</h5>
+<div>
+    <p><strong>Your server will receive UART-reported data via HTTP POST:</strong></p>
+    <code>{
+        "key": "f402afaa0f9ceeeb230ce6291c95c306",
+        "content": {
+            "id": "67b69eff87025163883ee59e",
+            "deviceId": "67b460755a961507ca44bc0d",
+            "moduleTypeId": 19,
+            "request": null,
+            "requestTime": null,
+            "upload": {
+                "protocolType": "RS485",
+                "dataType": "DTU",
+                "rxData": "61616161610d0a",
+                "rxTimes": 0,
+                "rxLength": 14,
+                "rxTimesFailed": 0,
+                "rxUploadFailed": 0,
+                "rxFifoOverTimes": 0,
+                "rxBufFullTimes": 0,
+                "rxBreakTimes": 0,
+                "rxParityErrTimes": 0,
+                "rxFrameErrTimes": 0,
+                "txLength": 0,
+                "txTimes": 0,
+                "txTimesFailed": 0
+            },
+            "uploadTime": "2025-02-20T03:18:23.789719945Z",
+            "command": 6,
+            "operate": null,
+            "info": null,
+            "errorType": "OK",
+            "dataCommType": "INTERRUPT_UPLOAD",
+            "dataCommSource": "DEVICE_AUTO"
+        }
+    }</code>
+</div>
+
+<h5>Sending Data</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 22</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>tx_data</code></td>
+            <td>This specifies the data to be transmitted. There is no separate tx_data_len parameter; the cloud will calculate and prepend the data length before sending it to the device. This value is expressed in hex, starting with 0x. For example, to transmit the value 3, it would be written as 0x03, where 0 represents the upper 4 bits being 0, and 3 represents the lower 4 bits being 3. For example, to transmit the lowercase letter "a," it would be written as 0x61, since the hexadecimal value 0x61 corresponds to the ASCII code for "a."</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>x</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>tx_pin</code></td>
+            <td>GPIO number. For example, if gpio_esp_21 is used as the TX pin, then write 21 here. If this parameter is not provided, the device will use the predefined configuration. Refer to the RS485 module's configuration page for details. Transmitting this parameter overrides and modifies the default configuration. To change the configuration, transmit it once, and subsequent transmissions can omit it.</td>
+            <td><span class="badge badge-optional">No</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>rx_pin</code></td>
+            <td>GPIO number. For example, if gpio_esp_2 is used as the RX pin, then write 2 here. If this parameter is not provided, the device will use the predefined configuration. Refer to the RS485 module's configuration page for details. Transmitting this parameter overrides and modifies the default configuration. To change the configuration, transmit it once, and subsequent transmissions can omit it.</td>
+            <td><span class="badge badge-optional">No</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+        <tr>
+            <td><code>baud_rate</code></td>
+            <td>Baud rate, representing the speed of transmission and reception. Match it with the baud rate supported by the connected device. Commonly used values include 115200. If this parameter is not provided, the device will use the predefined configuration. Refer to the UART module's configuration page for details. Transmitting this parameter overrides and modifies the default configuration. To change the configuration, transmit it once, and subsequent transmissions can omit it.</td>
+            <td><span class="badge badge-optional">No</span></td>
+            <td>Number</td>
+            <td>4</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>TX uses GPIO 21, RX uses GPIO 2, baud rate 115200, transmitting 0x303132. The receiving end will print ASCII characters "012":</strong>
+    <p><code>operate=22 tx_data=0x303132 tx_pin=21 rx_pin=2 baud_rate=115200</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67b69a9c87025163883ee51a","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":19,"request":{"rawString":"operate=22 tx_data=0x303132 tx_pin=21 rx_pin=2 baud_rate=115200","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-20T02:59:40.371935775Z","upload":null,"uploadTime":"2025-02-20T02:59:40.682589016Z","command":3,"operate":22,"info":"tx done","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <hr>
+    <strong>Using the default configuration:</strong>
+    <p><code>operate=22 tx_data=0x303132</code></p>
+    <p>Response</p>
+    <p><code>{"id":"67b69a6987025163883ee513","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":19,"request":{"rawString":"operate=22 tx_data=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-20T02:58:48.159729956Z","upload":null,"uploadTime":"2025-02-20T02:58:49.072281797Z","command":3,"operate":8,"info":"tx done","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

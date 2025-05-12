@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_GPIO Module Introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#periodupload">Data Upload - Automatic</a></li>
+        <li><a href="#interruptupload">Data Upload - Interrupt</a></li>
+        <li><a href="#commandupload">Data Upload - Command</a></li>
+        <li><a href="#forward">Data Forwarding</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_GPIO Module Introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>On the DC01 product, there are two chips providing GPIO functionality externally. One is the ESP chip, which provides more rich GPIO functions including input, output, interrupt, and some pins can also be set as ADC sampling. The specific configuration part for this module shows that the GPIO pins provided by the ESP chip are named gpio_esp_xx.
+           Another one is the expansion chip, which provides fewer GPIO functions and can only be configured to output low or high. The pins are named ext_ocxx or ext_ioxx. From an usage perspective, they have no difference; both can be set to output high or low. Click <a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">here</a> to view the MODULE_GPIO chapter to configure the pins.</p>
+    </div>
+    <div class="help-item" id="periodupload">
+        <h6>Data Upload - Automatic</h6>
+        <p>The values array represents each GPIO pin's value. Every upload will report all enabled pins. If valueType is ANALOG, it indicates ADC sampling, where pinValue represents the pin's value. If not ADC sampling, it will only be 0 or 1. If it is ADC sampling, it will be in mV units.
+            pinMode represents the pin's configuration mode, pinType indicates whether it is an ESP chip pin or an expansion module pin, and pin is the pin number. Click <a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">here</a> to view the MODULE_GPIO chapter to understand which pins are available.</p>
+        <pre><code>
+{
+	"values": [
+		{
+			"pinValue": 1,
+			"pinMode": 2,
+			"pinType": "ESP",
+			"pin": 4,
+			"valueType": "DIGITAL"
+		},
+		{
+			"pinValue": 0,
+			"pinMode": 33,
+			"pinType": "ESP",
+			"pin": 14,
+			"valueType": "ANALOG"
+		},
+		{
+			"pinValue": 0,
+			"pinMode": 1,
+			"pinType": "EXT",
+			"pin": 7,
+			"valueType": "DIGITAL"
+		},
+		{
+			"pinValue": 0,
+			"pinMode": 2,
+			"pinType": "EXT",
+			"pin": 3,
+			"valueType": "DIGITAL"
+		}
+	]
+}
+        </code></pre>
+    </div>
+    <div class="help-item" id="interruptupload">
+        <h6>Data Upload - Interrupt</h6>
+        <p>Interrupt reporting has the same format as automatic reporting. When the level of a single pin changes causing an interrupt trigger, data will be reported immediately but only for that pin, not other pins.</p>
+        <pre><code>
+{
+	"values": [
+		{
+			"pinValue": 0,
+			"pinMode": 60,
+			"pinType": "ESP",
+			"pin": 21,
+			"valueType": "DIGITAL"
+		}
+	]
+}
+        </code></pre>
+    </div>
+    <div class="help-item" id="commandupload">
+        <h6>Data Upload - Command</h6>
+        <p>By sending commands to the device, data will also be triggered to be uploaded. Click <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">here</a> to view the GPIO-related chapters to understand what commands can be executed and the format of the uploaded data.</p>
+    </div>
+    <div class="help-item" id="forward">
+        <h6>Data Forwarding</h6>
+        <p>Click <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">here</a> to view how to configure the module's data forwarding.
+            Click <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">here</a> to view the format of forwarded data.</p>
+    </div>
+</div>
+</body>
+</html>

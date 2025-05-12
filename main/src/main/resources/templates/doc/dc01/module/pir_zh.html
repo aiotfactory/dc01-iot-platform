@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_PIR模块介绍</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#description" class="active">模块说明</a></li>
+        <li><a href="#periodupload">数据上报-自动</a></li>
+		<li><a href="#commandupload">数据上报-触发</a></li> 
+		<li><a href="#forward">数据转发</a></li> 
+		<li><a href="#runtimeinfo">运行状态</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_PIR模块介绍</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>模块说明</h6>
+        <p>产品上预装了PIR红外线触发传感器，该传感器能够感应人或者动物的移动或者动作，有效距离大约2-3米，只要识别到移动或者动作，传感器即可触发设备上报数据，同时系统支持连动操作，比如触发后立刻开始拍照。
+		</p>
+    </div>
+	<div class="help-item" id="periodupload">
+	    <h6>数据上报-自动</h6>
+		<p>字段意思比较明确，也可以<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看MODULE_PIR模块，里面介绍了上报的数据字段含义。
+		</p>
+	</div>
+	<div class="help-item" id="commandupload">
+	    <h6>数据上报-触发</h6>
+		<p>PIR状态改变时会立刻触发上报，具体上报信息与自动上报一样。
+		</p>
+	</div>
+	<div class="help-item" id="forward">
+	    <h6>数据转发</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">点击</a>查看如何配置模块的数据转发。
+		   <a href="/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">点击</a>查看转发的数据格式。
+		</p>
+	</div>	
+	<div class="help-item" id="runtimeinfo">
+	    <h6>运行状态</h6>
+		<p><a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看MODULE_PIR模块相关章节可以了解各个字段含义。
+		</p>
+	</div>	
+</div>
+</body>
+</html>

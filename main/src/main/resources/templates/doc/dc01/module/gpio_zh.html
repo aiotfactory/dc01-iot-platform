@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_GPIO模块介绍</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#description" class="active">模块说明</a></li>
+        <li><a href="#periodupload">数据上报-自动</a></li>
+		<li><a href="#interruptupload">数据上报-中断</a></li> 
+		<li><a href="#commandupload">数据上报-命令</a></li> 
+		<li><a href="#forward">数据转发</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_GPIO模块介绍</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>模块说明</h6>
+        <p>DC01产品上有两个芯片对外提供GPIO功能，一个是ESP芯片，ESP芯片提供的GPIO功能比较丰富，可以设置输入，输出，中断，有些引脚也可以设置为ADC采样，具体可以看该模块的配置部分，ESP芯片的GPIO引脚命名为gpio_esp_xx。
+		   另外一个是扩展芯片，扩展芯片提供的GPIO功能较少，只能设置为输出低或者高，引脚命名为ext_ocxx或者ext_ioxx，两者从使用角度没有区别，都可以设置为输出高或者低。<a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">点击</a>查看MODULE_GPIO章节来配置引脚。
+		</p>
+    </div>
+	<div class="help-item" id="periodupload">
+	    <h6>数据上报-自动</h6>
+		<p>values数组的每个元素代表一个GPIO引脚的值，每次上报都会报送所有启用的引脚，valueType为ANALOG表示是ADC采样，pinValue表示该引脚的值，如果不是ADC采样，只会为0或者1，如果是ADC采样则是mV值。
+			pinMode表示该引脚配置的模式，pinType表示是ESP芯片引脚还是扩展模块引脚，pin为引脚编号。<a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">点击</a>查看MODULE_GPIO章节了解那些引脚可用。
+		</p>
+	    <pre><code>		
+{
+	"values": [{
+		"pinValue": 1,
+		"pinMode": 2,
+		"pinType": "ESP",
+		"pin": 4,
+		"valueType": "DIGITAL"
+	}, {
+		"pinValue": 0,
+		"pinMode": 33,
+		"pinType": "ESP",
+		"pin": 14,
+		"valueType": "ANALOG"
+	}, {
+		"pinValue": 0,
+		"pinMode": 1,
+		"pinType": "EXT",
+		"pin": 7,
+		"valueType": "DIGITAL"
+	},{
+		"pinValue": 0,
+		"pinMode": 2,
+		"pinType": "EXT",
+		"pin": 3,
+		"valueType": "DIGITAL"
+	}]
+}
+	    </code></pre>	
+	</div>
+	<div class="help-item" id="interruptupload">
+	    <h6>数据上报-中断</h6>
+		<p>中断上报和自动上报的格式是一样的，但一个引脚的电平发生变化，导致中断触发，就会立刻上报数据，但只上报该引脚的，而不会同时上报其他引脚数据。
+		</p>
+	    <pre><code>		
+{
+	"values": [{
+		"pinValue": 0,
+		"pinMode": 60,
+		"pinType": "ESP",
+		"pin": 21,
+		"valueType": "DIGITAL"
+	}]
+}
+	    </code></pre>	
+	</div>
+	
+	<div class="help-item" id="commandupload">
+	    <h6>数据上报-命令</h6>
+		<p>通过向设备发送命令也会触发设备上报数据，<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看GPIO相关章节了解可以执行那些命令，以及上报的数据格式。
+		</p>
+	</div>
+	<div class="help-item" id="forward">
+	    <h6>数据转发</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">点击</a>查看如何配置模块的数据转发。
+		   <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">点击</a>查看转发的数据格式。
+		</p>
+	</div>	
+</div>
+</body>
+</html>

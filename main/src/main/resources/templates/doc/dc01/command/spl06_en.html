@@ -1,0 +1,62 @@
+<h5>Description</h5>
+<p>The module is used to detect air pressure but can also detect temperature.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Necessary</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>In/Out</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed at 20</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Example</h5>
+<div>
+    <strong>Get Air Pressure and Temperature:</strong>
+    <p><code>operate=20</code></p>
+    <p>Return, Normal</p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><code>temperature</code></td>
+                <td>The measured temperature this time, divided by 100 for Celsius.</td>
+            </tr>
+            <tr>
+                <td><code>pressure</code></td>
+                <td>The measured air pressure this time, divided by 100 for Pa.</td>
+            </tr>
+            <tr>
+                <td><code>temperatureMax,temperatureMin</code></td>
+                <td>The maximum and minimum temperatures since the device was turned on.</td>
+            </tr>
+            <tr>
+                <td><code>pressureMax,pressureMin</code></td>
+                <td>The maximum and minimum air pressures since the device was turned on.</td>
+            </tr>
+            <tr>
+                <td><code>timesTotal,timesSuccess</code></td>
+                <td>The total number of measurements and successful measurements since the device was turned on.</td>
+            </tr>
+            <tr>
+                <td><code>flag</code></td>
+                <td>Value 0 indicates that the measurement is normal; other values indicate abnormal measurement.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Return Normal</p>
+    <p><code>{"id":"67bd9582d9546c2e21de66e6","deviceId":"67bd8c60d9546c2e21de6536","deviceNo":"24587cd6ef0c","moduleTypeId":18,"request":{"rawString":"operate=20","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-25T10:03:46.130435650Z","upload":{"pressure":10263195,"pressureMax":10263266,"pressureMin":10263127,"temperature":2144,"temperatureMax":2144,"temperatureMin":2135,"flag":0,"timesSuccess":21,"timesTotal":21},"uploadTime":"2025-02-25T10:03:46.478120118Z","command":3,"operate":20,"deviceRequestPack":3,"deviceUploadPack":3,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

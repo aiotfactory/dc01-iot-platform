@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<th:block th:insert="~{fragments/nav :: head(#{user_list})}"></th:block>
+<body>
+ <th:block th:insert="~{fragments/nav :: search}"></th:block>
+<div class="container-fluid">
+  <div class="row">
+   <th:block th:insert="~{fragments/nav :: menu}"></th:block>
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+	  <th:block th:insert="~{fragments/nav :: breadcrumb}"></th:block>
+	  <div class="d-flex align-items-center">
+	      <h2 class="me-2" th:text="#{user_list}">User list</h2>
+		  <a th:href="@{/pub/doc(page='user')}" target="_blank"><i class="bi bi-question-circle fs-6"></i></a> 
+	      <a class="icon-link mb-1" href="javascript:void(0);" onclick="showCreateItemModal()" rel="noopener">
+	          <svg class="bi" width="16" height="16"><use xlink:href="#arrow-right-circle"></use></svg>
+	          <span th:text="#{new}">new</span>
+	      </a>
+	  </div>
+      <div class="table-responsive small">
+        <table class="table table-striped table-sm" id="user-body">
+        </table>
+      </div>
+    </main>
+   <th:block th:insert="~{fragments/nav :: modalError}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalConfirm}"></th:block>
+   <th:block th:insert="~{fragments/nav :: modalCreateItem}"></th:block>
+  </div>
+</div>
+<th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+<script  th:inline="javascript">
+const isAdmin = /*[[${isAdmin}]]*/ '';
+
+const actionDel = {  confirmTitle: [[#{delete_device_tb_device_confirm}]] , confirmDescription: [[#{sure_to_delete_user}]] , operate: '/dc/web/userlistrefresh?action=userDel&userId=', icon: 'bi-trash', isAjax: 'normal' , help: [[#{user_delete_comments}]]};
+const actionResetPassword = { confirmTitle: [[#{confirm_reset}]], confirmDescription: [[#{reset_password}]] , operate: '/dc/web/userlistrefresh?action=userPasswordReset&userId=', icon: 'bi-lock', isAjax: 'normal', space: 'me-2' , help: [[#{user_reset_password_comments}]]};
+	
+let userType = {column: 'userType', name: [[#{user_level}]], width: '10%'};
+if(isAdmin==1){
+	userType.editable = [];
+	userType.fieldType = 'string';
+	userType.updateAction = '/dc/web/userlistrefresh?action=userUpdate&userId=';
+}
+const columns = [
+    { column: 'id', name:[[#{id_no_comma}]], width: '5%', isId: 1 },
+	userType,
+    { column: 'name', name:[[#{name_tb_device}]], width: '5%' },
+	{ column: 'userStatus', name: [[#{status_tb_device}]], width: '8%', editable: [], fieldType: 'string',updateAction:'/dc/web/userlistrefresh?action=userUpdate&userId='},
+    { column: 'createBy', name: [[#{creator}]], width: '5%'},
+	{ column: 'clonedUser', name: [[#{cloned_from}]], width: '8%', editable: [], fieldType: 'string',updateAction:'/dc/web/userlistrefresh?action=userUpdate&userId='},
+    { column: 'latestVisitTime', name:[[#{visit}]] , width: '8%'},
+    { column: 'registerTime', name:[[#{register}]] , width: '8%'},
+    { name: [[#{action_tb_device}]], width: '10%', isAction: 1, actions: [actionResetPassword,actionDel]}
+];
+
+const tableInput=[{tableData: 'userList', tableDataMeta: 'userListMeta', tableBody: 'user-body', tableColumns: columns}];
+excAction('/dc/web/userlistrefresh',null,tableInput,null,true);
+
+function showCreateItemModal() {
+	const modalId=document.getElementById('createItemModal');
+	let createItemModal = bootstrap.Modal.getInstance(modalId);
+	if (!createItemModal) 
+		createItemModal = new bootstrap.Modal(modalId);
+    modalId.querySelector('.modal-title').textContent=[[#{enter_user_email}]];
+	const fieldDivs = document.querySelectorAll(".field"); 
+	fieldDivs.forEach(function(div) {
+		div.classList.add('d-none');
+	});
+
+	fieldDivs[0].classList.remove('d-none');
+	fieldDivs[0].querySelectorAll(".form-label")[0].textContent =[[#{login_name}]]; 
+	fieldDivs[0].querySelectorAll(".form-control")[0].value='';
+	fieldDivs[0].querySelectorAll(".form-control")[0].placeholder=[[#{enter_login_name}]];
+
+	fieldDivs[1].classList.remove('d-none');
+	fieldDivs[1].querySelectorAll(".form-label")[0].textContent =[[#{login_password}]]; 
+	fieldDivs[1].querySelectorAll(".form-control")[0].value='';
+	fieldDivs[1].querySelectorAll(".form-control")[0].placeholder=[[#{enter_login_password}]];
+	
+	const confirmButton = modalId.querySelector('.submit');
+	confirmButton.addEventListener('click', function() {
+		const userName=fieldDivs[0].querySelectorAll(".form-control")[0].value;
+		const password=fieldDivs[1].querySelectorAll(".form-control")[0].value;
+		const jsonSend = {
+		       userName: userName,
+			   password: password
+		   };
+		createItemModal.hide();
+		excAction("/dc/web/userlistrefresh?action=userAdd",jsonSend,tableInput,null,true);		
+	}, { once: true });
+	createItemModal.show();
+}
+</script>
+</body>
+</html>

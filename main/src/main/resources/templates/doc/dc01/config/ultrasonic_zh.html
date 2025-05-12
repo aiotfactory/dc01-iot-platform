@@ -1,0 +1,77 @@
+{
+    "moduleName": "MODULE_ULTRASONIC",
+    "moduleComments": "超声波测距。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "ultrasonic_onoff",
+            "sample": "1",
+            "range": "0-1",
+            "comments": "用于模块开关状态。0表示关闭，1表示开启。"
+        },
+        {
+            "order": 2,
+            "name": "ultrasonic_upload_interval_seconds",
+            "sample": "10",
+            "range": "0-0xffffffff秒",
+            "comments": "配置模块数据上传的间隔时间（秒）。"
+        },
+        {
+            "order": 3,
+            "name": "ultrasonic_pin_trig",
+            "sample": "1",
+            "range": "0-255",
+            "comments": "启动超声测距的引脚，低7位表示引脚号，最高位1表示是esp芯片gpio引脚，0表示是ext扩展引脚。"
+        },
+        {
+            "order": 4,
+            "name": "ultrasonic_pin_echo",
+            "sample": "21",
+            "range": "0-255",
+            "comments": "接收超声回波的引脚，必须为esp芯片的gpio引脚。"
+        },
+        {
+            "order": 5,
+            "name": "ultrasonic_measure_milli_seconds",
+            "sample": "1000",
+            "range": "1-0xffffffff",
+            "comments": "超声测距间隔时间，单位为毫秒。"
+        },
+        {
+            "order": 6,
+            "name": "ultrasonic_compensation_mode",
+            "sample": "1",
+            "range": "0，1，2",
+            "comments": "因温湿度对声速影响较大，需要有补偿措施，为0表示不补偿，为1表示通过板载温湿度传感器的数据进行补偿，需要设置温湿度传感器为开启状态，为2表示固定值补偿，固定值通过ultrasonic_compensation_value设置。"
+        },
+        {
+            "order": 7,
+            "name": "ultrasonic_compensation_value",
+            "sample": "70",
+            "range": "0-0xffff",
+            "comments": "该值单位为摄氏度，系统会减去50使用，比如设置为70，实际表示70-50=20摄氏度，也就是假设环境气温为20摄氏度。"
+        },
+        {
+            "order": 8,
+            "name": "ultrasonic_trigger_times",
+            "sample": "1",
+            "range": "0-0xffff",
+            "comments": "符合条件X次后触发。"
+        },
+        {
+            "order": 9,
+            "name": "ultrasonic_trigger_min",
+            "sample": "0",
+            "range": "1-0xffffffff",
+            "comments": "单位为毫米，测距结果落在最小值和最大值之间算触发，这里定义最小值。"
+        },
+        {
+            "order": 10,
+            "name": "ultrasonic_trigger_max",
+            "sample": "100",
+            "range": "1-0xffffffff",
+            "comments": "单位为毫米，测距结果落在最小值和最大值之间算触发，这里定义最大值。"
+        }
+    ],
+    "status": "ok"
+}

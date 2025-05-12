@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_4G module introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#runtimeinfo">Runtime Information</a></li>
+    </ul>
+</div>
+
+<!-- Main content area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_4G module introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>The DC01 product has a 4G LTE module. The international version supports global standards, while the Chinese mainland version only supports cards from China Mobile. Click <a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">here</a> to view and configure the MODULE_4G section.</p>
+    </div>
+    <div class="help-item" id="runtimeinfo">
+        <h6>Runtime Information</h6>
+        <p>Each time the device restarts, it will obtain a Csq value which is used to evaluate the strength of the 4G network signal. Generally, a value above 20 indicates good reception, while below 10 may indicate poor reception.</p>
+        <p>Csq Min and Csq Max are stored as minimum and maximum values in the cloud.</p>
+        <p>Other status values are periodically reported by the MODULE_META module, so this module must be enabled to access these data.</p>
+        <p>Iccid: The ICCID number of the SIM card on the device; Imei: The IMEI number of the 4G module, usually printed on the surface of the 4G module; Ip, Mask, Gateway, Dns1, Dns2, Ipv6: Network configuration obtained by the 4G module from the operator's base station.</p>
+    </div>
+</div>
+</body>
+</html>

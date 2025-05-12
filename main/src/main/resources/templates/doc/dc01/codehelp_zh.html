@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码说明</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h3 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .sidebar ul li a:hover {
+            background-color: #34495e;
+            color: #ffffff;
+        }
+        .sidebar ul li a.active {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        .main-content {
+            margin-left: 270px; 
+            padding: 20px;
+        }
+        .help-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .help-item:hover {
+            background-color: #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .help-item h5 {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .help-item a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .help-item a:hover {
+            text-decoration: underline;
+        }
+        .help-item p {
+            line-height: 1.6;
+            color: #4a4a4a;
+        }
+        .help-item h6 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #34495e;
+        }
+		
+    </style>
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#c1" class="active">总体说明</a></li>
+		<li><a href="#c2">启动入口</a></li>
+        <li><a href="#c3">设备配置</a></li>
+		<li><a href="#c4">网络传输</a></li>
+		<li><a href="#c5">模块处理</a></li>
+		<li><a href="#c6">内核说明</a></li>
+		<li><a href="#c7">其他工具</a></li>
+		<li><a href="#c8">快捷键</a></li>
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">代码说明</h1>
+    </div>
+    <div class="help-item" id="c1">
+        <h6>总体说明</h6>
+        <p>DC01产品基于ESP32芯片研发，因此代码结构符合ESP32的IDF架构。除了参考本说明，用户也可以直接参考ESP32的<a href="https://docs.espressif.com/projects/esp-idf/zh_CN/v5.2/esp32s3/get-started/index.html" target="_blank">开发文档</a>。		
+		这里是ESP32可供使用的<a href="https://docs.espressif.com/projects/esp-idf/zh_CN/v5.2/esp32s3/api-reference/index.html" target="_blank">API文档</a>。
+		</p>
+		<p>在线代码很多，用户可能只修改了一部分，修改的这一部分系统会单独保存，在编译时，系统会把项目的基础文件和用户修改的文件合并在一起编译。但系统的基础文件也可能发生变化，
+		因此可能未来会导致用户新编译时出现错误或者功能有所改变，因此每次即便用户没有修改文件，重新编译后也要进行测试，确保固件运行符合期望。</p>
+    </div>
+	
+	<div class="help-item" id="c2">
+	    <h6>启动入口</h6>
+	    <p>类似C语言的main函数，设备启动后首先调用的函数是/main/app_main.c中的void app_main(void)函数，可以参考该函数的说明。</p>
+	</div>
+		
+	<div class="help-item" id="c3">
+	    <h6>设备配置</h6>
+	    <p>比如增加配置项目，可以修该文件/main/device_config.h以及device_config.c，文件内部有详细解释说明。</p>
+	</div>
+	
+	<div class="help-item" id="c4">
+	    <h6>网络传输</h6>
+	    <p>向云端发送报文，可以调用的函数定义在/main/network_util.h，发送后接收处理定义在/main/comm_util.h。</p>
+	</div>
+
+	<div class="help-item" id="c5">
+	    <h6>模块处理</h6>
+	    <p>从架构角度看，设备主要由各个模块组成，每个模块都可以发送自己相关的信息到云端和接收处理云端命令，比如lora模块的处理就定义在/main/lora_util.c中，gpio模块的处理就定义在/main/gpio_util.c中，以此类推。</p>
+	</div>
+
+	<div class="help-item" id="c6">
+	    <h6>内核说明</h6>
+	    <p>内核函数只能使用，不能修改，系统启动和工具相关定义在/main/system_util.h中，网络相关定义在/main/network_util.h，设备配置定义在/main/device_config.h,
+	    ，日志工具定义在/main/cloud_log.h</p>
+	</div>
+	
+	<div class="help-item" id="c7">
+	    <h6>其他工具</h6>
+	    <p>其他工具定义在/main/util_log.h, 扩展端口驱动定义在/main/ch423.h, 另外还有一些ESP32配置，构建相关的文件，在熟悉前不要轻易改动。</p>
+	</div>
+
+	<div class="help-item" id="c8">
+	    <h6>快捷键</h6>
+	    <p>ctrl键+b 是提交编译快捷键, ctrl键+s 是保存文件快捷键。</p>
+	</div>						
+</div>
+</body>
+</html>

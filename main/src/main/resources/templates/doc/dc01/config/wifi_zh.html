@@ -1,0 +1,63 @@
+{
+    "moduleName": "MODULE_WIFI",
+    "moduleComments": "用于配置WiFi相关信息，包括模式、SSID、密码等。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "wifi_mode",
+            "sample": "0",
+            "range": "0, 1, 2, 3",
+            "comments": "0: 关闭WiFi， 1: sta模式，也就是用于连接其他WiFi路由器，2: ap模式，就是设备作为WiFi路由器，允许其他设备连接自己，3：同时工作在sta和ap模式。"
+        },
+        {
+            "order": 2,
+            "name": "wifi_ap_sta_ssid",
+            "sample": "second",
+            "range": "1-29个字符",
+            "comments": "WiFi AP或STA的SSID。"
+        },
+        {
+            "order": 3,
+            "name": "wifi_ap_sta_password",
+            "sample": "fuxiaohu1%",
+            "range": "0-19个字符",
+            "comments": "WiFi AP或STA的密码。"
+        },
+        {
+            "order": 4,
+            "name": "wifi_ap_channel",
+            "sample": "6",
+            "range": "1-14",
+            "comments": "WiFi AP的信道号。"
+        },
+        {
+            "order": 5,
+            "name": "wifi_ap_max_connection",
+            "sample": "5",
+            "range": "1-10",
+            "comments": "WiFi AP最大连接数，最多允许多少个其他设备同时连接本设备。"
+        },
+        {
+            "order": 6,
+            "name": "wifi_ap_ssid_hidden",
+            "sample": "0",
+            "range": "0, 1",
+            "comments": "WiFi AP是否隐藏SSID（0表示不隐藏，1表示隐藏）。"
+        },
+        {
+            "order": 7,
+            "name": "wifi_ap_dns_update_seconds",
+            "sample": "20",
+            "range": "1-0xffffffff秒",
+            "comments": "WiFi AP的DNS更新间隔时间。"
+        },
+        {
+            "order": 8,
+            "name": "wifi_ap_dns_default",
+            "sample": "0",
+            "range": "0-49个字符",
+            "comments": "WiFi AP默认的DNS地址，设置为0表示不设置默认DNS。"
+        }
+    ],
+    "status": "ok"
+}

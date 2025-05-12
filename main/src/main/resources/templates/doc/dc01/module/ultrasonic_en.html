@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_ULTRASONIC Module Introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#periodupload">Data Upload - Periodic</a></li>
+        <li><a href="#interruptupload">Data Upload - Interrupt</a></li> 
+		<li><a href="#commandupload">Data Upload - Command</a></li> 
+		<li><a href="#forward">Data Forwarding</a></li> 
+		<li><a href="#runtimeinfo">Runtime Information</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">Introduction to MODULE_ULTRASONIC</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>The device can be connected with an ultrasonic distance measurement module. The ultrasonic module calculates distance by sending ultrasonic waves and measuring the time it takes for the echo to return. Typically, such modules have four pins: one for ground, one for power, one for triggering the wave emission, and one for receiving the echo interrupt.</p>
+		<p>The trigger pin can be either an ESP chip GPIO pin or an EXT expansion pin. However, the echo pin must be a GPIO pin on the ESP chip.</p>
+		<p>The speed of sound is not constant; it varies based on temperature, air pressure, and humidity. Therefore, compensation mechanisms can be enabled via module configuration to calculate distance using different sound speeds according to environmental conditions.</p>
+    </div>
+	<div class="help-item" id="periodupload">
+	    <h6>Data Upload - Periodic</h6>
+		<p>The meaning of each field is clear. You can also <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">click here</a> to view the MODULE_ULTRASONIC module documentation, which explains the meanings of the uploaded data fields.</p>
+	</div>
+	<div class="help-item" id="interruptupload">
+	    <h6>Data Upload - Interrupt</h6>
+		<p>By configuring a distance range, the module will automatically upload data whenever the measured distance falls within that range. <a href="/dc/pub/doc?page=config_index&deviceType=dc01" target="_blank">Click here</a> to view how to configure the MODULE_ULTRASONIC module.</p>
+	</div>
+	<div class="help-item" id="commandupload">
+	    <h6>Data Upload - Command</h6>
+		<p>Sending commands to the device can also trigger data uploads. <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">Click here</a> to see which commands are supported by the MODULE_ULTRASONIC module and what data format is used in responses.</p>
+	</div>
+	<div class="help-item" id="forward">
+	    <h6>Data Forwarding</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">Click here</a> to learn how to configure data forwarding for this module.<br>
+		   <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">Click here</a> to view the data structure used during forwarding.
+		</p>
+	</div>	
+	<div class="help-item" id="runtimeinfo">
+	    <h6>Runtime Information</h6>
+		<p><a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">Click here</a> to view the MODULE_ULTRASONIC module section to understand the meaning of each field.</p>
+	</div>	
+</div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "params": "fields=data&action=aggRefresh&deviceId=xxxxxxxxxxxx&moduleTypeId=xxx&page=0&startDate=2024-11-10T00:00:00.000Z&endDate=2024-11-11T00:00:00.000Z",
+  "inputComments": "指定设备ID、模块类型ID、页码、开始日期和结束日期以获取该模块的聚合报告。",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>设备的ID。</td></tr><tr><td>moduleTypeId</td><td>模块的ID。</td></tr><tr><td>page</td><td>页码序列，每页显示的数量由系统定义，页码从0开始。</td></tr><tr><td>startDate endDate</td><td>ISO日期格式 2024-11-11T00:00:00.000Z，如果未提供，则默认使用当前日期。</td></tr></tbody></table>",
+  "outputComments": "返回此模块的聚合报告，数据将以表格形式显示，并且对于不同的模块会有所不同。您可能需要查看模块的视图页面以了解字段含义。",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>如果成功，将返回ok。</td></tr><tr><td>aggMap</td><td>这是数据的容器。</td></tr><tr><td>yAxisData</td><td>Y轴数据的容器。</td></tr><tr><td>xAxisData</td><td>X轴数据。</td></tr><tr><td>minPin1Value minPin2Value</td><td>仅作为示例，不同模块的字段会有所不同，请查阅模块的视图页面。</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"aggMap\": {\r\n    \"yAxisData\": {\r\n      \"minPin1Value\": [\r\n        \"0\",\r\n        \"0\",\r\n        ...\r\n      ],\r\n      \"minPin2Value\": [\r\n        \"0\",\r\n        \"0\",\r\n        ...\r\n      ],\r\n      ...\r\n    },\r\n    \"xAxisData\": [\r\n      \"11-10 00\",\r\n      \"11-10 01\",\r\n      ...\r\n    ]\r\n  },\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"aggMap\": {\r\n    \"yAxisData\": {\r\n      \"minPin1Value\": [\r\n        \"0\",\r\n        \"0\",\r\n        ...\r\n      ],\r\n      \"minPin2Value\": [\r\n        \"0\",\r\n        \"0\",\r\n        ...\r\n      ],\r\n      ...\r\n    },\r\n    \"xAxisData\": [\r\n      \"11-10 00\",\r\n      \"11-10 01\",\r\n      ...\r\n    ]\r\n  },\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

@@ -1,0 +1,49 @@
+<h5>Description</h5>
+<p>Retrieve the operational status of the camera module.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 6</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Get Operational Status:</strong>
+    <p><code>operate=6</code></p>
+    <p>Response</p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><code>times_inited=0</code></td>
+                <td>The number of times the camera has been initialized. If initialization fails, retries will occur, and this records the count.</td>
+            </tr>
+            <tr>
+                <td><code>times_take=0</code></td>
+                <td>The number of photos taken.</td>
+            </tr>
+            <tr>
+                <td><code>times_failed=0</code></td>
+                <td>The number of failed photo capture attempts.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><code>{"id":"67b4559f4db5084335f3d457","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":6,"request":{"rawString":"operate=6","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-18T09:40:44.637306668Z","upload":{"times_failed":0,"times_inited":1,"times_take":10},"uploadTime":"2025-02-18T09:40:47.851490120Z","command":3,"operate":6,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

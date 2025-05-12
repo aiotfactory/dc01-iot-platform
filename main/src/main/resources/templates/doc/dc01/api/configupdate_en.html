@@ -1,0 +1,12 @@
+{
+  "params": "fields=none&action=configUpdate&fieldName=valueInDb&fieldType=string&deviceId=xxxxxxxxxxxx&moduleTypeId=xxx&index=xx&fieldValue=xx",
+  "inputComments": "Specify the deviceId, moduleTypeId, index and fieldValue to update the value of config.",
+  "inputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>deviceId</td><td>The id of the device.</td></tr><tr><td>moduleTypeId</td><td>The id of module.</td></tr><tr><td>index</td><td>The index of config.</td></tr><tr><td>fieldValue</td><td>The value to be updated to device.</td></tr></tbody></table>",
+  "outputComments": "The value will be first stored in database and once device uploads any data to cloud, cloud will push the config to device as part of response, and once it is set in device, the device will report the done.",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>status</td><td>If success, it will return ok.</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey": "[[${apiKey}]]",
+  "apiRunning": "[[${apiRunning}]]"
+}

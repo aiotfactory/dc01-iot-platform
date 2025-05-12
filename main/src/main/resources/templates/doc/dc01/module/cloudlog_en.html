@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_CLOUDLOG Module Introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+		<li><a href="#runtimeinfo">Runtime Information</a></li> 
+		<li><a href="#forward">Data Forwarding</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_CLOUDLOG Module Introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>When the device is running, it will output logs. Generally, in embedded development, you need to connect your computer and the device with a specified line to see the logs on the computer. This system provides cloud-based logging, where the device uploads logs to the cloud via the network, allowing you to view the logs directly from the cloud without needing to connect to the device. However, this increases the usage of traffic.
+			<a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">Click here</a> to view the configuration for enabling or disabling cloud-based logging.
+		</p>
+    </div>
+	<div class="help-item" id="runtimeinfo">
+	    <h6>Runtime Information</h6>
+		<p>Log Status example {"times":135,"uploadTime":"2025-02-18T10:36:38.036+00:00"}, indicating the cumulative number of uploaded logs and the most recent upload time.</p>
+	</div>	
+	<div class="help-item" id="forward">
+	    <h6>Data Forwarding</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">Click here</a> to view how to configure data forwarding for the module.
+			<a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">Click here</a> to view the format of forwarded data.
+		</p>
+	</div>	
+</div>
+</body>
+</html>

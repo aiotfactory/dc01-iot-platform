@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>帮助 - API使用说明</title>
+	<link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	    .command-intro {
+	        background-color: #f8f9fa;
+	        padding: 20px;
+	        border-radius: 8px;
+	        margin-bottom: 30px;
+	        border-left: 4px solid #007bff;
+	    }
+	    .command-intro h5 {
+	        margin-bottom: 15px;
+	    }
+	    .badge-required {
+	        background-color: #dc3545;
+	    }
+	    .badge-optional {
+	        background-color: #28a745;
+	    }
+	</style>
+	<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+	  <symbol id="server" viewBox="0 0 16 16">
+	    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+	  </symbol>
+	</svg>
+</head>
+<body>
+    <div class="container my-5">
+        <!-- 页面标题 -->
+        <div class="text-center mb-4">
+            <h1>帮助 - 如何调用云端API</h1>
+            <p class="text-muted">数据流: 你的应用 → 云服务器 → 你的应用</p>
+        </div>
+		<div class="command-intro">
+            <h5 class="card-title">API运行机制说明</h5>
+            <p>你的应用，云服务器之间交互:</p>
+            <ul>
+                <li><strong>你的应用:</strong> 向云服务器发送API请求，每个请求都需要携带api和key参数。</li>
+                <li><strong>云服务器:</strong> 验证key的合法性，通过后会返回api参数指定的结果。</li>
+                <li><strong>你的应用:</strong> 接收云服务器的Json格式返回内容。</li>
+            </ul>
+            <p>具体调用时，类似这样的http请求: <span th:text="${siteUrl} + '/dc/api/call?key=' + ${apiKey} + '&api=device'"></span></p>
+			<p>另外API调用都是有配额的，每分钟和每天调用次数有一个限制，下面每个API介绍底部都可以实时测试。<a href="/dc/pub/doc?page=interface" target="_blank">点击</a>查看Key的详细说明。</p>
+        </div>
+
+        <div class="accordion" id="apiAccordion">
+            <!-- Accordion items will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script src="/dc/js/bootstrap.bundle.min.js"></script>
+    <th:block th:insert="~{fragments/nav :: scriptFunctions}"></th:block>
+
+    <script th:inline="javascript">
+		window.onload = function() {
+			let i=1;
+			createAccordionItem(i++, '在设备上运行命令', 'runcommand','command');
+		    
+			createAccordionItem(i++, '设备列表', 'devicelist','device');
+		    createAccordionItem(i++, '设备添加', 'deviceadd','device');
+		    createAccordionItem(i++, '设备删除', 'devicedel','device');
+		    createAccordionItem(i++, '设备名称修改', 'devicenameupdate','device');
+		    
+		    createAccordionItem(i++, '模块列表', 'modulelist','module');
+		    createAccordionItem(i++, '模块聚合信息查询', 'aggreport','module');
+		    createAccordionItem(i++, '模块历史信息查询', 'historydata','module');
+		    createAccordionItem(i++, '模块运行信息查询', 'runtime','module');
+		    
+		    createAccordionItem(i++, '转发数据查询', 'forwardlist','module');
+		    
+		    createAccordionItem(i++, '警告信息查询', 'alertlist','alert');
+		    createAccordionItem(i++, '警告信息设置处理中', 'alertprocess','alert');
+		    createAccordionItem(i++, '警告信息删除', 'alertdel','alert');
+		    createAccordionItem(i++, '警告信息设置处理完成', 'alertok','alert');
+		    
+		    createAccordionItem(i++, '配置信息查询', 'configlist','module');
+		    createAccordionItem(i++, '配置信息修改', 'configupdate','module');
+		    createAccordionItem(i++, '配置信息删除', 'configdel','module');		    
+		}
+		function createAccordionItem(id, title, docName,apiUri) {
+		     const accordion = document.getElementById('apiAccordion');
+		     const accordionItem = document.createElement('div');
+		     accordionItem.className = 'accordion-item';
+		     accordionItem.id = `item${id}`;
+
+		     const headerHtml = `
+		         <h2 class="accordion-header" id="heading${id}">
+		             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+		                 data-bs-target="#collapse${id}" aria-expanded="false" aria-controls="collapse${id}" 
+		                 onclick="loadAccordionContent('${id}', '${docName}', '${apiUri}')">
+		                 <span class="me-2 badge bg-primary">${id}</span> ${title}
+		             </button>
+		         </h2>
+		     `;
+
+		     const contentHtml = `
+		         <div id="collapse${id}" class="accordion-collapse collapse" aria-labelledby="heading${id}" data-bs-parent="#apiAccordion">
+		             <div class="accordion-body">Loading...</div>
+		         </div>
+		     `;
+
+		     accordionItem.innerHTML = headerHtml + contentHtml;
+		     accordion.appendChild(accordionItem);
+		 }
+
+		 function loadAccordionContent(id, docName,apiUri) {
+		     const accordionBody = document.querySelector(`#collapse${id} .accordion-body`);
+		     if (accordionBody.dataset.loaded === 'true') return;
+		     const url='/dc/web/doc?page=api_'+docName+'&apiUri='+apiUri+'&deviceType=dc01';
+		     fetch(url)
+	         .then((response) => response.ok ? response.text() : Promise.reject('Failed to load content'))
+	         .then((content) => {
+	        	 const apiInfo = {};
+	        	 apiInfo.inputComments=parseContent(content,"inputComments");
+	        	 apiInfo.inputDefinition=parseContent(content,"inputDefinition");
+	        	 apiInfo.outputComments=parseContent(content,"outputComments");
+	        	 apiInfo.outputDefinition=parseContent(content,"outpoutputDefinitionutExample");
+	        	 apiInfo.outputExample=parseContent(content,"outputExample");
+	        	 apiInfo.protocol=parseContent(content,"protocol");
+	        	 apiInfo.jsonContent=parseContent(content,"jsonContent");
+	        	 apiInfo.apiKey=parseContent(content,"apiKey");
+	        	 var apiRunning=parseContent(content,"apiRunning");
+	        	 apiRunning=apiRunning.replace(/&quot;/g, '"');
+	        	 console.log(apiRunning);
+	        	 apiRunning=JSON.parse(apiRunning);
+	             fillAccordionItem(id,apiUri,apiInfo, apiRunning, accordionBody);
+	             accordionBody.dataset.loaded = 'true';
+	         })
+	         .catch((error) => {
+        	    accordionBody.innerHTML = 'Error loading content.';
+	         });
+		 }
+       function fillAccordionItem(id,apiUri,apiInfo, apiRunning, bodyDiv) {
+    	    let callUri='/dc/api/call?key='+apiInfo.apiKey+'&api='+apiUri;
+    	    if(apiInfo.params!=null)
+    	    	callUri=callUri+'&'+apiInfo.params;
+            bodyDiv.innerHTML  = `
+                <strong>调用次数 | 每分钟限制次数:</strong>
+                <p>${apiRunning.timesPerMinute || '0'} | ${apiRunning.limitPerMinute || '*'}</p>
+                <strong>调用次数 | 每天限制次数:</strong>
+                <p>${apiRunning.timesPerDay || '0'} | ${apiRunning.limitPerDay || '*'}</p>
+                <strong>最近一次调用:</strong>
+                <p>${apiRunning.latestCallTime || ''}</p>
+                <strong>总调用次数:</strong>
+                <p>${apiRunning.calls || ''}</p>
+                <strong>协议:</strong>
+                <p>${apiInfo.protocol}</p>
+                <strong>输入:</strong>
+                <p>${apiInfo.inputComments || ''}</p>
+                <pre>${apiInfo.inputExample || ''}</pre>
+                <p>${apiInfo.inputDefinition || ''}</p>
+                <strong>输出:</strong>
+                <p>${apiInfo.outputComments || ''}</p>
+                <pre>${apiInfo.outputExample || ''}</pre>
+                <p>${apiInfo.outputDefinition || ''}</p>
+                <strong>例子:</strong>
+                <pre>${'GET '+callUri}</pre>
+                <pre>${apiInfo.jsonContent || ''}</pre>
+                <strong>Test:</strong>
+                <button class="btn btn-sm p-0" id="${id}TestButton" style="background: none; border: none; color: #007bff; cursor: pointer;">
+					<svg class="bi text-primary" width="16" height="16" fill="currentColor">
+					  <use href="#server"></use>
+					</svg>
+                </button>
+                <div class="my-2">
+                    <textarea id="${id}TestContent" class="form-control" style="white-space: pre; font-family: monospace; padding: 10px; background-color: #f8f9fa;">${callUri || ''}</textarea>
+                </div>
+                <div id="${id}Result" class="mt-3"></div>
+            `;
+
+            document.getElementById(`${id}TestButton`).addEventListener('click', async () => {
+                const resultDiv = document.getElementById(`${id}Result`);
+                resultDiv.innerHTML = 'Running test...';
+                const link = document.getElementById(`${id}TestContent`).value;
+                let protocol = apiInfo.protocol === 'GET_POST' || apiInfo.protocol === 'GET' ? 'GET' : 'POST';
+                let jsonStr = protocol === 'POST' ? apiInfo.jsonContent || null : null;
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+
+                function generateResultHtml(link, protocol, headers, jsonStr, responseContent = 'Loading...') {
+                    return `
+<pre class="bg-dark text-light p-3">
+<strong>链接:</strong>
+${link}
+<strong>协议:</strong>
+${protocol}
+<strong>请求头:</strong>
+${JSON.stringify(headers, null, 2)}
+<strong>请求内容:</strong>
+${jsonStr ? JSON.stringify(JSON.parse(jsonStr), null, 2) : 'None'}
+<strong>返回:</strong>
+${responseContent}
+                    </pre>`;
+                }
+
+                resultDiv.innerHTML = generateResultHtml(link, protocol, headers, jsonStr);
+                try {
+                    const response = await fetch(link, {
+                        method: protocol,
+                        headers: headers,
+                        body: jsonStr ? JSON.stringify(JSON.parse(jsonStr)) : null,
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        resultDiv.innerHTML = generateResultHtml(link, protocol, headers, jsonStr, JSON.stringify(data, null, 2));
+                    } else {
+                        resultDiv.innerHTML = generateResultHtml(link, protocol, headers, jsonStr, `Error: ${response.statusText}`);
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = generateResultHtml(link, protocol, headers, jsonStr, `Error: ${error.message}`);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

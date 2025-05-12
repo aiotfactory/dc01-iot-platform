@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{error_page}">Error Page</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .error-container {
+            margin-top: 10%;
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 5rem;
+            color: #dc3545;
+        }
+        .error-message {
+            font-size: 1.5rem;
+            margin-top: 20px;
+        }
+        .error-details {
+            margin-top: 10px;
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .btn-home {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 error-container">
+                <i class="bi bi-exclamation-triangle-fill error-icon"></i>
+                <h1 class="display-4 text-danger" th:text="#{oops}">Oops! Something went wrong.</h1>
+                <p class="error-message" th:text="${message ?: 'An unexpected error occurred.'}"></p>
+                <p class="error-details">
+                    <strong th:text="#{status_comma}">Status:</strong> <span th:text="${status ?: 500}"></span> <br>
+                    <strong th:text="#{path_comma}">Path:</strong> <span th:text="${path ?: 'Unknown'}"></span>
+                </p>
+                <a href="/dc/" class="btn btn-primary btn-home">
+                    <i class="bi bi-house-fill"></i> <span th:text="#{return_to_home}">Return to Home</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="/dc/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

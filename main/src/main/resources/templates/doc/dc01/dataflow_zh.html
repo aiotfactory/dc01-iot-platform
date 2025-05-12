@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据流</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        /* 左侧导航栏样式 */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h3 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .sidebar ul li a:hover {
+            background-color: #34495e;
+            color: #ffffff;
+        }
+        .sidebar ul li a.active {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        /* 主内容区域样式 */
+        .main-content {
+            margin-left: 270px; /* 留出导航栏空间 */
+            padding: 20px;
+        }
+        .help-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .help-item:hover {
+            background-color: #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .help-item h5 {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .help-item a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .help-item a:hover {
+            text-decoration: underline;
+        }
+        .help-item p {
+            line-height: 1.6;
+            color: #4a4a4a;
+        }
+        .help-item h6 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #34495e;
+        }
+		
+    </style>
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#process" class="active">总体流程</a></li>
+		<li><a href="#datastructure">数据格式</a></li>
+        <li><a href="#deviceregularupload">定时上报</a></li>
+		<li><a href="#devicealertupload">触发上报</a></li> 
+		<li><a href="#cloudpush2client">云平台推送数据到第三方平台或者发送EMAIL</a></li> 
+		<li><a href="#cloudrequestdevice">云平台请求设备数据</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">数据流</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>总体流程</h6>
+        <p>传感器感知到的数据被设备采集，然后通过网络定时或者触发方式上报到云端，云端处理存储数据，也会根据规则触发新的数据，乃至新数据推送到用户，第三方平台等。同样，第三方平台，或者云平台也可以主动请求设备上的数据。
+		   请求的方式可能是用户点击云平台的按钮，或者第三方系统通过API请求云服务器，云服务器转发请求到设备，设备回复数据。
+		</p>
+    </div>
+	
+	<div class="help-item" id="datastructure">
+	    <h6>数据格式</h6>
+	    <p>上报格式：不同传感器上报的具体数据含义不同，可以参看传感器对应的MODULE中的帮助文档，但上报的数据会以大致相同的JSON结构存储在数据库中。转发格式：上报的数据如需转发给客户的服务器，系统会对'上报格式'数据进行包装，然后再转发。
+		   以下为两种格式的例子。
+		</p>
+	    <p>id：为每条数据记录的id，deviceId：为设备的id号，moduleTypeId：表示处理该数据的模块id，request：如果是云端发送请求给设备，请求设备返回指定数据，request为请求的原始内容，requestTime：为请求的时间
+	      upload：上报的具体内容，具体要参看模块内的信息或<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">模块可执行命令</a>页面了解详情。uploadTime：上报的时间，command：上报的数据包内的command号，operate：发送请求到设备时指定的operate号，info：设备返回的提示或者警告信息,
+	      errorType：返回是否出错，dataCommType：上报的类型，dataCommSource：触发上报的来源。
+	    </p>	
+		<p>上报格式</p>
+
+		<code>
+{
+    "id": "67ab1784152cfa6319e84e26",
+    "deviceId": "67a9b3f7fc9137775691004f",
+	"deviceNo": "24587cd6ef0c",
+    "moduleTypeId": 13,
+    "request": null,
+    "requestTime": null,
+    "upload": {
+        "values": [
+            {
+                "pinValue": 0,
+                "pinMode": 33,
+                "pinType": "ESP",
+                "pin": 14,
+                "valueType": "ANALOG"
+            },
+            {
+                "pinValue": 0,
+                "pinMode": 60,
+                "pinType": "ESP",
+                "pin": 21,
+                "valueType": "DIGITAL"
+            },
+            {
+                "pinValue": 1,
+                "pinMode": 2,
+                "pinType": "EXT",
+                "pin": 2,
+                "valueType": "DIGITAL"
+            }
+        ]
+    },
+    "uploadTime": "2025-02-11T09:25:24.004123892Z",
+    "command": 5,
+    "operate": null,
+    "info": null,
+    "errorType": "OK",
+    "dataCommType": "PERIOD_UPLOAD",
+    "dataCommSource": "DEVICE_AUTO"
+}
+		</code>
+		<p>转发格式</p>
+		<p>可以看出转发格式中的content字段内容就是上报格式内容，只是增加了一个key，该key是用户key的md5值，第三方服务器接收到转发信息后，可以根据key的值判断是否冒充数据。
+		</p>
+		<code>
+{
+    "key": "4a924f53cabb09913d0bac1217e39d0e",
+    "content": {
+        "id": "67ab1784152cfa6319e84e26",
+        "deviceId": "67a9b3f7fc9137775691004f",
+        "deviceNo": "24587cd6ef0c",
+        "moduleTypeId": 13,
+        "request": null,
+        "requestTime": null,
+        "upload": {
+            "values": [
+                {
+                    "pinValue": 0,
+                    "pinMode": 33,
+                    "pinType": "ESP",
+                    "pin": 14,
+                    "valueType": "ANALOG"
+                },
+                {
+                    "pinValue": 0,
+                    "pinMode": 60,
+                    "pinType": "ESP",
+                    "pin": 21,
+                    "valueType": "DIGITAL"
+                },
+                {
+                    "pinValue": 1,
+                    "pinMode": 2,
+                    "pinType": "EXT",
+                    "pin": 2,
+                    "valueType": "DIGITAL"
+                }
+            ]
+        },
+        "uploadTime": "2025-02-11T09:25:24.004123892Z",
+        "command": 5,
+        "operate": null,
+        "info": null,
+        "errorType": "OK",
+        "dataCommType": "PERIOD_UPLOAD",
+        "dataCommSource": "DEVICE_AUTO"
+    }
+}		
+        </code>
+	</div>
+		
+	<div class="help-item" id="deviceregularupload">
+	    <h6>定时上报</h6>
+	    <p>设备启动后，首先执行app_main.c中的app_main函数，该函数初始化后会创建任务列表如下，如果不需要执行某些任务，直接注释掉或者删除即可，<a href="/dc/pub/doc?page=config" target="_blank">点击</a>配置可以查看上报周期等配置信息。</p>
+	   <pre><code>
+UTIL_TASK_ADD(task_idx,gpio_util_upload,CONFIG_GPIO_ONOFF,CONFIG_GPIO_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,uart_util_upload,CONFIG_UART_ONOFF,CONFIG_UART_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,meta_upload,CONFIG_META_ONOFF,CONFIG_META_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,camera_upload,CONFIG_CAMERA_ONOFF,CONFIG_CAMERA_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,tm7705_upload,CONFIG_TM7705_ONOFF,CONFIG_TM7705_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,bat_adc_upload,CONFIG_ADC_BAT_ONOFF,CONFIG_ADC_BAT_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,lora_util_upload,CONFIG_LORA_MODE,CONFIG_LORA_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,config_upload,CONFIG_CONFIG_UPLOAD_ONOFF,CONFIG_CONFIG_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,forward_upload,CONFIG_FORWARD_UPLOAD_ONOFF,CONFIG_FORWARD_UPLOAD_INTERVAL_SECONDS,NULL)	
+	    </code></pre>
+	   <p>然后以下循环会周期执行每个任务，具体任务的执行可以查看每个函数，如camera_upload实现了采集图片然后上传到云端的逻辑。</p>
+	   	   <pre><code>
+while(1)
+{
+   loop_times++;
+   #if 1
+   for(uint8_t i=0;(i&lt;task_idx)&amp;&amp;(all_tasks[i].status&gt;0);i++)
+   {
+	   loop_wait_on_interrupt(0);
+	   if((all_tasks[i].status)&amp;&amp;((all_tasks[i].exe_times==0)||((util_get_run_seconds()-all_tasks[i].exe_last_seconds)&gt;config_get_number(all_tasks[i].task_upload_interval_idex))))
+	   {
+		   uint32_t task_start_seconds=util_get_run_seconds();
+		   task_ret=-1;
+		   if(tcp_lock("module",pdMS_TO_TICKS(100*1000)) == pdTRUE)
+		   {
+			   task_ret=all_tasks[i].task_func(all_tasks[i].parameter);
+			   tcp_unlock("module");
+		   }
+		   if(task_ret&lt;0)
+			   all_tasks[i].exe_times_failed=all_tasks[i].exe_times_failed+1;
+		   all_tasks[i].exe_times=all_tasks[i].exe_times+1;
+		   all_tasks[i].result_last=task_ret;
+		   all_tasks[i].exe_last_seconds=util_get_run_seconds();
+	   }
+   }
+   #endif
+   loop_wait_on_interrupt(LOOP_INTERVAL_TICKS);
+}
+	    </code></pre>
+		<p>云端是通过相应模块接收，模块定义在ModuleDefine.java文件(云端java工程文件，不是这里的c语言文件)中，在同级目录下有各个模块的具体实现文件，如果需要增加新模块，仿照添加即可。</p>
+	</div>
+	
+	<div class="help-item" id="devicealertupload">
+	    <h6>触发上报</h6>
+	    <p>一些事件触发后要立刻上报到云端，比如串口收到数据，LORA收到指令，设备特定引脚的电平改变，这类事件会不定期触发，触发后要及时上报，如果需要添加新的触发，比如PIR红外触发，可以在app_main.c以下函数添加。</p>
+	   <pre><code>
+void loop_wait_on_interrupt(uint32_t max_tickets)
+{
+    uint32_t ticks1 = xTaskGetTickCount(), ticks2 = 0;
+    do
+    {
+        gpio_util_queue();
+        uart_util_queue();
+        restore_monitor();
+        ticks2 = xTaskGetTickCount();
+        ticks2 = ticks2 &gt;= ticks1 ? ticks2 - ticks1 : 0xffffffff - ticks1 + ticks2;
+    } while (max_tickets &gt; ticks2);    
+    if (util_get_run_seconds() &gt; (last_comm_seconds + config_get_number(CONFIG_NO_COMMUNICATE_SECONDS)))
+    {
+        ESP_LOGE(TAG, "upload failed too long %lu&gt;%lu+%lu", util_get_run_seconds(), last_comm_seconds, config_get_number(CONFIG_NO_COMMUNICATE_SECONDS));
+        util_reboot(9);
+    }
+}
+	    </code></pre>
+	</div>	
+	
+	<div class="help-item" id="cloudpush2client">
+	    <h6>云平台推送数据到第三方平台或者发送EMAIL</h6>
+	    <p>设备周期或者触发的上报数据被云平台接收后，云平台可以推送到用户的服务器上，但需要先<a href="/dc/web/apisetting" target="_blank">点击</a>这里配置，首先创建一个Key，然后设置通知方式，目前通知方式有两种，一种是转发，
+		用户只要把用户的接收URL输入进去即可，数据会以HTTP JSON方式推送给客户的服务器，其格式如下，各个字段容易理解，其中key为前面创建的key的MD5值，客户系统可以依据这个值来判断推送来的信息来源正确。</p>
+		<code>
+{
+    "key": "4a924f53cabb09913d0bac1217e39d0e",
+    "content": {
+        "id": "67ab1741152cfa6319e84e19",
+        "deviceId": "67a9b3f7fc9137775691004f",
+		"deviceNo": "24587cd6ef0c",
+        "moduleTypeId": 13,
+        "request": null,
+        "requestTime": null,
+        "upload": {
+            "values": [
+                {
+                    "pinValue": 0,
+                    "pinMode": 33,
+                    "pinType": "ESP",
+                    "pin": 14,
+                    "valueType": "ANALOG"
+                },
+                {
+                    "pinValue": 0,
+                    "pinMode": 60,
+                    "pinType": "ESP",
+                    "pin": 21,
+                    "valueType": "DIGITAL"
+                },
+                {
+                    "pinValue": 1,
+                    "pinMode": 2,
+                    "pinType": "EXT",
+                    "pin": 2,
+                    "valueType": "DIGITAL"
+                }
+            ]
+        },
+        "uploadTime": "2025-02-11T09:24:17.888191998Z",
+        "command": 5,
+        "operate": null,
+        "info": null,
+        "errorType": "OK",
+        "dataCommType": "PERIOD_UPLOAD",
+        "dataCommSource": "DEVICE_AUTO"
+    }
+}
+	   </code>
+	   <p>另外一种是EMAIL推送，主要针对小客户，客户没有自己的服务器，因此可以设置一个接收推送信息的EMAIL地址，并且设置一个正则表达式，一旦设备上报的信息匹配了正则表达式，信息内容会以EMAIL的方式发送给客户设置的EMAIL地址。
+		要成功推送需要：1) 设置正确的接收URL或者EMAIL地址 2) 点击转发右侧的"继续"来开启转发，点击后显示"暂停"，如果点击"暂停"会暂停转发 3) <a href="/dc/web/devicelist" target="_blank">点击</a>可以查所有设备列表，
+		点击需要开启转发功能的设备右侧的 <span><i class="bi bi-eye"></i></span> 图标查看设备的模块，点击每个模块右侧的 <span><i class="bi bi-caret-right-fill"></i></span> 图标开启该模块转发，点击 <span><i class="bi bi-pause-circle"></i></span> 则停止转发，
+		点击页面下方"转发"右侧的 <span><i class="bi bi-camera-video-fill"></i></span> 图标则开启设备的转发，点击 <span><i class="bi bi-camera-video-off-fill"></i></span> 图标则暂停转发，这两个图标的用处是暂时停止或者继续转发，而不会重置每个模块的状态，比如a,b,c模块为不转发状态，e，f为转发状态，暂停或者继续，不会影响a,b,c,e,f的状态，只是可能被转发的数据被拦截。
+		如果想一次重置所有模块为转发，可以点击"转发"右侧的<span><i class="bi bi-caret-right-fill"></i></span> 图标，a,b,c,d,e,f都会被设置为转发状态，如果想重置所有模块为停止转发，可以点击<span><i class="bi bi-pause-circle"></i></span>图标，a,b,c,d,e,f都会被设置为停止状态。
+	   </p>
+	   <p>
+		每个模块推送的具体数据不同，具体可以参见每个模块的信息。
+	   </p>
+	</div>	
+	<div class="help-item" id="cloudrequestdevice">
+	    <h6>云平台请求设备数据</h6>
+	    <p>设备会周期或者触发式的上报数据，因为设备与云平台时刻保持了TCP/IP连接，因此云平台也可以主动下发请求到设备，设备根据请求内容上报数据到云平台，具体协议为：a) 云平台发送请求到设备 b) 设备接收请求并回复数据到云平台 c) 云平台再次回复数据确认已经接收到上报。</p>
+	    <p>本质上向设备发送请求是通过向设备发送命令的方式实现的，具体不同模块支持的命令以及格式<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看<p>
+		<p>发送命令的方式有三种</p>
+		<p>1 通过点击模块页面中"运行状态"右面的<span><i class="bi bi-arrow-repeat"></i></span> 图标，点击后会提交类似 operate=xx的命令。<p>
+		<p>2 通过模块页面最下方的执行命窗口执行，如输入 operate=9 gpio_esp_no=0 status=1 pull_up=1 pull_down=0 然后回车，表示对ESP芯片的gpio0设置为输出高电平，上拉开启，下拉不开启。<p>
+	    <p>3 通过调用云端API的方式下发命令，具体如何调用<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看。<p>
+	</div>	
+</div>
+</body>
+</html>

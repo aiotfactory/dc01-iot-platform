@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_TM7705模块介绍</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+	<link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- 左侧导航栏 -->
+<div class="sidebar">
+    <h3>目录</h3>
+    <ul>
+        <li><a href="#description" class="active">模块说明</a></li>
+        <li><a href="#periodupload">数据上报-自动</a></li>
+		<li><a href="#commandupload">数据上报-命令</a></li> 
+		<li><a href="#forward">数据转发</a></li> 
+		<li><a href="#runtimeinfo">运行状态</a></li> 
+		<li><a href="#alertinfo">警报信息</a></li> 
+    </ul>
+</div>
+
+<!-- 主内容区域 -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_TM7705模块介绍</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>模块说明</h6>
+        <p>DC01产品上有个TM7705高精度16位A/D转换芯片，有两个引脚，可以同时采集两路数据。<a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">点击</a>查看MODULE_TM7705章节来配置引脚。
+		   如果引脚配置为开启采集，但没实际连接到被采集对象，也会采集到数值，而且数值会随机变动，这是因为浮空电压所致。
+		</p>
+    </div>
+	<div class="help-item" id="periodupload">
+	    <h6>数据上报-自动</h6>
+		<p>pin1Value,pin2Value分别为引脚1，2的采样值，如果该引脚没有开启则为null，数值单位为10uV，如2050意思是2050*10uV=205000uV=20.500mV=0.0205V，如果电压值为-100，表示读取出错。
+		</p>
+	    <pre><code>		
+{
+	"pin1Value": 2050,
+	"pin2Value": null
+}
+	    </code></pre>	
+	</div>
+	
+	<div class="help-item" id="commandupload">
+	    <h6>数据上报-命令</h6>
+		<p>通过向设备发送命令也会触发设备上报数据，<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">点击</a>查看TM7705相关章节了解可以执行那些命令，以及上报的数据格式。
+		</p>
+	</div>
+	<div class="help-item" id="forward">
+	    <h6>数据转发</h6>
+		<p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">点击</a>查看如何配置模块的数据转发。
+		   <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">点击</a>查看转发的数据格式。
+		</p>
+	</div>	
+	<div class="help-item" id="runtimeinfo">
+	    <h6>运行状态</h6>
+		<p>Spi Host，host=2,miso=gpio_esp_39,mosi=gpio_esp_38,sclk=gpio_esp_40，表示读取本模块时，ESP芯片所用的Spi Host编号，以及引脚。</p>
+		<p>Spi TM7705	device=1,cs=gpio_ext_io5,reset=gpio_ext_oc0,power=gpio_ext_oc15(shared with i2c power) 表示ESP芯片上SPI的device编号，以及cs,reset和power引脚。</p>
+		<p>TM7705 Status	{"max_value_pin1":2169,"read_failed_times":0,"max_value_pin2":0,"read_times":19,"init_failed_times":0,"reset_times":1}
+		   表示从开机到现在，max_value_pin1/2引脚1/2读取的最大值，read_failed_times读取失败次数，read_times读取次数，init_failed_times初始化失败次数，reset_times重置次数。
+		</p>
+	</div>	
+	<div class="help-item" id="alertinfo">
+	    <h6>警报信息</h6>
+		<p>当引脚的值发生突变，会产生报警信息，其原理是每次新数据会和之前10条数据值进行对比，一旦超过或者低于较大幅度会产生报警信息，模块页面会显示最近的前10条报警信息。</p>
+	</div>	
+</div>
+</body>
+</html>

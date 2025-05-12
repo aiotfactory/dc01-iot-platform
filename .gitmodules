@@ -1,0 +1,3 @@
+[submodule "comm"]
+	path = comm
+	url = https://gitee.com/aiotfactory/private-dc01-iot-platform.git

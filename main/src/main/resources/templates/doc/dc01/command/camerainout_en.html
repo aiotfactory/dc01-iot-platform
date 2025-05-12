@@ -1,0 +1,56 @@
+<h5>Description</h5>
+<p>The device can be configured to periodically upload captured images, or you can use this command to temporarily retrieve an image.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 15</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Examples</h5>
+<div>
+    <strong>Capture an image and return the image content in base64 format:</strong>
+    <p><code>operate=15</code></p>
+    <p>Response</p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><code>picName</code></td>
+                <td>The generated image name, also stored in the cloud.</td>
+            </tr>
+            <tr>
+                <td><code>picContentBase64</code></td>
+                <td>Since JSON cannot transmit binary data, the image content is encoded in base64 format.</td>
+            </tr>
+            <tr>
+                <td><code>picId</code></td>
+                <td>The ID of the image stored in the cloud.</td>
+            </tr>
+            <tr>
+                <td><code>info</code></td>
+                <td>Indicates successful retrieval.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Successful Example</p>
+    <p><code>{"id":"67b453c435968529457187f7","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":6,"request":{"rawString":"operate=15","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-18T09:32:51.201379348Z","upload":{"picContentBase64":"/9j/4AAQSkZJRgABAQEAAKKBhRQIKKACigAooAKKACigAooAXNSLIRQBIJM07NAgppoAjIptAxKUNigBTITTc0AJRQAlFABRQAUtACUUAFFABS0AJmkoASigAooAKKACigAooAKKACkoAWigAooAKSgAooAP//Z","picName":"24587cd6ef0c-20250218173252.jpeg","picSize":9513,"picId":"67b453c435968529457187f5"},"uploadTime":"2025-02-18T09:32:52.216155138Z","command":3,"operate":15,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+    <p>Failure Example</p>
+    <p><code>{"id":"67b455c94db5084335f3d46b","deviceId":"67ac4240c2fb41360998f33d","moduleTypeId":6,"request":{"rawString":"operate=15","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-18T09:41:19.098632338Z","upload":null,"uploadTime":"2025-02-18T09:41:29.101860063Z","command":null,"operate":15,"info":"java.util.concurrent.TimeoutException","errorType":"DEVICE_REQUEST_TIMEOUT","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

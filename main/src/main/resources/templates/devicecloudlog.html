@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en" data-bs-theme="auto" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="#{device_log_view}">Device Log View</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/dc/css/flatpickr.min.css">
+    <script src="/dc/js/flatpickr.js"></script>
+    <style>
+        /* 设置log-text的最大高度，并且自动溢出内容 */
+        .log-text {
+            max-height: 180px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;  /* 限制显示的行数 */
+            -webkit-box-orient: vertical;
+            cursor: pointer;
+        }
+
+        /* 展开日志时，不限制最大高度 */
+        .log-text.expanded {
+            max-height: none;
+            -webkit-line-clamp: unset;
+        }
+
+        .btn-toggle {
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #007bff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-toggle:hover {
+            text-decoration: underline;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-family: Consolas, "Courier New", monospace;
+        }
+
+        /* 防止Log Content列溢出，并根据内容自动调整列宽 */
+        .table {
+            table-layout: auto;  /* 自动调整列宽 */
+            width: 100%;
+        }
+
+        th, td {
+            text-overflow: ellipsis;  /* 超长文本显示省略号 */
+            overflow: hidden;
+            white-space: nowrap;  /* 时间列禁止换行 */
+        }
+
+        .log-text {
+            word-wrap: break-word;  /* 长文本换行 */
+            white-space: normal;    /* 允许log内容换行 */
+        }
+
+        /* 设置列宽，避免时间列溢出 */
+        th, td {
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white text-uppercase">
+                <span th:text="#{log_details_for}">Log Details for </span><span th:text="${deviceNo}"></span>
+            </div>
+            <div class="card-body">
+                <form id="deviceLogForm" action="/dc/web/devicecloudlog" method="GET">
+                    <div class="row">
+                        <div class="col-md-6 d-flex">
+                            <!-- Start Date Icon -->
+                            <div class="input-group">
+                                <span class="input-group-text" id="startIcon">
+                                    <i class="bi bi-calendar"></i>
+                                </span>
+                                <input type="text" id="startDate" name="startDate" class="form-control" th:placeholder="#{select_start_time}">
+                            </div>
+                            <!-- End Date Icon -->
+                            <div class="input-group ms-3">
+                                <span class="input-group-text" id="endIcon">
+                                    <i class="bi bi-calendar"></i>
+                                </span>
+                                <input type="text" id="endDate" name="endDate" class="form-control" th:placeholder="#{select_end_time}">
+                            </div>
+                        </div>
+                        <!-- Filter Button -->
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary w-100" onclick="filterLog()" th:text="#{filter}">Filter</button>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <!-- Refresh Button -->
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-secondary w-100" onclick="refreshLog(1000)">Tail 1000</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-secondary w-100" onclick="refreshLog(100)">Tail 100</button>
+                        </div>
+                    </div>
+                    <input type="hidden" name="deviceId" th:value="${deviceId}">
+                </form>
+
+                <div class="table-responsive mt-4">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" th:text="#{upload_time}">Upload Time</th>
+                                <th scope="col" th:text="#{log_ontent}">Log Content</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="log : ${logs}">
+                                <td th:text="${log.time}"></td>
+                                <td>
+                                    <div class="log-text" th:utext="${log.content}"></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 将 script 标签放在页面末尾 -->
+    <script src="/dc/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">    
+        function refreshLog(topNum) {
+            const deviceId = document.querySelector('input[name="deviceId"]').value;
+            const newUrl = '/dc/web/devicecloudlog?&deviceId='+deviceId+'&topNum='+topNum;
+            window.location.href = newUrl;
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            let startTime = [[${startTime}]];
+            let endTime = [[${endTime}]];
+            flatpickr("#startDate", {
+                allowInput: true, 
+                enableTime: true,
+                time_24hr: true,
+                dateFormat: "Y-m-d H:i",
+                defaultDate: startTime,
+            });
+
+            flatpickr("#endDate", {
+                allowInput: true, 
+                enableTime: true,
+                time_24hr: true,
+                dateFormat: "Y-m-d H:i",
+                defaultDate: endTime,
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+    <h5>说明</h5>
+    <p>对应用程序开发工程师来说，I2C这些概念不容易理解，简单来说，我们写程序时比如调用socket，程序帮我们封装了物理层，但实际物理层肯定是电信号的交换，比如某一时刻，一个引脚是高电平，那么就表示1，否则表示0的意思，硬件就是通过这些高低电平的变化来是实现信息交互。</p>
+    <p>比如我们自己设计一个交互逻辑，用a,b两根线，分别连接到两个芯片的对应引脚，为了交互信息，比如我们约定b这跟线的电压每1ms变化一次，那么a用于数据传输，当b电压变化时，比如高到低变化或者低到高变化，我们接收芯片就测量a线的电压，如果那时是高，就是数据1，如果是低，就是数据0，那么发送芯片只要控制好节奏，在规定的1ms变化间把a线的电压控制为高或者低电平就可以传输数据，这就是一种简单的硬件接口定义，业界实际上定义了很多类似接口，有的用到2根线，有的用到3根线或者更多根线，但实际原理都是大同小异，一般我们也不需要去了解协议的所有细节，因为底层驱动已经实现了这些电平控制。</p>
+	<p>UART就是其中的一个协议，很多设备采用UART协议传输，UART和SPI或者I2C比，通讯两端是对等关系，如上所述SPI或者I2C对传感器写入或者读取数据都是以ESP为主，由ESP发起，也就是ESP不发起，传感器不会主动发送数据，因此ESP是master，传感器是slave。但UART是对等协议，通讯两端的设备A和B，无论A或者B都可以主动发送数据，另外UART只能点对点传输，也就是两个设备接在一起，而不能三个或者以上设备连接。</p>
+	<p>UART通常用两根线进行传输，称为TX（发送）和RX（接收），因此两个设备的引脚要反接，就是A设备的TX接B设备的RX，A设备的RX接B设备的TX，如果只想读取或者发送，接一根线也可以，另外两个设备的GND（地线）要相连接。</p>
+	<h5>接收数据</h5>
+	<p>因为设备间是对等关系，因此对方设备可能随时会发送数据到本设备的RX引脚，本设备随时按预定义的配置待命，收到数据后上报到云端，云端会存储进而转发数据。因此有两种方式获得数据，一是通过api查询云端的最新接收数据，另外一个更好办法是事先注册一个第三方系统URL，这样云端收到设备数据后即可推送给指定URL。</p>
+	<p>查询方式点击<a href="/dc/web/doc?page=api&deviceType=dc01" target="_blank">这里</a>通过API "Data Forward List" 可以查询上报的数据。</p>
+	<p>推送转发方式点击<a href="/dc/web/apisetting" target="_blank">这里</a>配置你的接收URL,接收到的UART消息会以HTTP POST方式转发给你的URL</p>
+	<table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+            </tr>
+        </thead>
+        <tbody>
+			<tr>
+			    <td><code>deviceId</code></td>
+			    <td>上报数据的设备ID。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>
+			<tr>
+			    <td><code>deviceNo</code></td>
+			    <td>上报数据的设备编码，通常会粘贴在设备表面。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>
+			<tr>
+			    <td><code>protocolType</code></td>
+				<td>区分是UART还是RS485。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>	
+			<tr>
+			    <td><code>dataType</code></td>
+				<td>UART上报数据类型，DTU rx收到数据，PROPERTY 设备上报的uart状态信息。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>		
+			<tr>
+			    <td><code>rxData</code></td>
+				<td>上报的数据的hex值，因为可能含有不可见字符，因此全部转为hex传输，接收端要解码hex字符串。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>字符串</td>
+			</tr>									
+        </tbody>
+    </table>
+	<h5>例子</h5>
+	<div>
+	    <p><strong>你的服务器会以HTTP POST接收到UART上报的数据:</strong></p>
+	    <code>{
+		    "key": "f402afaa0f9ceeeb230ce6291c95c306",
+		    "content": {
+		        "id": "67b69eff87025163883ee59e",
+		        "deviceId": "67b460755a961507ca44bc0d",
+		        "moduleTypeId": 8,
+		        "request": null,
+		        "requestTime": null,
+		        "upload": {
+					"protocolType": "UART",
+					"dataType": "DTU",
+		            "rxData": "61616161610d0a",
+		            "rxTimes": 0,
+		            "rxLength": 14,
+		            "rxTimesFailed": 0,
+		            "rxUploadFailed": 0,
+		            "rxFifoOverTimes": 0,
+		            "rxBufFullTimes": 0,
+		            "rxBreakTimes": 0,
+		            "rxParityErrTimes": 0,
+		            "rxFrameErrTimes": 0,
+		            "txLength": 0,
+		            "txTimes": 0,
+		            "txTimesFailed": 0
+		        },
+		        "uploadTime": "2025-02-20T03:18:23.789719945Z",
+		        "command": 6,
+		        "operate": null,
+		        "info": null,
+		        "errorType": "OK",
+		        "dataCommType": "INTERRUPT_UPLOAD",
+		        "dataCommSource": "DEVICE_AUTO"
+		    }
+		}</code>
+	</div>
+	
+	<h5>发送数据</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>参数</th>
+                <th>描述</th>
+                <th>必须</th>
+                <th>类型</th>
+				<th>字节</th>
+                <th>入出</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><code>operate</code></td>
+                <td>固定为8</td>
+                <td><span class="badge badge-required">是</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+			<tr>
+			    <td><code>tx_data</code></td>
+				<td>这个表示要传输的数据，这里并不再有tx_data_len，云端会根据tx_data实际设置的数值在传输给设备前补充数据长度。这里用hex表示数值，以0x开头，比如想传输数值3，那就是0x03，其中0表示数值3的高4bits是0，3表示低4bits是3。比如传输小写字母a，那就是0x61，因为十六进制0x61正好是字母a的ascii码。</td>
+			    <td><span class="badge badge-required">是</span></td>
+			    <td>数字</td>
+				<td>x</td>
+			    <td>输入</td>
+			</tr>
+            <tr>
+                <td><code>tx_pin</code></td>
+                <td>GPIO号，比如gpio_esp_21用作tx引脚，那么这里写21，如果不传输这个参数，设备会使用预定义的，具体是那个可以参看UART模块的配置页面，这里传输后会覆盖和修改默认配置，因此如果想修改配置，传输一次后，之后可以不再传输。</td>
+                <td><span class="badge badge-optional">否</span></td>
+                <td>数字</td>
+				<td>1</td>
+                <td>输入</td>
+            </tr>
+			<tr> 
+			    <td><code>rx_pin</code></td>
+			    <td>GPIO号，比如gpio_esp_2用作rx引脚，那么这里写2，如果不传输这个参数，设备会使用预定义的，具体是那个可以参看UART模块的配置页面，这里传输后会覆盖和修改默认配置，因此如果想修改配置，传输一次后，之后可以不再传输。</td>
+			    <td><span class="badge badge-optional">否</span></td>
+			    <td>数字</td>
+				<td>1</td>
+			    <td>输入</td>
+			</tr>
+            <tr>
+                <td><code>baud_rate</code></td>
+                <td>波特率，表示传输和接收的速度，和需要连接的设备支持的波特率匹配即可，一般用115200比较多，如果不传输这个参数，设备会使用预定义的，具体是那个可以参看UART模块的配置页面，这里传输后会覆盖和修改默认配置，因此如果想修改配置，传输一次后，之后可以不再传输。</td>
+                <td><span class="badge badge-optional">否</span></td>
+                <td>数字</td>
+				<td>4</td>
+                <td>输入</td>
+            </tr>										
+        </tbody>
+    </table>
+    <h5>例子</h5>
+    <div>
+        <strong>tx用gpio 2，rx用gpio 14，波特率115200，传输0x303132，实际上接收端收到ascii符打印出来为字母012:</strong>
+        <p><code>operate=8 tx_data=0x303132 tx_pin=2 rx_pin=14 baud_rate=115200</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67b69a9c87025163883ee51a","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":8,"request":{"rawString":"operate=8 tx_data=0x303132 tx_pin=2 rx_pin=14 baud_rate=115200","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-20T02:59:40.371935775Z","upload":null,"uploadTime":"2025-02-20T02:59:40.682589016Z","command":3,"operate":8,"info":"tx done","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+        <hr>
+        <strong>用默认配置传输:</strong>
+        <p><code>operate=8 tx_data=0x303132</code></p>
+		<p>返回</p>
+		<p><code>{"id":"67b69a6987025163883ee513","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":8,"request":{"rawString":"operate=8 tx_data=0x303132","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-20T02:58:48.159729956Z","upload":null,"uploadTime":"2025-02-20T02:58:49.072281797Z","command":3,"operate":8,"info":"tx done","errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p> 
+    </div>

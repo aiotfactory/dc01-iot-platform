@@ -1,0 +1,13 @@
+{
+  "params": null,
+  "inputComments": "No input",
+  "inputDefinition": null,
+  "inputExample": null,
+  "outputComments": "Return all devices under the user, the children of the user and users cloned by the user.",
+  "outputDefinition": "<table class=\"table table-bordered table-hover table-striped\"><tbody><tr><td>iccid</td><td>Sim card no</td></tr><tr><td>imei</td><td>Imei of 4g module</td></tr><tr><td>ownerShip</td><td>Child, the device belongs the child of current user;clone, the device belongs to the user cloned by current user; empty, the device is owned by the current user.</td></tr><tr><td>uploadTime</td><td>Latest data upload time to cloud</td></tr><tr><td>deviceStatus</td><td>0, no data uploaded; 1, latest upload is within 24 hours; 2, latest upload is within 30 minutes</td></tr></tbody></table>",
+  "outputExample": "{\r\n  \"deviceList\": [\r\n    {\r\n      \"iccid\": \"\",\r\n      \"ownerShip\": \"\",\r\n      \"colorStatus\": 0,\r\n      \"imei\": \"\",\r\n      \"id\": \"6728af1db4fffe5cd00fd2d2\",\r\n      \"deviceNo\": \"24587cf06b91\",\r\n      \"uploadTime\": \"\",\r\n      \"deviceName\": \"abc\",\r\n      \"deviceStatus\": \"ENABLED\"\r\n    }\r\n\t...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "protocol": "GET_POST",
+  "jsonContent": "{\r\n  \"deviceList\": [\r\n    {\r\n      \"iccid\": \"\",\r\n      \"ownerShip\": \"\",\r\n      \"colorStatus\": 0,\r\n      \"imei\": \"\",\r\n      \"id\": \"6728af1db4fffe5cd00fd2d2\",\r\n      \"deviceNo\": \"24587cf06b91\",\r\n      \"uploadTime\": \"\",\r\n      \"deviceName\": \"abc\",\r\n      \"deviceStatus\": \"ENABLED\"\r\n    }\r\n\t...\r\n  ],\r\n  \"status\": \"ok\"\r\n}",
+  "apiKey":"[[${apiKey}]]",
+  "apiRunning":"[[${apiRunning}]]"
+}

@@ -1,0 +1,61 @@
+<h5>Description</h5>
+<p>The circuit board includes SPI modules such as LORA and TM7705. Additionally, other SPI modules can be externally connected to the board. This command allows you to check the operating status of SPI-related devices.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 4</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Number</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Example</h5>
+<div>
+    <strong>Get SPI operating status:</strong>
+    <p><code>operate=4</code></p>
+    <p>Response</p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><code>spi_bus</code></td>
+                <td>1 indicates successful initialization, 0 indicates failure</td>
+            </tr>
+            <tr>
+                <td><code>0.noname:inited</code></td>
+                <td>0 represents SPI device 0. A total of 5 SPI devices are supported, numbered 0-4. Device 0 is for the LORA module on the board, device 1 is for the TM7705 sensor, device 2 is for the W5500 chip, and devices 3 and 4 can be used for external modules.</td>
+            </tr>
+            <tr>
+                <td><code>0.noname:inited</code></td>
+                <td>The "name" indicates whether a name was assigned during the initialization of each module. If no name was assigned, it defaults to "noname."</td>
+            </tr>
+            <tr>
+                <td><code>0.noname:inited=0</code></td>
+                <td>Indicates that SPI device number 0, which corresponds to the LORA module, has not been initialized or enabled.</td>
+            </tr>
+            <tr>
+                <td><code>0.noname:inited=0,tx=0,rx=0,fail=0;</code></td>
+                <td>"tx" and "rx" represent the number of transmissions and receptions, respectively, and "fail" represents the number of failures. Since the device was not initialized, all values are 0.</td>
+            </tr>
+            <tr>
+                <td><code>1.not set:inited=1,tx=12,rx=17,fail=0;</code></td>
+                <td>SPI device number 1, corresponding to the TM7705, has been initialized and has transmitted 12 times, received 17 times, with 0 failures.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p><code>{"id":"67b5bebc19fe35439944f64a","deviceId":"67b460755a961507ca44bc0d","moduleTypeId":9,"request":{"rawString":"operate=4","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-19T11:21:30.130632880Z","upload":{"spi01":"1.tm7705:inited=1,tx=6,rx=37,fail=0","spi00":"0.noname:inited=0,tx=0,rx=0,fail=0","spi03":"3.noname:inited=0,tx=0,rx=0,fail=0","spi02":"2.noname:inited=0,tx=0,rx=0,fail=0","spi04":"4.noname:inited=0,tx=0,rx=0,fail=0","spiBus":1},"uploadTime":"2025-02-19T11:21:32.935215583Z","command":3,"operate":4,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

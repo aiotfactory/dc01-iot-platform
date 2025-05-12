@@ -1,0 +1,63 @@
+{
+    "moduleName": "MODULE_PIR",
+    "moduleComments": "侦测人和动物的动作。",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "pir_mode",
+            "sample": "1",
+            "range": "0-5",
+            "comments": "模式开关，0：关闭，1：有活动触发上报，2：无活动触发上报，3：变化就触发上报，如从无活动变为有活动或从有活动变为无活动。"
+        },
+        {
+            "order": 2,
+            "name": "pir_upload_interval_seconds",
+            "sample": "10",
+            "range": "0-0xffffffff秒",
+            "comments": "配置模块数据周期上传的间隔时间（秒）。"
+        },
+        {
+            "order": 3,
+            "name": "pir_valid_times",
+            "sample": "3",
+            "range": "0-0xffffffff次",
+            "comments": "用于放置干扰，必须触发指定次数才算有效，如果设置为0，表示任何触发都算作有效。"
+        },
+        {
+            "order": 4,
+            "name": "pir_not_repeat_upload_seconds",
+            "sample": "3",
+            "range": "0-0xffffffff秒",
+            "comments": "为防止频发上报数据，设置为X秒内只上报一次，0表示任何触发都上报。"
+        },
+        {
+            "order": 5,
+            "name": "pir_gpio_num",
+            "sample": "14",
+            "range": "有效的ESP芯片GPIO引脚",
+            "comments": "指定ESP芯片GPIO引脚号，14比较方便，建议使用。"
+        },
+        {
+            "order": 6,
+            "name": "pir_action",
+            "sample": "1",
+            "range": "0或1",
+            "comments": "触发后采取的连带措施，目前支持1，表示触发后拍摄照片，0表示没有连带措施。"
+        },
+        {
+            "order": 7,
+            "name": "pir_action_times",
+            "sample": "3",
+            "range": "0-0xffffffff",
+            "comments": "连带措施实施次数，如拍照X次。"
+        },
+        {
+            "order": 8,
+            "name": "pir_action_interval_seconds",
+            "sample": "3",
+            "range": "0-0xffffffff",
+            "comments": "连带措施实施间隔Y秒，比如出发后拍摄X次照片，每次拍摄间隔Y秒。"
+        }
+    ],
+    "status": "ok"
+}

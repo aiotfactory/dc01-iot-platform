@@ -1,0 +1,66 @@
+<h5>Description</h5>
+<p>The module is used to detect temperature and humidity. Since the module is pre-installed on the circuit board, the temperature of the circuit board will increase slightly during operation, so the measured temperature will be slightly higher than the ambient temperature.</p>
+<!-- Parameter Table -->
+<h5>Parameter Description</h5>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Parameter</th>
+            <th>Description</th>
+            <th>Required</th>
+            <th>Type</th>
+            <th>Bytes</th>
+            <th>Input/Output</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><code>operate</code></td>
+            <td>Fixed value: 19</td>
+            <td><span class="badge badge-required">Yes</span></td>
+            <td>Numeric</td>
+            <td>1</td>
+            <td>Input</td>
+        </tr>
+    </tbody>
+</table>
+<h5>Example</h5>
+<div>
+    <strong>Get Temperature and Humidity:</strong>
+    <p><code>operate=19</code></p>
+    <p>Response, Normal</p>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <td><code>temperature</code></td>
+                <td>The measured temperature; divide by 100 to get the value in Celsius.</td>
+            </tr>
+            <tr>
+                <td><code>humidity</code></td>
+                <td>The measured humidity; divide by 100 to get the percentage value.</td>
+            </tr>
+            <tr>
+                <td><code>temperatureMax, temperatureMin</code></td>
+                <td>The maximum and minimum temperatures measured since the device was powered on.</td>
+            </tr>
+            <tr>
+                <td><code>humidityMax, humidityMin</code></td>
+                <td>The maximum and minimum humidity values measured since the device was powered on.</td>
+            </tr>
+            <tr>
+                <td><code>timesTotal, timesSuccess</code></td>
+                <td>The total number of measurements and successful measurements since the device was powered on.</td>
+            </tr>
+            <tr>
+                <td><code>flag</code></td>
+                <td>A value of 0 indicates normal measurement; any other value indicates abnormal measurement.</td>
+            </tr>
+            <tr>
+                <td><code>status</code></td>
+                <td>The status byte read from the AHT20 sensor; this is the 0th byte when reading 7 bytes of data.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Response Normal</p>
+    <p><code>{"id":"67bd9353d9546c2e21de6636","deviceId":"67bd8c60d9546c2e21de6536","deviceNo":"24587cd6ef0c","moduleTypeId":17,"request":{"rawString":"operate=19","sourceType":"CLOUD_COMMAND","ip":"127.0.0.1"},"requestTime":"2025-02-25T09:54:26.661990346Z","upload":{"temperature":2073,"temperatureMax":2074,"temperatureMin":2073,"humidity":3469,"humidityMax":3469,"humidityMin":3456,"flag":0,"status":28,"timesSuccess":3,"timesTotal":3},"uploadTime":"2025-02-25T09:54:27.193098718Z","command":3,"operate":19,"deviceRequestPack":2,"deviceUploadPack":2,"info":null,"errorType":"OK","dataCommType":"REQUEST_UPLOAD","dataCommSource":"CLOUD_COMMAND"}</code></p>
+</div>

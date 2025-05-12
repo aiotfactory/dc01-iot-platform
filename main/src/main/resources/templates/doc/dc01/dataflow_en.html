@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Flow</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        /* Sidebar styles */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+        .sidebar h3 {
+            color: #ffffff;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+        .sidebar ul li {
+            margin-bottom: 10px;
+        }
+        .sidebar ul li a {
+            color: #bdc3c7;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .sidebar ul li a:hover {
+            background-color: #34495e;
+            color: #ffffff;
+        }
+        .sidebar ul li a.active {
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+        /* Main content area styles */
+        .main-content {
+            margin-left: 270px; /* Leave space for the sidebar */
+            padding: 20px;
+        }
+        .help-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #007bff;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .help-item:hover {
+            background-color: #e9ecef;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .help-item h5 {
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .help-item a {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: 500;
+        }
+        .help-item a:hover {
+            text-decoration: underline;
+        }
+        .help-item p {
+            line-height: 1.6;
+            color: #4a4a4a;
+        }
+        .help-item h6 {
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #34495e;
+        }
+		
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#process" class="active">Overall Process</a></li>
+		<li><a href="#datastructure">Data Format</a></li>
+        <li><a href="#deviceregularupload">Scheduled Upload</a></li>
+		<li><a href="#devicealertupload">Triggered Upload</a></li> 
+		<li><a href="#cloudpush2client">Cloud Platform Push Data to Third-party Platforms or Send EMAIL</a></li> 
+		<li><a href="#cloudrequestdevice">Cloud Platform Requests Device Data</a></li> 
+    </ul>
+</div>
+
+<!-- Main content area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">Data Flow</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Overall Process</h6>
+        <p>The data sensed by sensors is collected by devices and then reported to the cloud via network periodically or triggered events. The cloud processes and stores this data, which can also generate new data based on rules and push it to users, third-party platforms, etc. Similarly, third-party platforms or the cloud platform can proactively request data from the device.
+		   The request may be initiated by a user clicking a button on the cloud platform or through an API request from a third-party system to the cloud server, which forwards the request to the device, and the device responds with data.
+		</p>
+    </div>
+	
+	<div class="help-item" id="datastructure">
+	    <h6>Data Format</h6>
+	    <p>Report format: Different sensors report specific data meanings, which can be found in the help documentation corresponding to the sensor's MODULE. However, the reported data will be stored in the database in roughly the same JSON structure. Forwarding format: If the reported data needs to be forwarded to a customer's server, the system packages the 'report format' data before forwarding.
+		   Below are examples of both formats.
+		</p>
+	    <p>id: ID of each data record, deviceId: ID number of the device, moduleTypeId: ID representing the module processing the data, request: If the cloud sends a request to the device asking for specific data, request contains the original request content, requestTime: Time of the request.
+	      upload: Specific content being reported, refer to information within modules or visit the <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">module executable commands</a> page for more details. uploadTime: Time of reporting, command: Command number in the reported data packet, operate: Number specified when sending a request to the device, info: Hint or warning message returned by the device,
+	      errorType: Whether there was an error, dataCommType: Type of report, dataCommSource: Source triggering the report.
+	    </p>	
+		<p>Report Format</p>
+
+		<code>
+{
+    "id": "67ab1784152cfa6319e84e26",
+    "deviceId": "67a9b3f7fc9137775691004f",
+	"deviceNo": "24587cd6ef0c",
+    "moduleTypeId": 13,
+    "request": null,
+    "requestTime": null,
+    "upload": {
+        "values": [
+            {
+                "pinValue": 0,
+                "pinMode": 33,
+                "pinType": "ESP",
+                "pin": 14,
+                "valueType": "ANALOG"
+            },
+            {
+                "pinValue": 0,
+                "pinMode": 60,
+                "pinType": "ESP",
+                "pin": 21,
+                "valueType": "DIGITAL"
+            },
+            {
+                "pinValue": 1,
+                "pinMode": 2,
+                "pinType": "EXT",
+                "pin": 2,
+                "valueType": "DIGITAL"
+            }
+        ]
+    },
+    "uploadTime": "2025-02-11T09:25:24.004123892Z",
+    "command": 5,
+    "operate": null,
+    "info": null,
+    "errorType": "OK",
+    "dataCommType": "PERIOD_UPLOAD",
+    "dataCommSource": "DEVICE_AUTO"
+}
+		</code>
+		<p>Forwarding Format</p>
+		<p>The content field in the forwarding format is the content of the report format, but with an additional key that is the MD5 value of the user key. Upon receiving the forwarded information, the third-party server can determine if it is fake data based on the key value.
+		</p>
+		<code>
+{
+    "key": "4a924f53cabb09913d0bac1217e39d0e",
+    "content": {
+        "id": "67ab1784152cfa6319e84e26",
+        "deviceId": "67a9b3f7fc9137775691004f",
+        "deviceNo": "24587cd6ef0c",
+        "moduleTypeId": 13,
+        "request": null,
+        "requestTime": null,
+        "upload": {
+            "values": [
+                {
+                    "pinValue": 0,
+                    "pinMode": 33,
+                    "pinType": "ESP",
+                    "pin": 14,
+                    "valueType": "ANALOG"
+                },
+                {
+                    "pinValue": 0,
+                    "pinMode": 60,
+                    "pinType": "ESP",
+                    "pin": 21,
+                    "valueType": "DIGITAL"
+                },
+                {
+                    "pinValue": 1,
+                    "pinMode": 2,
+                    "pinType": "EXT",
+                    "pin": 2,
+                    "valueType": "DIGITAL"
+                }
+            ]
+        },
+        "uploadTime": "2025-02-11T09:25:24.004123892Z",
+        "command": 5,
+        "operate": null,
+        "info": null,
+        "errorType": "OK",
+        "dataCommType": "PERIOD_UPLOAD",
+        "dataCommSource": "DEVICE_AUTO"
+    }
+}		
+        </code>
+	</div>
+		
+	<div class="help-item" id="deviceregularupload">
+	    <h6>Scheduled Upload</h6>
+	    <p>After the device starts up, it first executes the app_main function in app_main.c. After initialization, this function creates a task list as follows. If certain tasks do not need to be executed, they can be commented out or deleted. Click <a href="/dc/pub/doc?page=config" target="_blank">here</a> to configure the upload intervals and other settings.</p>
+	   <pre><code>
+UTIL_TASK_ADD(task_idx,gpio_util_upload,CONFIG_GPIO_ONOFF,CONFIG_GPIO_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,uart_util_upload,CONFIG_UART_ONOFF,CONFIG_UART_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,meta_upload,CONFIG_META_ONOFF,CONFIG_META_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,camera_upload,CONFIG_CAMERA_ONOFF,CONFIG_CAMERA_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,tm7705_upload,CONFIG_TM7705_ONOFF,CONFIG_TM7705_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,bat_adc_upload,CONFIG_ADC_BAT_ONOFF,CONFIG_ADC_BAT_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,lora_util_upload,CONFIG_LORA_MODE,CONFIG_LORA_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,config_upload,CONFIG_CONFIG_UPLOAD_ONOFF,CONFIG_CONFIG_UPLOAD_INTERVAL_SECONDS,NULL)	
+UTIL_TASK_ADD(task_idx,forward_upload,CONFIG_FORWARD_UPLOAD_ONOFF,CONFIG_FORWARD_UPLOAD_INTERVAL_SECONDS,NULL)	
+	    </code></pre>
+	   <p>The following loop periodically executes each task. For detailed task execution, see individual functions, such as camera_upload, which implements logic for capturing images and uploading them to the cloud.</p>
+	   	   <pre><code>
+while(1)
+{
+   loop_times++;
+   #if 1
+   for(uint8_t i=0;(i&lt;task_idx)&amp;&amp;(all_tasks[i].status&gt;0);i++)
+   {
+	   loop_wait_on_interrupt(0);
+	   if((all_tasks[i].status)&amp;&amp;((all_tasks[i].exe_times==0)||((util_get_run_seconds()-all_tasks[i].exe_last_seconds)&gt;config_get_number(all_tasks[i].task_upload_interval_idex))))
+	   {
+		   uint32_t task_start_seconds=util_get_run_seconds();
+		   task_ret=-1;
+		   if(tcp_lock("module",pdMS_TO_TICKS(100*1000)) == pdTRUE)
+		   {
+			   task_ret=all_tasks[i].task_func(all_tasks[i].parameter);
+			   tcp_unlock("module");
+		   }
+		   if(task_ret&lt;0)
+			   all_tasks[i].exe_times_failed=all_tasks[i].exe_times_failed+1;
+		   all_tasks[i].exe_times=all_tasks[i].exe_times+1;
+		   all_tasks[i].result_last=task_ret;
+		   all_tasks[i].exe_last_seconds=util_get_run_seconds();
+	   }
+   }
+   #endif
+   loop_wait_on_interrupt(LOOP_INTERVAL_TICKS);
+}
+	    </code></pre>
+		<p>The cloud receives through respective modules, defined in ModuleDefine.java (cloud Java project file, not the C language file here). Implementation files for each module are located in the same directory. To add a new module, follow the existing pattern.</p>
+	</div>
+	
+	<div class="help-item" id="devicealertupload">
+	    <h6>Triggered Upload</h6>
+	    <p>Certain events, such as data received on a serial port, instructions received by LORA, or changes in the voltage level on specific pins of the device, trigger immediate reports to the cloud. These events trigger irregularly and require timely reporting. If you need to add a new trigger, such as PIR infrared trigger, you can add it in the following function in app_main.c.</p>
+	   <pre><code>
+void loop_wait_on_interrupt(uint32_t max_tickets)
+{
+    uint32_t ticks1 = xTaskGetTickCount(), ticks2 = 0;
+    do
+    {
+        gpio_util_queue();
+        uart_util_queue();
+        restore_monitor();
+        ticks2 = xTaskGetTickCount();
+        ticks2 = ticks2 &gt;= ticks1 ? ticks2 - ticks1 : 0xffffffff - ticks1 + ticks2;
+    } while (max_tickets &gt; ticks2);    
+    if (util_get_run_seconds() &gt; (last_comm_seconds + config_get_number(CONFIG_NO_COMMUNICATE_SECONDS)))
+    {
+        ESP_LOGE(TAG, "upload failed too long %lu&gt;%lu+%lu", util_get_run_seconds(), last_comm_seconds, config_get_number(CONFIG_NO_COMMUNICATE_SECONDS));
+        util_reboot(9);
+    }
+}
+	    </code></pre>
+	</div>
+<div class="help-item" id="cloudpush2client">
+    <h6>Cloud Platform Push Data to Third-party Platforms or Send EMAIL</h6>
+    <p>After the cloud platform receives periodic or triggered reports from devices, it can push this data to the user's server. However, you need to first <a href="/dc/web/apisetting" target="_blank">click</a> here to configure settings. Start by creating a Key, then set up notification methods. Currently, there are two notification methods: one is forwarding, where users simply input their receiving URL, and the data will be pushed to the customer's server in HTTP JSON format as follows. Each field is easy to understand, with the key being the MD5 value of the previously created key, allowing the customer's system to verify the source of the information.</p>
+    <code>
+{
+    "key": "4a924f53cabb09913d0bac1217e39d0e",
+    "content": {
+        "id": "67ab1741152cfa6319e84e19",
+        "deviceId": "67a9b3f7fc9137775691004f",
+        "deviceNo": "24587cd6ef0c",
+        "moduleTypeId": 13,
+        "request": null,
+        "requestTime": null,
+        "upload": {
+            "values": [
+                {
+                    "pinValue": 0,
+                    "pinMode": 33,
+                    "pinType": "ESP",
+                    "pin": 14,
+                    "valueType": "ANALOG"
+                },
+                {
+                    "pinValue": 0,
+                    "pinMode": 60,
+                    "pinType": "ESP",
+                    "pin": 21,
+                    "valueType": "DIGITAL"
+                },
+                {
+                    "pinValue": 1,
+                    "pinMode": 2,
+                    "pinType": "EXT",
+                    "pin": 2,
+                    "valueType": "DIGITAL"
+                }
+            ]
+        },
+        "uploadTime": "2025-02-11T09:24:17.888191998Z",
+        "command": 5,
+        "operate": null,
+        "info": null,
+        "errorType": "OK",
+        "dataCommType": "PERIOD_UPLOAD",
+        "dataCommSource": "DEVICE_AUTO"
+    }
+}
+    </code>
+    <p>The other method is EMAIL push, mainly for small customers who do not have their own servers. An email address can be set to receive push notifications, along with a regular expression. When device-reported information matches the regular expression, the content is sent via email to the configured email address.
+    To successfully push, you need: 1) Set the correct receiving URL or email address 2) Click "Continue" next to the forward option to activate forwarding; once activated, it shows "Pause." Clicking "Pause" will pause forwarding 3) <a href="/dc/web/devicelist" target="_blank">Click</a> to view all device lists. Click the <span><i class="bi bi-eye"></i></span> icon on the right side of the device that needs forwarding enabled to view the device's modules. Click the <span><i class="bi bi-caret-right-fill"></i></span> icon on the right side of each module to enable forwarding for that module. Click the <span><i class="bi bi-pause-circle"></i></span> icon to stop forwarding. Click the <span><i class="bi bi-camera-video-fill"></i></span> icon at the bottom right of the page to enable device forwarding, and click the <span><i class="bi bi-camera-video-off-fill"></i></span> icon to pause forwarding. These icons temporarily halt or resume forwarding without resetting the state of each module. For example, if modules a, b, c are not in forwarding mode, and e, f are, pausing or resuming will not affect the states of a, b, c, e, f but may intercept forwarded data. If you want to reset all modules to forwarding, click the <span><i class="bi bi-caret-right-fill"></i></span> icon next to "Forward," setting a, b, c, d, e, f to forwarding status. To reset all modules to stop forwarding, click the <span><i class="bi bi-pause-circle"></i></span> icon, setting a, b, c, d, e, f to stopped status.
+    </p>
+    <p>Each module pushes different specific data; refer to the information for each module for details.
+    </p>
+</div>    
+<div class="help-item" id="cloudrequestdevice">
+    <h6>Cloud Platform Requests Device Data</h6>
+    <p>Devices report data periodically or through triggers. Because devices maintain a TCP/IP connection with the cloud platform, the cloud platform can also proactively send requests to devices. Devices respond based on the request content, reporting data back to the cloud platform. The specific protocol is: a) The cloud platform sends a request to the device b) The device receives the request and responds with data to the cloud platform c) The cloud platform replies again to confirm receipt of the reported data.
+    Essentially, sending a request to a device is implemented by sending commands to the device. Specific commands supported by different modules and formats can be viewed by <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">clicking</a> here.
+    </p>
+    <p>There are three ways to send commands:</p>
+    <p>1. By clicking the <span><i class="bi bi-arrow-repeat"></i></span> icon next to "Operational Status" on the module page, which submits a command similar to operate=xx.</p>
+    <p>2. Through the command execution window at the bottom of the module page, such as entering operate=9 gpio_esp_no=0 status=1 pull_up=1 pull_down=0 and pressing Enter, indicating setting GPIO 0 of the ESP chip to output high level, enabling pull-up, and disabling pull-down.</p>
+    <p>3. By calling the cloud API to send commands. How to call the API can be found by <a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">clicking</a> here.</p>
+</div>    
+</div>
+</body>
+</html>

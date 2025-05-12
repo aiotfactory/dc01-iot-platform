@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_CONFIG module introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#forward">Data Forwarding</a></li>
+    </ul>
+</div>
+
+<!-- Main content area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_CONFIG module introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>After the device is started and the network connection is established, it will first report the configuration information on the device once. If users also want to have the device periodically report configuration information, they can enable this module. Even if this module is disabled, the device will still report the configuration information once after establishing the connection for the first time. If the network is interrupted in the middle, when the connection is re-established, it will report once again.
+            At the beginning of each module page, there are configurations related to that module, while the MODULE_CONFIG module allows you to view all configurations, making it convenient for users to handle them centrally.
+            <a href="/dc/pub/doc?page=config&deviceType=dc01" target="_blank">Click here</a> to view all configuration descriptions.
+            The MODULE_CONFIG section introduces how to manage this module.
+        </p>
+    </div>
+    <div class="help-item" id="forward">
+        <h6>Data Forwarding</h6>
+        <p><a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">Click here</a> to see how to configure data forwarding for the module.
+           <a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">Click here</a> to see the format of forwarded data.
+        </p>
+    </div>
+</div>
+</body>
+</html>

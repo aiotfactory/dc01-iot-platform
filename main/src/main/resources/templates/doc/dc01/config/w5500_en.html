@@ -1,0 +1,49 @@
+{
+    "moduleName": "MODULE_W5500",
+    "moduleComments": "Used to configure network settings of the W5500 module, including IP address, subnet mask, gateway, DNS, etc.",
+    "configInfo": [
+        {
+            "order": 1,
+            "name": "w5500_mode",
+            "sample": "0",
+            "range": "0-3",
+            "comments": "Operating mode of the W5500 module. 0=Off, 1=Work as a client and obtain IP address automatically, 2=Work as a client with static IP configuration, 3=Not in use."
+        },
+        {
+            "order": 2,
+            "name": "w5500_ip",
+            "sample": "192.168.18.177",
+            "range": "7-15 characters",
+            "comments": "Device's IP address in IPv4 format. The range is 7 to 15 characters. No configuration needed if set to automatically obtain an IP address."
+        },
+        {
+            "order": 3,
+            "name": "w5500_subnet_mask",
+            "sample": "255.255.255.0",
+            "range": "7-15 characters",
+            "comments": "Device's subnet mask in IPv4 format. The range is 7 to 15 characters. No configuration needed if set to automatically obtain an IP address."
+        },
+        {
+            "order": 4,
+            "name": "w5500_gateway",
+            "sample": "192.168.18.1",
+            "range": "7-15 characters",
+            "comments": "Device's gateway address in IPv4 format. The range is 7 to 15 characters. No configuration needed if set to automatically obtain an IP address."
+        },
+        {
+            "order": 5,
+            "name": "w5500_dns1",
+            "sample": "114.114.114.114",
+            "range": "7-15 characters",
+            "comments": "Primary DNS server address in IPv4 format. The range is 7 to 15 characters. No configuration needed if set to automatically obtain an IP address."
+        },
+        {
+            "order": 6,
+            "name": "w5500_dns2",
+            "sample": "8.8.8.8",
+            "range": "7-15 characters",
+            "comments": "Secondary DNS server address in IPv4 format. The range is 7 to 15 characters. No configuration needed if set to automatically obtain an IP address."
+        }
+    ],
+    "status": "ok"
+}

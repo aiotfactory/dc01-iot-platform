@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTA Online Upgrade</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#c1">Principle</a></li>
+        <li><a href="#c2">Modify Version Number</a></li>
+        <li><a href="#c3">Compile Firmware</a></li>
+        <li><a href="#c4">Push Firmware</a></li>
+        <li><a href="#c5">Query Firmware Properties</a></li>
+        <li><a href="#c6">Delete Firmware</a></li>
+        <li><a href="#c7">Start Upgrade</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">OTA Online Upgrade</h1>
+    </div>
+    <div class="help-item" id="c1">
+        <h6>Principle</h6>
+        <p>Embedded devices generally work in locations where engineers cannot easily access them for upgrades. Therefore, OTA (Over-the-Air) updates are necessary. OTA allows new firmware versions to be downloaded from the cloud via the network and then self-upgraded by the device before restarting.
+           When the device boots up or runs, it periodically checks with the cloud server to see if there is a new version available. The request includes the current version number of the device. The cloud checks the uploaded version number against the latest firmware version on the cloud. If there is a new firmware, the cloud sends an upgrade instruction that includes the MD5 value of the firmware and the download address. After receiving the download address, the device starts downloading the firmware. Once the download is complete, it verifies the MD5 value of the firmware. If they match, the device performs a self-upgrade and restarts. After restarting, there is a process to determine if the new firmware is usable. After restarting, the device first sends a command to the cloud server to verify whether its basic communication function is available. If it is available, the device confirms this upgrade; otherwise, it automatically restarts and rolls back to the previous version.</p>
+    </div>
+	<div class="help-item" id="c2">
+	    <h6>Modify Version Number</h6>
+	    <p>The version number is stored in the version.txt file under the project's root directory. Every time a submission build occurs, the system will automatically increment this value by 1. Of course, users can also manually change it to a specific value, but the system will still automatically increment it by 1. Therefore, if you want to set it to 100, you can modify it to 99 so that after the automatic increment, it becomes 100.
+	    This file will be compiled into the firmware along with other code, and when the firmware is uploaded to the cloud, the cloud will automatically parse and retrieve the content of this file. Thus, the next time the device reports an upgrade inquiry, the cloud will compare the new version number with the current version number of the device. If they are different, the upgrade process will be initiated.
+	    The current firmware version of the device can be viewed in the <a href="/dc/web/devicelist" target="_blank">Device List</a>.
+	    </p>
+	</div>
+    <div class="help-item" id="c3">
+        <h6>Compile Firmware</h6>
+        <p>Firmware can be generated through either local compilation at <a href="/pub/doc?page=helloworld#localedit" target="_blank">Local Compilation</a> or online compilation at <a href="/dc/pub/doc?page=helloworld#onlineedit" target="_blank">Online Compilation</a>. If compiling locally, you also need to upload the firmware to the cloud. The firmware generated locally is named build\usb_cdc_4g_module.bin. Click the <a href="/dc/web/otalist" target="_blank">Upgrade</a> menu, then click "New", give the firmware a name, such as "abc01". On the right side of the newly created record, click the upload firmware icon <span><i class="bi bi-upload"></i></span>, select the usb_cdc_4g_module.bin file to upload. Upon successful upload, the system will automatically recognize the version number and file size.</p>
+    </div>
+    <div class="help-item" id="c4">
+        <h6>Push Firmware</h6>
+        <p>Click the <a href="/dc/web/otalist" target="_blank">Upgrade</a> menu to view existing firmware. Both locally compiled and online compiled firmware will appear in the list on this page.
+            Adjust the "Target", "Strategy", and "Scope" to decide how to gradually push the firmware.
+        </p>
+        <p>"Target": Since many devices may be running, and their firmware versions may not all be the same, enter the devices you want to push in the input box. For example, out of 100 devices, 30 have firmware version 1, another 30 have version 2, and 40 have version 3. The new firmware version made is 4. If you plan to upgrade all 100 devices, leave the input box empty. If you only want to upgrade those with version 1, enter 1. If you want to upgrade those with versions 1 and 2, enter 1,2.</p>
+        <p>"Strategy": If the current firmware version matches the new firmware version on the cloud, whether to force the upgrade. Normally, ignore is selected, which is the default setting. However, sometimes for debugging purposes, forced upgrade can also be chosen, usually combined with "Scope" to forcibly cover a limited number of devices.</p>
+        <p>"Scope": When there are many devices, we decide which ones to upgrade and which ones not to. "NONE" is the default value. New created firmware does not upgrade by default to avoid unexpected trouble. "ALL" upgrades all devices within the range defined by "Target" and "Strategy". "EXCEPT_EXCLUDE": When both "Target" and "Strategy" match, we still want to exclude some devices. Choose this scope and click the icon <span><i class="bi bi-box-arrow-up-left"></i></span> to upload the serial numbers of the devices to be excluded. Note, each upload clears old data and replaces it with new data. If you just want to delete old data, leave it blank and submit.
+            "INCLUDE_ONLY": When both "Target" and "Strategy" match, we still want to upgrade only certain devices listed. Choose this scope and click the icon <span><i class="bi bi-box-arrow-in-down-right"></i></span> to upload the serial numbers of the devices to include. Note, each upload clears old data and replaces it with new data. If you just want to delete old data, leave it blank and submit.
+        </p>
+    </div>
+    <div class="help-item" id="c5">
+        <h6>Query Firmware Properties</h6>
+        <p>Click the <a href="/dc/web/otalist" target="_blank">Upgrade</a> menu to view the existing firmware list. On the right side of each firmware line, click the icon <span><i class="bi bi-eye"></i></span> to view more properties of the firmware, such as the number of downloads.</p>
+    </div>
+    <div class="help-item" id="c6">
+        <h6>Delete Firmware</h6>
+        <p>Click the <a href="/dc/web/otalist" target="_blank">Upgrade</a> menu to view the existing firmware list. On the right side of each firmware line, click the icon <span><i class="bi bi-trash"></i></span> to delete the firmware.</p>
+    </div>
+    <div class="help-item" id="c7">
+        <h6>Start Upgrade</h6>
+        <p>Power on the device and start it. As long as the device successfully connects to the cloud via any method (Wi-Fi, 4G, Ethernet), it will automatically begin the upgrade. Click the <a href="/dc/web/devicelist" target="_blank">Device List</a> to check if the device has connected successfully.</p>
+    </div>
+</div>
+</body>
+</html>

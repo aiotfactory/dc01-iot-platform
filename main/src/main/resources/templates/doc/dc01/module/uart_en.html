@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODULE_UART Module Introduction</title>
+    <link href="/dc/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/dc/css/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="/dc/css/help-doc.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Sidebar Navigation -->
+<div class="sidebar">
+    <h3>Table of Contents</h3>
+    <ul>
+        <li><a href="#description" class="active">Module Description</a></li>
+        <li><a href="#periodupload">Automatic Data Reporting - Automatic</a></li>
+        <li><a href="#interruptupload">Data Reporting - Interrupt</a></li>
+        <li><a href="#commandupload">Data Reporting - Command</a></li>
+        <li><a href="#forward">Data Forwarding</a></li>
+    </ul>
+</div>
+
+<!-- Main Content Area -->
+<div class="main-content">
+    <div class="text-center mb-4">
+        <h1 class="display-4 font-weight-bold">MODULE_UART Module Introduction</h1>
+    </div>
+    <div class="help-item" id="process">
+        <h6>Module Description</h6>
+        <p>DC01's ESP chip has three UARTs, namely UART0, UART1, and UART2. UART0 is generally used for programming and logging, so here we talk about UART1 (UART2 is used for 485 communication). Like most functional modules in ESP chips, the UART pins can be configured; they do not have to be fixed on those specific pins.
+           For more details, please refer to.<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">Click</a>to view the UART-related section.
+           The principle of RS485 and UART is almost the same, just with different voltages, and the communication distance of RS485 is much farther. By default, it uses the same pin configuration, so if you want to enable both at the same time, you need to modify the configuration and cannot use the same pin.
+       </p>
+    </div>
+    <div class="help-item" id="periodupload">
+        <h6>Data Reporting - Automatic</h6>
+        <p>The automatically reported data is the status information of the UART operation. It mainly includes the number of times Tx and Rx occur as well as the error count. dataType type is PROPERTY, rxData is null.
+            rxTimes: Number of receptions after boot, rxLength: Total byte length received, rxTimesFailed: Number of reception errors, rxUploadFailed: Number of upload errors, rxFifoOverTimes: Number of buffer overflow events in hardware UART, such as receiving large amounts of data in a short period of time. rxBufFullTimes: Number of buffer full events in hardware UART, rxBreakTimes: Number of interrupt events, rxParityErrTimes: Number of parity check errors during reception, rxFrameErrTimes: Number of frame errors during reception, txLength: Total byte length sent, txTimes: Total number of transmissions, txTimesFailed: Total number of transmission errors.
+        </p>
+        <code>
+            {
+                "key": "f402afaa0f9ceeeb230ce6291c95c306",
+                "content": {
+                    "id": "67b6a0aa87025163883ee5ab",
+                    "deviceId": "67b460755a961507ca44bc0d",
+                    "moduleTypeId": 8,
+                    "request": null,
+                    "requestTime": null,
+                    "upload": {
+                        "protocolType": "UART",
+                        "dataType": "PROPERTY",
+                        "rxData": null,
+                        "rxTimes": 10,
+                        "rxLength": 59,
+                        "rxTimesFailed": 0,
+                        "rxUploadFailed": 0,
+                        "rxFifoOverTimes": 0,
+                        "rxBufFullTimes": 0,
+                        "rxBreakTimes": 1,
+                        "rxParityErrTimes": 0,
+                        "rxFrameErrTimes": 0,
+                        "txLength": 3,
+                        "txTimes": 1,
+                        "txTimesFailed": 0
+                    },
+                    "uploadTime": "2025-02-20T03:25:30.761688310Z",
+                    "command": 6,
+                    "operate": null,
+                    "info": null,
+                    "errorType": "OK",
+                    "dataCommType": "PERIOD_UPLOAD",
+                    "dataCommSource": "DEVICE_AUTO"
+                }
+            }
+        </code>
+    </div>
+    <div class="help-item" id="interruptupload">
+        <h6>Data Reporting - Interrupt</h6>
+        <p>Interrupt reporting actually means that when the UART is in listening mode, it automatically reports upon receiving information. Please<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">click</a>to view the UART chapter for receiving data. The interrupt reporting is the received data, while other fields are set to 0.
+        </p>
+    </div>
+    <div class="help-item" id="commandupload">
+        <h6>Data Reporting - Command</h6>
+        <p>Data can be triggered by sending commands to the device, which can be executed through the command execution interface. Please<a href="/dc/pub/doc?page=command_index&deviceType=dc01" target="_blank">click</a>to view the UART-related section to understand what commands can be executed and the format of the reported data.
+        </p>
+    </div>
+    <div class="help-item" id="forward">
+        <h6>Data Forwarding</h6>
+        <p>Please<a href="/dc/pub/doc?page=dataflow&deviceType=dc01#cloudpush2client" target="_blank">click</a>to see how to configure module data forwarding.
+            Please<a href="/dc/pub/doc?page=dataflow&deviceType=dc01#datastructure" target="_blank">click</a>to see the format of forwarded data.
+        </p>
+    </div>
+</div>
+</body>
+</html>
