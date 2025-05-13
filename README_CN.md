@@ -137,3 +137,13 @@
 ### 集成大语言模型（LLM）
 - 集成先进的大语言模型，增强平台的智能交互能力。
 
+<table>
+  <tr>
+    <td><img src="docs/p24.jpg" width="300"/></td>
+    <td><img src="docs/p25.jpg" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="docs/p26.jpg" width="300"/></td>
+    <td><img src="docs/p27.jpg" width="300"/></td>
+  </tr>
+</table>
