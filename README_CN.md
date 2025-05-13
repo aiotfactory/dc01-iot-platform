@@ -155,3 +155,117 @@
     <td><img src="docs/p29.jpg" width="300"/></td>
   </tr>
 </table>
+
+# 安装步骤
+
+```bash
+# 准备包
+sudo apt update && sudo apt upgrade -y
+mkdir -p /opt/dc01
+
+# 安装mongodb
+cd /opt/dc01
+wget https://repo.mongodb.org/apt/ubuntu/dists/jammy/mongodb-org/8.0/multiverse/binary-amd64/mongodb-org-server_8.0.3_amd64.deb
+sudo dpkg -i mongodb-org-server_8.0.3_amd64.deb
+sudo mkdir -p /opt/mongodb-8.0.3/{data,logs} && touch /opt/mongodb-8.0.3/logs/mongodb.log
+
+# 编辑配置文件
+vi /etc/mongod.conf 
+dbPath: /opt/mongodb-8.0.3/data
+path: /opt/mongodb-8.0.3/logs/mongodb.log
+bindIp: 0.0.0.0 #如需要外网访问，设置为0.0.0.0
+
+
+# 设置目录访问权限
+sudo chown -R mongodb:mongodb /opt/mongodb-8.0.3/data
+sudo chown -R mongodb:mongodb /opt/mongodb-8.0.3/logs
+sudo chmod -R 755 /opt/mongodb-8.0.3/data
+
+# 安装mongo shell
+wget https://downloads.mongodb.com/compass/mongodb-mongosh_2.5.0_amd64.deb 
+sudo dpkg -i  mongodb-mongosh_2.5.0_amd64.deb
+
+# 以免登录方式启动
+mongod --port 27017 --dbpath /opt/mongodb-8.0.3/data --noauth
+
+# 设置root密码
+mongosh
+use admin
+db.createUser({
+  user: "root",
+  pwd: "mongoDBTest1password",  
+  roles: [
+    { role: "root", db: "admin" }
+  ]
+})
+exit
+ctrl+c
+
+# 设置目录访问权限(再次)
+sudo chown -R mongodb:mongodb /opt/mongodb-8.0.3/data
+sudo chown -R mongodb:mongodb /opt/mongodb-8.0.3/logs
+sudo chmod -R 755 /opt/mongodb-8.0.3/data
+
+# 设置开机启动
+sudo systemctl enable mongod
+
+# 启动数据库
+sudo systemctl start mongod
+
+# 安装JDK
+cd /opt/dc01
+wget https://download.oracle.com/java/21/archive/jdk-21.0.4_linux-x64_bin.tar.gz
+tar -xvf jdk-21.0.4_linux-x64_bin.tar.gz 
+mv jdk-21.0.4 ../
+
+# 安装tomcat
+cd /opt/dc01
+wget https://archive.apache.org/dist/tomcat/tomcat-10/v10.1.39/bin/apache-tomcat-10.1.39.tar.gz
+tar -xvf apache-tomcat-10.1.39.tar.gz 
+mv apache-tomcat-10.1.39 apache-tomcat-dc-10.1.39
+
+# 编辑tomcat配置文件为如下内容
+vi /opt/apache-tomcat-dc-10.1.39/conf/server.xml
+
+<?xml version='1.0' encoding='utf-8'?>
+<Server port="9175" shutdown="SHUTDOWN">
+  <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+  <Listener className="org.apache.catalina.core.AprLifecycleListener" />
+  <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
+  <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
+  <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+
+  <GlobalNamingResources>
+    <Resource name="UserDatabase" auth="Container"
+              type="org.apache.catalina.UserDatabase"
+              description="User database that can be updated and saved"
+              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"
+              pathname="conf/tomcat-users.xml" />
+  </GlobalNamingResources>
+
+  <Service name="Catalina">
+    <Connector port="9012" protocol="org.apache.coyote.http11.Http11Nio2Protocol"
+               connectionTimeout="20000"
+               maxThreads="500"
+               minSpareThreads="20"
+               maxSpareThreads="50"
+               acceptCount="1000"
+               enableLookups="false"
+               URIEncoding="UTF-8"
+               redirectPort="9745" />
+
+    <Engine name="Catalina" defaultHost="localhost">
+      <Realm className="org.apache.catalina.realm.LockOutRealm">
+        <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
+               resourceName="UserDatabase"/>
+      </Realm>
+
+      <Host name="localhost" appBase="webapps"
+            unpackWARs="true" autoDeploy="true">
+        <Context docBase="dc" path="/dc"/>
+      </Host>
+    </Engine>
+  </Service>
+</Server>
+  
+```
