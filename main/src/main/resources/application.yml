@@ -1,88 +1,104 @@
 spring:
   application:
-    name: dc
+    name: dc  # Application name (used for service identification)
+
   thymeleaf:
-    cache: false
+    cache: false  # Disable template caching for development
+
   security:
-    enabled: false
+    enabled: false  # Global switch for Spring Security (disabled for simplicity or API-based auth)
+
   data:
     mongodb:
-      uri: "mongodb://root:aaaaaa@localhost:27017/dc?authSource=admin"
-    redis:
-      host: localhost
-      port: 6379
-      database: 0
+      uri: "mongodb://root:aaaaaa@localhost:27017/dc?authSource=admin"  # MongoDB connection string with authentication
+
   messages:
-    basename: i18n/messages
+    basename: i18n/messages  # Base path for internationalization message files (e.g., messages_en.properties)
+
   web:
-    locale: zh_CN
+    locale: zh_CN  # Default locale setting (language and region)
+  
   mvc:
     async:
-      request-timeout: 360000
+      request-timeout: 360000  # Async request timeout in milliseconds (6 minutes)
+
   servlet:
-      multipart:
-        max-file-size: 50MB
-        max-request-size: 50MB
+    multipart:
+      max-file-size: 50MB  # Max file size for uploads
+      max-request-size: 50MB  # Max request size for multi-part uploads
+
   mail:
-    host: smtp.example.com
-    port: 465
-    username: market@example.com
-    password: examplepassword
+    host: smtp.example.com  # SMTP server host
+    port: 465  # SMTP server port (SSL/TLS)
+    username: market@example.com  # SMTP account username
+    password: examplepassword  # SMTP account password
     properties:
-      mail.smtp.auth: true
-      mail.smtp.starttls.enable: true 
-      mail.smtp.ssl.enable: true       
+      mail.smtp.auth: true  # Enable SMTP authentication
+      mail.smtp.starttls.enable: true  # Enable STARTTLS
+      mail.smtp.ssl.enable: true  # Force SSL for secure communication
+
 logging:
   level:
-    root: INFO
-server:
-  error:
-    path: /dc/pub/error
+    root: INFO  # Root logging level (INFO, DEBUG, ERROR etc.)
+
 md5:
   keys:
-    password: "aDc43D"
-    api: "3E4T2"
+    password: "aDc43D"  # Salt for password MD5 encryption
+    api: "3E4T2"  # Salt for API key MD5 generation
+
 constant:
   clean:
-    enabled: true
-    mongo-seconds: 3600 # -1 means not execute, seconds
+    enabled: true  # Enable automatic database cleanup
+    mongo-seconds: 3600  # Interval (in seconds) for background cleaning (-1 to disable)
+  
   data:
     sensor:
-      keep-days: 60	
+      keep-days: 60  # Retention period for sensor data (days)
     user-log:
-      keep-days: 20	
+      keep-days: 20  # Retention period for user logs (days)
     module-log:
-      keep-days: 7	
+      keep-days: 7  # Retention period for module logs (days)
+
   cookie:
-    default-max-time: 90
+    default-max-time: 90  # Cookie max age in seconds
+
   session:
-    non-remember-time: 1
+    non-remember-time: 1  # Session timeout in days if "Remember Me" is not selected
+
   system:
-    admin-user: "a"
-    admin-user-password: "a"
+    admin-user: "a"  # Default admin username
+    admin-user-password: "a"  # Default admin password
+
   password:
-    valid: 0
+    valid: 0  # Password policy enforcement (0 = disabled, 1 = enabled)
+
   login:
-    valid: 0
-  site-url: "http://139.196.107.200:9002/dc"
-  site-company: "IOT Factory"
+    valid: 0  # Login restrictions (0 = no extra rules, 1 = enable additional checks)
+
+  site-url: "http://www.example.com:9002/dc"  # Public URL of the application
+  site-company: "IOT Factory"  # Name of the company running this app
+
   ota:
-    server: "139.196.107.200"
+    server: "www.example.com"
     port: 9002
-    uri: "/dc/pub/otadownload"
-    connection-timeout: 360000
+    uri: "/dc/pub/otadownload"  # OTA firmware download endpoint
+    connection-timeout: 360000  # Timeout in milliseconds for OTA connections
+
 env:
-  production: 0
-  test-data: true
+  production: 0  # Environment flag (0 = dev, 1 = prod)
+  test-data: true  # Whether to load test/demo data on startup
+
 tcp:
-  port: 7000
-  pic-path: "d:\\temp1\\pic"
+  port: 7000  # TCP server listening port
+  pic-path: "d:\\temp1\\pic"  # Path to store uploaded images
+
 sim:
   dw:
-    api-url: "you don't need it"
+    api-url: "you don't need it"  # Placeholder for SIM-related API (not used currently)
     api-id: "you don't need it"
     api-secret: "you don't need it"
+
 llm:
   ali:
-    api-key: "sk-your key"
-    temp-path: "d:\\temp1\\pic"
+    api-key: "sk-your key"  # API key for Alibaba Cloud LLM services
+    temp-path: "d:\\temp1\\pic"  # Temporary storage path for LLM-related image processing
