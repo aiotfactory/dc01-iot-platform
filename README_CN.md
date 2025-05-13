@@ -76,16 +76,63 @@
 </table>
 
 
-### 在线服务
+### 在线代码
 - **代码编译**：提供在线环境用于编写和编译代码。
+
+<table>
+  <tr>
+    <td><img src="docs/p12.jpg" width="300"/></td>
+    <td><img src="docs/p13.jpg" width="300"/></td>
+  </tr>
+</table>
+
 - **固件烧录**：直接从云端向设备推送并烧录固件。
+
+<table>
+  <tr>
+    <td><img src="docs/p14.jpg" width="300"/></td>
+    <td><img src="docs/p15.jpg" width="300"/></td>
+  </tr>
+</table>
+
 - **设备日志**：在线查看设备运行日志，便于调试和维护。
+
+<table>
+  <tr>
+    <td><img src="docs/p16.jpg" width="300"/></td>
+    <td><img src="docs/p17.jpg" width="300"/></td>
+  </tr>
+</table>
 
 ### API接口
 - 对外开放API接口，方便第三方应用集成与扩展。
 
+<table>
+  <tr>
+    <td><img src="docs/p20.jpg" width="300"/></td>
+    <td><img src="docs/p21.jpg" width="300"/></td>
+  </tr>
+</table>
+
+### 在设备上执行命令
+- 既可以通过API又可以通过命令窗口在设备上执行命令。
+
+<table>
+  <tr>
+    <td><img src="docs/p22.jpg" width="300"/></td>
+    <td><img src="docs/p23.jpg" width="300"/></td>
+  </tr>
+</table>
+
 ### 数据转发
 - 提供多种数据转发方式，支持灵活的数据处理和分发策略。
+
+<table>
+  <tr>
+    <td><img src="docs/p18.jpg" width="300"/></td>
+    <td><img src="docs/p19.jpg" width="300"/></td>
+  </tr>
+</table>
 
 ### 集成大语言模型（LLM）
 - 集成先进的大语言模型，增强平台的智能交互能力。
