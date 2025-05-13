@@ -33,10 +33,21 @@
 	<!-- 子模块定义 -->
 	<modules>
 		<module>base</module>
-		<module>comm</module>
 		<module>main</module>
 	</modules>
 
+  	<profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <modules>
+                <module>comm</module>
+            </modules>
+        </profile>
+    </profiles>
+    
 	<!-- 依赖管理 -->
 	<dependencyManagement>
 		<dependencies>

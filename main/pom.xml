@@ -70,10 +70,42 @@
 		</dependency>
 		<dependency>
 			<groupId>com.zyc</groupId>
-			<artifactId>comm</artifactId>
+			<artifactId>base</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	
+	<profiles>
+        <!-- 开发环境 - 使用 comm 子模块 -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+               <dependency>
+				   <groupId>com.zyc</groupId>
+				   <artifactId>comm</artifactId>
+				   <version>0.0.1-SNAPSHOT</version>
+			   </dependency>
+            </dependencies>
+        </profile>
+
+        <!-- 公开版本 - 使用本地 jar 包 -->
+        <profile>
+            <id>release</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.zyc</groupId>
+                    <artifactId>comm</artifactId>
+                    <version>0.0.1-SNAPSHOT</version>
+                    <scope>system</scope>
+                    <systemPath>${project.basedir}/lib/comm-0.0.1-SNAPSHOT.jar</systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+    	
 	<build>
 		<finalName>dc</finalName>
 		<plugins>

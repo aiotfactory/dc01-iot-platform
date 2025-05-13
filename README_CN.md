@@ -267,5 +267,15 @@ vi /opt/apache-tomcat-dc-10.1.39/conf/server.xml
     </Engine>
   </Service>
 </Server>
-  
+
+
+# 编译代码
+
+https://maven.apache.org/download.cgi #从这里安装maven，并添加的执行环境变量中
+
+cd /d D:\project\datacollection\temp1\dc01-iot-platform
+git clone https://gitee.com/aiotfactory/dc01-iot-platform.git
+cd dc01-iot-platform
+
+
 ```
