@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: dc
+  thymeleaf:
+    cache: false
+  security:
+    enabled: false
+  data:
+    mongodb:
+      uri: "mongodb://root:aaaaaa@localhost:27017/dc?authSource=admin"
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+  messages:
+    basename: i18n/messages
+  web:
+    locale: zh_CN
+  mvc:
+    async:
+      request-timeout: 360000
+  servlet:
+      multipart:
+        max-file-size: 50MB
+        max-request-size: 50MB
+  mail:
+    host: smtp.example.com
+    port: 465
+    username: market@example.com
+    password: examplepassword
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true 
+      mail.smtp.ssl.enable: true       
+logging:
+  level:
+    root: INFO
+server:
+  error:
+    path: /dc/pub/error
+md5:
+  keys:
+    password: "aDc43D"
+    api: "3E4T2"
+constant:
+  clean:
+    enabled: true
+    mongo-seconds: 3600 # -1 means not execute, seconds
+  data:
+    sensor:
+      keep-days: 60	
+    user-log:
+      keep-days: 20	
+    module-log:
+      keep-days: 7	
+  cookie:
+    default-max-time: 90
+  session:
+    non-remember-time: 1
+  system:
+    admin-user: "a"
+    admin-user-password: "a"
+  password:
+    valid: 0
+  login:
+    valid: 0
+  site-url: "http://139.196.107.200:9002/dc"
+  site-company: "IOT Factory"
+  ota:
+    server: "139.196.107.200"
+    port: 9002
+    uri: "/dc/pub/otadownload"
+    connection-timeout: 360000
+env:
+  production: 0
+  test-data: true
+tcp:
+  port: 7000
+  pic-path: "d:\\temp1\\pic"
+sim:
+  dw:
+    api-url: "you don't need it"
+    api-id: "you don't need it"
+    api-secret: "you don't need it"
+llm:
+  ali:
+    api-key: "sk-your key"
+    temp-path: "d:\\temp1\\pic"
