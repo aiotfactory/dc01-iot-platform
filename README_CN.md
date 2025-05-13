@@ -23,6 +23,18 @@
 - **设备监控与控制**：实时监控设备状态，远程控制设备操作。
 - **设备配置**：灵活配置设备参数，适应不同应用场景。
 
+<table>
+  <tr>
+    <td><img src="docs/p04.jpg" width="300"/></td>
+    <td><img src="docs/p05.jpg" width="300"/></td>
+  </tr>
+  <tr>
+    <td><img src="docs/p06.jpg" width="300"/></td>
+    <td><img src="docs/p07.jpg" width="300"/></td>
+  </tr>
+</table>
+
+
 ### 模块管理
 - 管理硬件模块，支持添加、删除及更新模块信息。
 
