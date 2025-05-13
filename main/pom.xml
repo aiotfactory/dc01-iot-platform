@@ -79,9 +79,6 @@
         <!-- 开发环境 - 使用 comm 子模块 -->
         <profile>
             <id>dev</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
             <dependencies>
                <dependency>
 				   <groupId>com.zyc</groupId>

@@ -21,9 +21,6 @@
         <dependent-module archiveName="base-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/base/base">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="comm-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/comm/comm">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
                                 
         
         
