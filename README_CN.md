@@ -268,3 +268,9 @@ vi /opt/apache-tomcat-dc-10.1.39/webapps/dc/WEB-INF/classes/application.yml
 ```bash
 nohup /opt/apache-tomcat-dc-10.1.39/bin/startup.sh &
 ```
+
+# 使用限制
+
+开源版本提供所有功能，但有每日流量限制。如有商业用途需求或需要更高的流量限制，请联系 market@zhiyince.com。
+
+如果您需要更强大的解决方案，包括额外的支持、定制服务或更高的使用上限，我们的商用版本将是您的理想选择。欢迎联系我们了解更多关于我们如何满足您的项目需求的信息。

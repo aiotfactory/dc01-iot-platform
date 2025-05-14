@@ -277,7 +277,7 @@ mv apache-tomcat-10.1.39 apache-tomcat-dc-10.1.39
 https://maven.apache.org/download.cgi # Download Maven and add it to the system PATH
 
 cd /d D:\project\datacollection\temp1\dc01-iot-platform
-git clone https://gitee.com/aiotfactory/dc01-iot-platform.git
+git clone https://github.com/aiotfactory/dc01-iot-platform.git
 cd dc01-iot-platform
 mvn clean package -P release
 ```
@@ -299,3 +299,9 @@ vi /opt/apache-tomcat-dc-10.1.39/webapps/dc/WEB-INF/classes/application.yml
 ```bash
 nohup /opt/apache-tomcat-dc-10.1.39/bin/startup.sh &
 ```
+
+# Usage Limitations
+
+The open-source version provides full access to all features but is subject to daily traffic limitations. For commercial use or to inquire about higher traffic limits, please contact us at market@zhiyince.com.
+
+Should you require a more robust solution that includes additional support, customizations, or higher usage caps, our commercial version might be the right fit for your needs. Reach out to learn more about how we can accommodate your project requirements.
