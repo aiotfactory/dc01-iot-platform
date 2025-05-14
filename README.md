@@ -17,8 +17,8 @@ In addition, this project provides a rich set of features and services for the c
 - **Login Management**: Provides a secure user login mechanism.
 
 <div align="center">  
-  <img src="docs/p02.jpg" width="300"/>  
-  <img src="docs/p03.jpg" width="300"/>  
+  <img src="docs/e02.jpg" width="300"/>  
+  <img src="docs/e03.jpg" width="300"/>  
 </div>
 
 ## Device Management  
@@ -26,10 +26,10 @@ In addition, this project provides a rich set of features and services for the c
 - **Device Configuration**: Flexible configuration of device parameters to adapt to different application scenarios.
 
 <div align="center">  
-  <img src="docs/p04.jpg" width="300"/>  
-  <img src="docs/p05.jpg" width="300"/><br>  
-  <img src="docs/p06.jpg" width="300"/>  
-  <img src="docs/p07.jpg" width="300"/>  
+  <img src="docs/e04.jpg" width="300"/>  
+  <img src="docs/e05.jpg" width="300"/><br>  
+  <img src="docs/e06.jpg" width="300"/>  
+  <img src="docs/e07.jpg" width="300"/>  
 </div>
 
 ## Module List  
@@ -63,8 +63,8 @@ In addition, this project provides a rich set of features and services for the c
 Supports online firmware upgrades over the network to ensure the system remains up-to-date.
 
 <div align="center">  
-  <img src="docs/p10.jpg" width="300"/>  
-  <img src="docs/p11.jpg" width="300"/>  
+  <img src="docs/e10.jpg" width="300"/>  
+  <img src="docs/e11.jpg" width="300"/>  
 </div>
 
 ## Online Code Development  
@@ -73,54 +73,54 @@ Supports online firmware upgrades over the network to ensure the system remains 
 - **Device Logs**: View device runtime logs online for debugging and maintenance purposes.
 
 <div align="center">  
-  <img src="docs/p12.jpg" width="300"/>  
-  <img src="docs/p13.jpg" width="300"/><br>  
-  <img src="docs/p14.jpg" width="300"/>  
-  <img src="docs/p15.jpg" width="300"/><br>  
-  <img src="docs/p16.jpg" width="300"/>  
-  <img src="docs/p17.jpg" width="300"/>  
+  <img src="docs/e12.jpg" width="300"/>  
+  <img src="docs/e13.jpg" width="300"/><br>  
+  <img src="docs/e14.jpg" width="300"/>  
+  <img src="docs/e15.jpg" width="300"/><br>  
+  <img src="docs/e16.jpg" width="300"/>  
+  <img src="docs/e17.jpg" width="300"/>  
 </div>
 
 ## API Interface  
 Open API interfaces are provided to facilitate third-party application integration and extension.
 
 <div align="center">  
-  <img src="docs/p20.jpg" width="300"/>  
-  <img src="docs/p21.jpg" width="300"/>  
+  <img src="docs/e20.jpg" width="300"/>  
+  <img src="docs/e21.jpg" width="300"/>  
 </div>
 
 ## Command Execution on Device  
 Commands can be executed on the device either via API or through a command window.
 
 <div align="center">  
-  <img src="docs/p22.jpg" width="300"/>  
-  <img src="docs/p23.jpg" width="300"/>  
+  <img src="docs/e22.jpg" width="300"/>  
+  <img src="docs/e23.jpg" width="300"/>  
 </div>
 
 ## Data Forwarding  
 Provides multiple data forwarding methods and supports flexible data processing and distribution strategies.
 
 <div align="center">  
-  <img src="docs/p18.jpg" width="300"/>  
-  <img src="docs/p19.jpg" width="300"/>  
+  <img src="docs/e18.jpg" width="300"/>  
+  <img src="docs/e19.jpg" width="300"/>  
 </div>
 
 ## Integration with Large Language Model (LLM)  
 Integrates advanced large language models to enhance the platform's intelligent interaction capabilities.
 
 <div align="center">  
-  <img src="docs/p24.jpg" width="300"/>  
-  <img src="docs/p25.jpg" width="300"/><br>  
-  <img src="docs/p26.jpg" width="300"/>  
-  <img src="docs/p27.jpg" width="300"/>  
+  <img src="docs/e24.jpg" width="300"/>  
+  <img src="docs/e25.jpg" width="300"/><br>  
+  <img src="docs/e26.jpg" width="300"/>  
+  <img src="docs/e27.jpg" width="300"/>  
 </div>
 
 ## Embedded Documentation System  
 Includes built-in documentation for easy viewing of usage guides and technical references.
 
 <div align="center">  
-  <img src="docs/p28.jpg" width="300"/>  
-  <img src="docs/p29.jpg" width="300"/>  
+  <img src="docs/e28.jpg" width="300"/>  
+  <img src="docs/e29.jpg" width="300"/>  
 </div>
 
 ---

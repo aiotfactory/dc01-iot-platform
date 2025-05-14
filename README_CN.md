@@ -1,4 +1,4 @@
-# English Version: [English](./README.md)
+# English: [English](./README.md)
 
 ---
 
