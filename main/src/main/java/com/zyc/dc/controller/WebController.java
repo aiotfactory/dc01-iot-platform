@@ -84,7 +84,6 @@ import com.zyc.dc.dao.ProjectBuildModel;
 import com.zyc.dc.dao.ProjectFileModel;
 import com.zyc.dc.dao.ProjectInfoModel;
 import com.zyc.dc.dao.UserModel;
-import com.zyc.dc.dao.UserSessionModel;
 import com.zyc.dc.dao.DataCommModel;
 import com.zyc.dc.pojo.MessageReq;
 import com.zyc.dc.service.AIService;
@@ -527,9 +526,11 @@ public class WebController {
         return "test"; 
     }
     @GetMapping({"/", "/pub/login"})
-    public String pubLogin(Model model) {
+    public String pubLogin(Model model,HttpServletRequest request, HttpServletResponse response) {
     	model.addAttribute("year",MiscUtil.dateFormat(new Date(), "yyyy"));
     	//model.addAttribute("captchaShow",1);
+    	if(miscUtil.loginCheck(request, response))
+    		return webDashboard(model);
         return "login"; 
     }
     @PostMapping("/pub/loginrefresh")
@@ -3614,6 +3615,7 @@ public class WebController {
     @GetMapping("/test")
     @ResponseBody
     public Map<String,Object> test() {
+    	/*
     	DataCommModel commModel=new DataCommModel();
     	DeviceModel deviceModel=mongoDBService.findOneByField("id", "67340ecab2707d5b339cb2cd", DeviceModel.class);
     	commModel.setDeviceId(deviceModel.getId());
@@ -3633,6 +3635,7 @@ public class WebController {
     	byte[] data=new byte[100];
     	mongoDBService.fileSave(10, "image/jpeg", "x1", data);
     	mongoDBService.fileSave(20, "image/jpeg", "x2", data);
+    	*/
         return null;
     }
 }

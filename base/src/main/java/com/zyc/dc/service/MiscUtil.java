@@ -948,6 +948,44 @@ public class MiscUtil {
 		}
 		return ret;
 	}
+    public boolean loginCheck(HttpServletRequest request, HttpServletResponse response) {
+    	String command=request.getServletPath().substring(request.getServletPath().lastIndexOf('/')+1);
+    	request.getServletPath().lastIndexOf('/');
+    	Cookie[] cookies = request.getCookies();
+    	Date now=new Date();
+    	String userSecret=null,userName=null;
+    	if((cookies!=null)&&(cookies.length>0))
+    	{
+    		for(Cookie cookie:cookies)
+    		{
+    			if(cookie.getName().equals("usersecret"))
+    			{
+    				userSecret = cookie.getValue();
+    			}else if(cookie.getName().equals("username"))
+    			{
+    				userName = cookie.getValue();
+    			}
+    		}
+    	}
+		if((userSecret!=null)&&(userSecret.length()>0)&&(userName!=null)&&(userName.length()>0))
+		{
+			Object[] matchResult=loginMatch(request,response, userName, null, null,userSecret, now);
+			if((matchResult!=null)&&(((Boolean)matchResult[0])==true))
+			{
+				UserModel userModel=(UserModel)matchResult[1];
+				Login login=new Login();
+				login.setUserId(userModel.getId());
+				login.setUserlogin(userModel.getLogin());
+				login.setUserModel(userModel);
+				login.setCommand(command);
+				login.setUserName(login.getUserName());
+				login.setUserSecret(userSecret);
+				CacheUtil.threadlocallogin.set(login);
+				return true;
+			}
+		}
+        return false;
+    }
     public static boolean ipV4OrDomainValid(String ip) {
     	if(ip==null)
     		return false;

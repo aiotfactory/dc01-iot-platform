@@ -1,16 +1,12 @@
 package com.zyc.dc;
 
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import com.zyc.dc.dao.Login;
-import com.zyc.dc.dao.UserModel;
 import com.zyc.dc.service.ConfigProperties;
 import com.zyc.dc.service.MiscUtil;
 import com.zyc.dc.util.CacheUtil;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -25,42 +21,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 	
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    	String command=request.getServletPath().substring(request.getServletPath().lastIndexOf('/')+1);
-    	request.getServletPath().lastIndexOf('/');
-    	Cookie[] cookies = request.getCookies();
-    	Date now=new Date();
-    	String userSecret=null,userName=null;
-    	if((cookies!=null)&&(cookies.length>0))
-    	{
-    		for(Cookie cookie:cookies)
-    		{
-    			if(cookie.getName().equals("usersecret"))
-    			{
-    				userSecret = cookie.getValue();
-    			}else if(cookie.getName().equals("username"))
-    			{
-    				userName = cookie.getValue();
-    			}
-    		}
-    	}
-    	//printRequest(command,request,userName,userSecret);
-		if((userSecret!=null)&&(userSecret.length()>0)&&(userName!=null)&&(userName.length()>0))
-		{
-			Object[] matchResult=miscUtil.loginMatch(request,response, userName, null, null,userSecret, now);
-			if((matchResult!=null)&&(((Boolean)matchResult[0])==true))
-			{
-				UserModel userModel=(UserModel)matchResult[1];
-				Login login=new Login();
-				login.setUserId(userModel.getId());
-				login.setUserlogin(userModel.getLogin());
-				login.setUserModel(userModel);
-				login.setCommand(command);
-				login.setUserName(login.getUserName());
-				login.setUserSecret(userSecret);
-				CacheUtil.threadlocallogin.set(login);
-				return true;
-			}
-		}
+    	if(miscUtil.loginCheck(request, response))
+    		return true;
 		response.sendRedirect(configProperties.SITE_URL());
         return false;
     }
