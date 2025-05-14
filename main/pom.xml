@@ -73,6 +73,11 @@
 			<artifactId>base</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>com.zyc</groupId>
+			<artifactId>comm</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	
 	<profiles>
@@ -80,11 +85,7 @@
         <profile>
             <id>dev</id>
             <dependencies>
-               <dependency>
-				   <groupId>com.zyc</groupId>
-				   <artifactId>comm</artifactId>
-				   <version>0.0.1-SNAPSHOT</version>
-			   </dependency>
+          
             </dependencies>
         </profile>
 
@@ -115,11 +116,27 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+	        <plugin>
+	            <groupId>org.apache.maven.plugins</groupId>
+	            <artifactId>maven-war-plugin</artifactId>
+	            <configuration>
+	                <webResources>
+	                    <resource>
+	                        <directory>${project.basedir}/lib</directory>
+	                        <targetPath>WEB-INF/lib</targetPath>
+	                        <includes>
+	                            <include>*.jar</include>
+	                        </includes>
+	                    </resource>
+	                </webResources>
+	            </configuration>
+	        </plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<outputDirectory>D:/temp1</outputDirectory>
+					<includeSystemScope>true</includeSystemScope>
 				</configuration>
 			</plugin>
 		</plugins>
