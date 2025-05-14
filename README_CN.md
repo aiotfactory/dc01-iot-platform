@@ -1,4 +1,4 @@
-# 📚 English Version: [English](./README.md)
+# English Version: [English](./README.md)
 
 ---
 
@@ -14,7 +14,7 @@
 
 # 功能概览
 
-## 🔐 用户管理
+## 用户管理
 - 用户注册：支持新用户的创建与注册。
 - 登录管理：提供安全的用户登录机制。
 
@@ -23,7 +23,7 @@
   <img src="docs/p03.jpg" width="300"/>
 </div>
 
-## 🖥️ 设备管理
+## 设备管理
 - 实时监控设备状态，远程控制设备操作。
 - 灵活配置设备参数，适应不同应用场景。
 
@@ -34,7 +34,7 @@
   <img src="docs/p07.jpg" width="300"/>
 </div>
 
-## 🧩 模块列表
+## 模块列表
 
 | 模块名称       | 简要介绍                         |
 |----------------|----------------------------------|
@@ -61,7 +61,7 @@
 | 热成像模块     | 支持热成像功能                   |
 | 超声波模块     | 支持超声波测距功能               |
 
-## 🔧 OTA升级
+## OTA升级
 支持通过网络对设备固件进行在线升级，确保系统始终保持最新。
 
 <div align="center">
@@ -69,7 +69,7 @@
   <img src="docs/p11.jpg" width="300"/>
 </div>
 
-## 💻 在线代码开发
+## 在线代码开发
 - **代码编译**：提供在线环境用于编写和编译代码。
 - **固件烧录**：直接从云端向设备推送并烧录固件。
 - **设备日志**：在线查看设备运行日志，便于调试和维护。
@@ -83,7 +83,7 @@
   <img src="docs/p17.jpg" width="300"/>
 </div>
 
-## 🌐 API 接口
+## API 接口
 对外开放 API 接口，方便第三方应用集成与扩展。
 
 <div align="center">
@@ -91,7 +91,7 @@
   <img src="docs/p21.jpg" width="300"/>
 </div>
 
-## 🧪 在设备上执行命令
+## 在设备上执行命令
 既可以通过 API 又可以通过命令窗口在设备上执行命令。
 
 <div align="center">
@@ -99,7 +99,7 @@
   <img src="docs/p23.jpg" width="300"/>
 </div>
 
-## 🔄 数据转发
+## 数据转发
 提供多种数据转发方式，支持灵活的数据处理和分发策略。
 
 <div align="center">
@@ -107,7 +107,7 @@
   <img src="docs/p19.jpg" width="300"/>
 </div>
 
-## 🤖 集成大语言模型（LLM）
+## 集成大语言模型（LLM）
 集成先进的大语言模型，增强平台的智能交互能力。
 
 <div align="center">
@@ -117,7 +117,7 @@
   <img src="docs/p27.jpg" width="300"/>
 </div>
 
-## 📄 内嵌文档系统
+## 内嵌文档系统
 内嵌式文档，方便查阅使用说明和技术资料。
 
 <div align="center">
@@ -127,18 +127,18 @@
 
 ---
 
-# 🛠️ 安装步骤
+# 安装步骤
 
-> ⚠️ 以下操作建议在 Ubuntu 系统下完成，具备管理员权限（sudo）。
+> 以下操作建议在 Ubuntu 系统下完成，具备管理员权限（sudo）。
 
-## 🧱 准备环境
+## 准备环境
 
 ```bash
 sudo apt update && sudo apt upgrade -y
 mkdir -p /opt/dc01
 ```
 
-## 🗃️ 安装 MongoDB
+## 安装 MongoDB
 
 ```bash
 cd /opt/dc01
@@ -148,7 +148,7 @@ sudo dpkg -i mongodb-org-server_8.0.3_amd64.deb
 sudo mkdir -p /opt/mongodb-8.0.3/{data,logs} && touch /opt/mongodb-8.0.3/logs/mongodb.log
 ```
 
-### ✏️ 修改配置文件
+### 修改配置文件
 
 ```bash
 vi /etc/mongod.conf
@@ -160,7 +160,7 @@ path: /opt/mongodb-8.0.3/logs/mongodb.log
 bindIp: 0.0.0.0 # 如需外网访问
 ```
 
-### 🔒 设置权限
+### 设置权限
 
 ```bash
 sudo chown -R mongodb:mongodb /opt/mongodb-8.0.3/data
@@ -168,13 +168,13 @@ sudo chown -R mongodb:mongodb /opt/mongodb-8.0.3/logs
 sudo chmod -R 755 /opt/mongodb-8.0.3/data
 ```
 
-### 🧪 启动测试
+### 启动测试
 
 ```bash
 mongod --port 27017 --dbpath /opt/mongodb-8.0.3/data --noauth
 ```
 
-### 👤 创建 root 用户
+### 创建 root 用户
 
 ```bash
 mongosh
@@ -187,14 +187,14 @@ db.createUser({
 exit
 ```
 
-### 🔄 设置开机启动
+### 设置开机启动
 
 ```bash
 sudo systemctl enable mongod
 sudo systemctl start mongod
 ```
 
-## ☕ 安装 JDK
+## 安装 JDK
 
 ```bash
 cd /opt/dc01
@@ -203,7 +203,7 @@ tar -xvf jdk-21.0.4_linux-x64_bin.tar.gz
 mv jdk-21.0.4 /opt/
 ```
 
-## 🏢 安装 Tomcat
+## 安装 Tomcat
 
 ```bash
 cd /opt/dc01
@@ -212,7 +212,7 @@ tar -xvf apache-tomcat-10.1.39.tar.gz
 mv apache-tomcat-10.1.39 apache-tomcat-dc-10.1.39
 ```
 
-### ✏️ 配置 `server.xml`
+### 配置 `server.xml`
 
 ```xml
 <?xml version='1.0' encoding='utf-8'?>
@@ -237,7 +237,7 @@ mv apache-tomcat-10.1.39 apache-tomcat-dc-10.1.39
 </Server>
 ```
 
-## 🧪 编译打包（Maven）
+## 编译打包（Maven）
 
 ```bash
 # 安装 Maven
@@ -251,19 +251,19 @@ cd dc01-iot-platform
 mvn clean package -P release
 ```
 
-## 📦 部署 WAR 包
+## 部署 WAR 包
 
 ```bash
 unzip /var/webapps/dc.war -d /opt/apache-tomcat-dc-10.1.39/webapps/dc
 ```
 
-### ✏️ 配置 application.yml
+### 配置 application.yml
 
 ```bash
 vi /opt/apache-tomcat-dc-10.1.39/webapps/dc/WEB-INF/classes/application.yml
 ```
 
-## ▶️ 启动 Tomcat
+## 启动 Tomcat
 
 ```bash
 nohup /opt/apache-tomcat-dc-10.1.39/bin/startup.sh &
