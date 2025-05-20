@@ -70,14 +70,6 @@ public class ModuleHandlerMeta extends ModuleHandler {
     	
        	if(result.containsKey("rt_4g_ip")) {
        		Long rt4gIP=(Long)result.get("rt_4g_ip");
-       		if(rt4gIP>0)
-       		{
-       			ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(ModuleDefine.MODULE_4G.getId()); 
-       			if(moduleInfoModel!=null) {
-	       	    	moduleInfoModel.setUploadTime(now);
-	       	    	getMongoDBService().save("metaHandler", moduleInfoModel);
-       			}
-       		}
     		deviceModel.setModule4gIp(MiscUtil.ipNumber2String(rt4gIP));
        		newResult.put("module4gIp", deviceModel.getModule4gIp());
 		}
@@ -103,14 +95,6 @@ public class ModuleHandlerMeta extends ModuleHandler {
     	}
        	if(result.containsKey("rt_wifi_sta_ip")) {
        		Long rtWifiStaIp=(Long)result.get("rt_wifi_sta_ip");
-       		if(rtWifiStaIp>0)
-       		{
-       			ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(ModuleDefine.MODULE_WIFI.getId()); 
-       			if(moduleInfoModel!=null) {
-	       	    	moduleInfoModel.setUploadTime(now);
-       				getMongoDBService().save("metaHandler", moduleInfoModel);
-   				}
-       		}
     		deviceModel.setModuleWifiStaIp(MiscUtil.ipNumber2String(rtWifiStaIp));
     		newResult.put("moduleWifiStaIp", deviceModel.getModuleWifiStaIp());
        	}
@@ -156,14 +140,6 @@ public class ModuleHandlerMeta extends ModuleHandler {
     	}
        	if(result.containsKey("rt_w5500_sta_ip")) {
        		Long rtW5500StaIp=(Long)result.get("rt_w5500_sta_ip");
-       		if(rtW5500StaIp>0)
-       		{
-       			ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(ModuleDefine.MODULE_W5500.getId()); 
-       			if(moduleInfoModel!=null) {
-	       	    	moduleInfoModel.setUploadTime(now);
-	       	    	getMongoDBService().save("metaHandler", moduleInfoModel);
-       			}
-       		}
     		deviceModel.setModuleW5500Ip(MiscUtil.ipNumber2String(rtW5500StaIp));
     		newResult.put("moduleW5500Ip", deviceModel.getModuleW5500Ip());
     	}

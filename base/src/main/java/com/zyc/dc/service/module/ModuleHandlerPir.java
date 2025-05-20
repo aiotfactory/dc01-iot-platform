@@ -82,8 +82,10 @@ public class ModuleHandlerPir extends ModuleHandler {
 		
 		if(dataPir.getType()==0)
 			commModel.setDataCommType(DataCommModel.DataCommType.PERIOD_UPLOAD);
-		else
+		else {
 			commModel.setDataCommType(DataCommModel.DataCommType.INTERRUPT_UPLOAD);
+			deviceModel.incModuleRunInfo(getModuleTypeId());
+		}
 		
 		ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
     	moduleInfoModel.setUpload(dataPir);

@@ -3378,6 +3378,9 @@ public class WebController {
     		return null;
     	Date now=new Date();
         List<Map<String,Object>> result=new ArrayList<Map<String,Object>>();
+        Map<Integer,Integer> moduleRunInfo=deviceModel.getModuleRunInfo();
+        if(moduleRunInfo==null) moduleRunInfo=new HashMap<>();
+        
     	for(ModuleInfoModel moduleInfoModel:moduleInfoMap.values())
     	{
     		Map<String,Object> row=new HashMap<String,Object>();
@@ -3387,9 +3390,16 @@ public class WebController {
     		row.put("description",ModuleType.fromId(moduleInfoModel.getModuleTypeId()).getDescription());
     		row.put("modifyTime",MiscUtil.dateFormat(moduleInfoModel.getModifyTime(),"MM-dd HH:mm:ss"));
     		row.put("infoReqTime",MiscUtil.dateFormat(moduleInfoModel.getRequestTime(),"MM-dd HH:mm:ss"));
-    		Date uploadDate=MiscUtil.dateSelectNew(moduleInfoModel.getUploadTime(), moduleInfoModel.getUploadTime());
-    		row.put("uploadTime",MiscUtil.dateFormat(uploadDate,"MM-dd HH:mm:ss"));
     		row.put("colorStatus",0);
+    		Integer successTimes=moduleRunInfo.get(moduleInfoModel.getModuleTypeId());
+    		successTimes=successTimes==null?0:successTimes+1;
+    		row.put("successTimes",successTimes);
+    		Date uploadDate=MiscUtil.dateSelectNew(moduleInfoModel.getUploadTime(), moduleInfoModel.getUploadTime());
+    		String uploadDateStr=MiscUtil.dateFormat(uploadDate,"MM-dd HH:mm:ss");
+    		if(uploadDateStr!=null && uploadDateStr.length()>0)
+    			uploadDateStr=uploadDateStr+" | "+successTimes;
+    		row.put("uploadTime",uploadDateStr);
+    		
     		if(uploadDate!=null)
     		{
     			long diffSeconds=MiscUtil.dateDiff(uploadDate, now);

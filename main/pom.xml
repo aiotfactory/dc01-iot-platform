@@ -101,6 +101,27 @@
                     <systemPath>${project.basedir}/lib/comm-0.0.1-SNAPSHOT.jar</systemPath>
                 </dependency>
             </dependencies>
+            
+	        <build>
+	            <plugins>
+	                <plugin>
+	                    <groupId>org.apache.maven.plugins</groupId>
+	                    <artifactId>maven-war-plugin</artifactId>
+	                    <configuration>
+	                        <webResources>
+	                            <resource>
+	                                <directory>${project.basedir}/lib</directory>
+	                                <targetPath>WEB-INF/lib</targetPath>
+	                                <includes>
+	                                    <include>*.jar</include>
+	                                </includes>
+	                            </resource>
+	                        </webResources>
+	                    </configuration>
+	                </plugin>
+	            </plugins>
+	        </build>
+            
         </profile>
     </profiles>
     	
@@ -116,21 +137,7 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-	        <plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-war-plugin</artifactId>
-	            <configuration>
-	                <webResources>
-	                    <resource>
-	                        <directory>${project.basedir}/lib</directory>
-	                        <targetPath>WEB-INF/lib</targetPath>
-	                        <includes>
-	                            <include>*.jar</include>
-	                        </includes>
-	                    </resource>
-	                </webResources>
-	            </configuration>
-	        </plugin>
+
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

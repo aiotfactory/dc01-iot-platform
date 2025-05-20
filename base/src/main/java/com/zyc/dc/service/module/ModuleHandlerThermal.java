@@ -202,8 +202,13 @@ public class ModuleHandlerThermal extends ModuleHandler {
     		data.setAvgMinHistory(((Long)result.get("avg_min")).intValue());
     	
     	commModel.setUpload(data);
-		commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
-		
+    	
+		if(data.getAvgCurrent()== data.getMaxCurrent() && data.getAvgCurrent()==data.getMinCurrent())
+			commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);
+		else {
+			commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
+			deviceModel.incModuleRunInfo(getModuleTypeId());
+		}
 		if(msgReq.getOperate()==null)
 			commModel.setDataCommType(DataCommModel.DataCommType.PERIOD_UPLOAD);
 		else

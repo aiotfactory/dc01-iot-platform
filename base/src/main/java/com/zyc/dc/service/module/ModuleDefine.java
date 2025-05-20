@@ -11,6 +11,8 @@ public class ModuleDefine {
 	public final static long COMMAND_FLAG_INIT_FROM_DEVICE=(0x01<<3);
 	public final static long COMMAND_FLAG_LOG_NONE=        (0x01<<4);
 	public final static long COMMAND_FLAG_RAW_DATA=     (0x01<<5);
+	public final static long COMMAND_FLAG_NET_BIT0=     (0x01<<6);
+	public final static long COMMAND_FLAG_NET_BIT1=     (0x01<<7);
 
 	//web client sends to TCP server
 	//[5000-10000)

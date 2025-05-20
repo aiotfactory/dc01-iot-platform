@@ -85,6 +85,7 @@ public class ModuleHandlerBatAdc extends ModuleHandler {
     					Long batAdcValueRaw=(Long)result.get("bat_adc_value");
     					Double partialPressureDouble=Double.valueOf(batAdcValueRaw)/(Double.valueOf(partialPressureInt)/10000);
     					dataBatAdc.setAdcValue((int)Math.round(partialPressureDouble*10000));	
+    					deviceModel.incModuleRunInfo(getModuleTypeId());
     				}
     			}
     		}

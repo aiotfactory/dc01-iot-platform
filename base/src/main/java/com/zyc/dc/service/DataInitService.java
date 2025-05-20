@@ -86,6 +86,39 @@ public class DataInitService {
 			}
 		}
 	}
+	public DeviceModel deviceCreate(String deviceId,String ip,Integer csq,Long firmVersion,DeviceModel.DeviceType deviceType,String deviceNo)
+	{
+		Date cur=new Date();
+		DeviceModel deviceModel=new DeviceModel();
+		if(deviceId!=null)
+			deviceModel.setId(deviceId);
+		deviceModel.setCreateTime(cur);
+		deviceModel.setClientIp(ip);
+		deviceModel.setForwardStatus(false);
+		//deviceModel.setUserId(configProperties.DEFAULT_DEVICE_USER());
+		deviceModel.setCsqCurrent(csq);
+		deviceModel.setCsqLow(csq);
+		deviceModel.setCsqMax(csq);
+		deviceModel.setUploadTime(cur);
+		deviceModel.setDeviceFirmWareVersion(firmVersion);
+		deviceModel.setAlivePackSeqDevice(0L);
+		deviceModel.setAlivePackSeqTCP(0L);
+		deviceModel.setAliveTimesReconn(0L);
+		deviceModel.setAliveRunSeconds(0L);
+		deviceModel.setTimesReconn(0L);
+		deviceModel.setTimesRestart(0L);
+		deviceModel.setTimesUpload(0L);
+		deviceModel.setRunSeconds(0L);
+		deviceModel.setAliveTimesMeta(0L);
+		deviceModel.setDeviceType(deviceType);
+		deviceModel.setDeviceNo(deviceNo);
+		deviceModel.setDeviceStatus(DeviceModel.DeviceStatus.ENABLED);
+		deviceModel.setUserId(ADMIN_USER_MODEL().getId());
+		deviceModel.setModuleRunInfo(new HashMap<>());
+		mongoDBService.save("utilDeviceCreate", deviceModel);
+		setModuleToDevice(deviceModel);
+		return deviceModel;
+	}
 	public void init()
 	{
 		ADMIN_USER_MODEL();//create admin user
@@ -167,27 +200,7 @@ public class DataInitService {
 		String testDeviceNo="24587cd6ef0c";
 		DeviceModel deviceModel=mongoDBService.findOneByField("id", "67340ecab2707d5b339cb2cd", DeviceModel.class);
 		if(deviceModel==null)
-		{
-			deviceModel=new DeviceModel();
-			deviceModel.setId("67340ecab2707d5b339cb2cd");
-			deviceModel.setDeviceNo(testDeviceNo);
-			deviceModel.setCsqCurrent(0);
-			deviceModel.setCsqLow(0);
-			deviceModel.setCsqMax(0);
-			deviceModel.setAlivePackSeqDevice(0L);
-			deviceModel.setAlivePackSeqTCP(0L);
-			deviceModel.setAliveTimesReconn(0L);
-			deviceModel.setAliveRunSeconds(0L);
-			deviceModel.setTimesReconn(0L);
-			deviceModel.setTimesRestart(0L);
-			deviceModel.setTimesUpload(0L);
-			deviceModel.setRunSeconds(0L);
-			deviceModel.setAliveTimesMeta(0L);
-			deviceModel.setDeviceType(DeviceModel.DeviceType.DC01);
-			deviceModel.setUserId(user.getId());
-			deviceModel.setDeviceStatus(DeviceModel.DeviceStatus.ENABLED);
-			mongoDBService.save("init test data", deviceModel);
-		}
+			deviceCreate("67340ecab2707d5b339cb2cd",null,null,null,DeviceModel.DeviceType.DC01,testDeviceNo);
 		mongoDBService.save("initmodule",deviceModel);
 		setModuleToDevice(deviceModel);
 
@@ -198,10 +211,9 @@ public class DataInitService {
 			deviceModel=mongoDBService.findOneByField("deviceNo", deviceNo, DeviceModel.class);
 			if(deviceModel==null)
 			{
-				deviceModel=new DeviceModel();
-				deviceModel.setDeviceNo(deviceNo);
+				deviceModel=deviceCreate(null,null,null,null,DeviceModel.DeviceType.DC01,deviceNo);
 				deviceModel.setDeviceToken("123456");
-				mongoDBService.save("initdevice",deviceModel);
+				mongoDBService.save("init test", deviceModel);
 			}
 		}		
 		//setProjectToUser(user, ProjectAccessModel.ProjectAccessType.ALL_WRITE);

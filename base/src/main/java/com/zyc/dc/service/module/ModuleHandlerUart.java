@@ -74,6 +74,7 @@ public class ModuleHandlerUart extends ModuleHandler {
 	    		dataUart.setRxLength((data.length-1)*2);
 				commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
 				commModel.setDataCommType(DataCommModel.DataCommType.INTERRUPT_UPLOAD);
+				deviceModel.incModuleRunInfo(getModuleTypeId());
 	    	}else if(type==0)//meta
 	    	{
 	    		dataUart.setDataType(DataUart.DataType.PROPERTY);

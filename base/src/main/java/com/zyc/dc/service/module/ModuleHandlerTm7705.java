@@ -84,7 +84,14 @@ public class ModuleHandlerTm7705 extends ModuleHandler {
 	        	if((pin&0x02)>0)
 	        		dataTm7705.setPin2Value(ml02);
 	        	commModel.setUpload(dataTm7705);
-				commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
+	        	
+				if(dataTm7705.getPin1Value()!=-999999999 && dataTm7705.getPin2Value()!=-99999999 ) {
+					commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
+					deviceModel.incModuleRunInfo(getModuleTypeId());
+				}
+				else
+					commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);
+				
 				commModel.setDataCommType(DataCommModel.DataCommType.PERIOD_UPLOAD);
 				evaluateRule(commModel);
 	    	}
@@ -110,7 +117,12 @@ public class ModuleHandlerTm7705 extends ModuleHandler {
 		        	if((pin&0x02)>0)
 		        		dataTm7705.setPin2Value(ml02);
 		        	commModel.setUpload(dataTm7705);
-					commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
+					if(dataTm7705.getPin1Value()!=-999999999 && dataTm7705.getPin2Value()!=-99999999 ) {
+						commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
+						deviceModel.incModuleRunInfo(getModuleTypeId());
+					}
+					else
+						commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);
 					commModel.setDataCommType(DataCommModel.DataCommType.REQUEST_UPLOAD);
 					evaluateRule(commModel);
 		    	}

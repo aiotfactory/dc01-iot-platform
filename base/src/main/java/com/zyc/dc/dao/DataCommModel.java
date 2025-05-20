@@ -24,8 +24,14 @@ public class DataCommModel {
 	private DataCommErrorType errorType;
 	private DataCommType dataCommType;
 	private DataCommSource dataCommSource;
-	
+	private DataNetType dataNetType;
     
+	public DataNetType getDataNetType() {
+		return dataNetType;
+	}
+	public void setDataNetType(DataNetType dataNetType) {
+		this.dataNetType = dataNetType;
+	}
 	public Long getDeviceRequestPack() {
 		return deviceRequestPack;
 	}
@@ -132,6 +138,13 @@ public class DataCommModel {
     	DEVICE_NOT_ONLINE,
     	DEVICE_REQUEST_TIMEOUT,
     	DEVICE_EXCEPTION,
+    	MODULE_DATA_ERROR
+    }
+	public enum DataNetType
+    {
+    	NET_4G,
+    	NET_WIFI,
+    	NET_ETH
     }
 	public enum DataCommType
     {

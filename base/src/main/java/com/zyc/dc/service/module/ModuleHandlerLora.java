@@ -80,6 +80,7 @@ public class ModuleHandlerLora extends ModuleHandler {
 			commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
 			commModel.setDataCommType(DataCommModel.DataCommType.INTERRUPT_UPLOAD);
 	    	commModel.setUpload(dataLora);
+	    	deviceModel.incModuleRunInfo(getModuleTypeId());
     		return null;
     	}else if(type==0)//meta
     	{

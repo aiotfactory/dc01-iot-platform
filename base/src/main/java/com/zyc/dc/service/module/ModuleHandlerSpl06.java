@@ -86,6 +86,18 @@ public class ModuleHandlerSpl06 extends ModuleHandler {
 		idex+=4;
 		commModel.setErrorType(dataSPL06.getFlag()==0?DataCommModel.DataCommErrorType.OK:DataCommModel.DataCommErrorType.DEVICE_EXCEPTION);
 
+		if(dataSPL06.getFlag()!=0)
+			commModel.setErrorType(DataCommModel.DataCommErrorType.DEVICE_EXCEPTION);
+		else {
+			if(dataSPL06.getTemperature()<9900 && dataSPL06.getTemperature()>-4000 && dataSPL06.getPressure() >9082283 && dataSPL06.getPressure()<15282359) {
+				commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
+				deviceModel.incModuleRunInfo(getModuleTypeId());
+			}
+			else
+				commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);
+		}
+		
+		
     	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
     	moduleInfoModel.setUpload(dataSPL06);
     	return null;
