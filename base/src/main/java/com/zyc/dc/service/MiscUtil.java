@@ -1078,4 +1078,20 @@ public class MiscUtil {
     	}
     	return result;
     }
+    public static byte crcCalc(byte[] data, int dataNum, int polynomial) {
+        int crc = 0xFF; // Initial value
+
+        for (int byteCtr = 0; byteCtr < dataNum; byteCtr++) {
+            crc ^= Byte.toUnsignedInt(data[byteCtr]); // XOR with current byte
+            for (int bit = 8; bit > 0; --bit) {
+                if ((crc & 0x80) != 0) {
+                    crc = (crc << 1) ^ polynomial;
+                } else {
+                    crc <<= 1;
+                }
+            }
+        }
+
+        return (byte) (crc & 0xFF); // Return as byte
+    }
 }

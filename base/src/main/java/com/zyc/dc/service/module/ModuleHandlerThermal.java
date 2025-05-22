@@ -207,7 +207,8 @@ public class ModuleHandlerThermal extends ModuleHandler {
 			commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);
 		else {
 			commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
-			deviceModel.incModuleRunInfo(getModuleTypeId());
+	    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
+			moduleInfoModel.incValidUploadTimes();
 		}
 		if(msgReq.getOperate()==null)
 			commModel.setDataCommType(DataCommModel.DataCommType.PERIOD_UPLOAD);

@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.zyc.dc.dao.DataBatAdc;
@@ -71,12 +73,19 @@ public class ModuleHandlerBatAdc extends ModuleHandler {
     	if(result.containsKey("bat_adc_pin_onoff")) {
     		dataBatAdc.setAdcPinOnoff(((Long)result.get("bat_adc_pin_onoff")).intValue());
     	}
+    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
     	if(result.containsKey("bat_adc_value")) 
     	{
     		Map<Integer, DeviceConfigElementModel> config=deviceModel.getDeviceConfig();
     		if(config!=null)
     		{
-    			DeviceConfigElementModel partialPressureElement=config.get(7);
+    			Map<String, DeviceConfigElementModel> configNameModuleMap = config.values().stream()
+    		            .collect(Collectors.toMap(
+    		                model -> model.getName() + "-" + model.getModule(), 
+    		                model -> model                                       
+    		    ));
+    			
+    			DeviceConfigElementModel partialPressureElement=configNameModuleMap.get("adc_bat_partial_pressure-"+getModuleTypeId());
     			if((partialPressureElement!=null)&&(partialPressureElement.getName().equals("adc_bat_partial_pressure")))
     			{
     				Integer partialPressureInt=MiscUtil.strParseInteger(partialPressureElement.getValueInDevice());
@@ -85,12 +94,11 @@ public class ModuleHandlerBatAdc extends ModuleHandler {
     					Long batAdcValueRaw=(Long)result.get("bat_adc_value");
     					Double partialPressureDouble=Double.valueOf(batAdcValueRaw)/(Double.valueOf(partialPressureInt)/10000);
     					dataBatAdc.setAdcValue((int)Math.round(partialPressureDouble*10000));	
-    					deviceModel.incModuleRunInfo(getModuleTypeId());
+    					moduleInfoModel.incValidUploadTimes();
     				}
     			}
     		}
     	}
-    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
     	moduleInfoModel.setUpload(dataBatAdc);
     	commModel.setUpload(dataBatAdc);
 		commModel.setErrorType(DataCommModel.DataCommErrorType.OK);

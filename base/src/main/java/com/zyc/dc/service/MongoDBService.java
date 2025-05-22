@@ -27,7 +27,6 @@ import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.data.mongodb.core.index.IndexOperations;
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -37,7 +36,6 @@ import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -174,12 +172,12 @@ public class MongoDBService {
             return null;
         }
     }
-    public void fileDelById(String fileId) {
-        ObjectId fileObjectId = new ObjectId(fileId);
+    public void fileDel(String fieldName, Object fieldValue) {
         Query query = new Query();
-        query.addCriteria(Criteria.where("_id").is(fileObjectId));
+        query.addCriteria(Criteria.where(fieldName).is(fieldValue));
         gridFsTemplate.delete(query);
-    }
+    } 
+    
     public void fileDelExpired() {
     	Date currentDate = new Date();
         Criteria criteria = Criteria.where("metadata.expiredTime").lt(currentDate);
@@ -610,6 +608,8 @@ public class MongoDBService {
     private void createOrEnsureTimeSeriesCollections() {
     	
     	createCollection(ApiKeyModel.class);
+    	
+    	ensureMultiIndex("fs.files",new Object[][] { {"metadata.deviceId", Sort.Direction.ASC} },new Object[][] { {"metadata.userId", Sort.Direction.ASC} });
     	
     	ensureMultiIndex("aiRule",new Object[][] { {"userId", Sort.Direction.ASC} });
     	ensureMultiIndex("aiRule",new Object[][] { {"userId", Sort.Direction.ASC},{"status", Sort.Direction.ASC},{"deviceNos", Sort.Direction.ASC} });

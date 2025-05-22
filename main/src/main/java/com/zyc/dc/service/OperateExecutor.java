@@ -26,6 +26,7 @@ public class OperateExecutor {
     
     @PostConstruct
     public void init() {
+    	combinedOperateMap.put("aht20", new CombinedOperateAht20());
         combinedOperateMap.put("sht30", new CombinedOperateSht30());
         combinedOperateMap.put("tm7705", new CombinedOperateTm7705());
     }

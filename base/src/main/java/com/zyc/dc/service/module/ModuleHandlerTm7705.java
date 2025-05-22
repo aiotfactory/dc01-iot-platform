@@ -87,7 +87,8 @@ public class ModuleHandlerTm7705 extends ModuleHandler {
 	        	
 				if(dataTm7705.getPin1Value()!=-999999999 && dataTm7705.getPin2Value()!=-99999999 ) {
 					commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
-					deviceModel.incModuleRunInfo(getModuleTypeId());
+			    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
+					moduleInfoModel.incValidUploadTimes();
 				}
 				else
 					commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);
@@ -119,7 +120,8 @@ public class ModuleHandlerTm7705 extends ModuleHandler {
 		        	commModel.setUpload(dataTm7705);
 					if(dataTm7705.getPin1Value()!=-999999999 && dataTm7705.getPin2Value()!=-99999999 ) {
 						commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
-						deviceModel.incModuleRunInfo(getModuleTypeId());
+				    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
+						moduleInfoModel.incValidUploadTimes();
 					}
 					else
 						commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);

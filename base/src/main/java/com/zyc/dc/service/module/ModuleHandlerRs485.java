@@ -74,7 +74,8 @@ public class ModuleHandlerRs485 extends ModuleHandler {
 	    		dataUart.setRxLength((data.length-1)*2);
 				commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
 				commModel.setDataCommType(DataCommModel.DataCommType.INTERRUPT_UPLOAD);
-				deviceModel.incModuleRunInfo(getModuleTypeId());
+		    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
+				moduleInfoModel.incValidUploadTimes();
 	    	}else if(type==0)//meta
 	    	{
 	    		dataUart.setDataType(DataUart.DataType.PROPERTY);

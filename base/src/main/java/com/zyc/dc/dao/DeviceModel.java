@@ -68,39 +68,25 @@ public class DeviceModel {
     private Date uploadTime;
     private Date acrossCommandTime;
     private Long acrossCommandTimes;
-    private Map<Integer,Integer> moduleRunInfo;
     private DeviceStatus deviceStatus;
     private DeviceTradeStatus deviceTradeStatus;
     private DeviceTestStatus deviceTestStatus;
+    
     @Transient
-    private Map<Integer,DeviceConfigElementModel> deviceConfig;
+    private transient Map<Integer,DeviceConfigElementModel> deviceConfig;
     @Transient
-    private Map<Integer,ModuleInfoModel> moduleInfoModelMap;
+    private transient Map<Integer,ModuleInfoModel> moduleInfoModelMap;
     @Transient
-    private List<RebootInfoModel> rebootInfoModelList;
+    private transient List<RebootInfoModel> rebootInfoModelList;
     @Transient
-    private LockInfoModel lockInfoModel;
+    private transient LockInfoModel lockInfoModel;
     @Transient
-    private MongoDBService mongoDBService;
-
+    private transient MongoDBService mongoDBService;
+    @Transient
     private transient DeviceTCPHostModel deviceTCPHost;
+    
     private List<Date[]> exeTime;
     
-    
-	public Map<Integer, Integer> getModuleRunInfo() {
-		return moduleRunInfo;
-	}
-	public void setModuleRunInfo(Map<Integer, Integer> moduleRunInfo) {
-		this.moduleRunInfo = moduleRunInfo;
-	}
-	public void incModuleRunInfo(Integer moduleId)
-	{
-		if(moduleRunInfo==null)
-			moduleRunInfo=new HashMap<>();
-		Integer times=moduleRunInfo.get(moduleId);
-		times=(times==null?1:times+1);
-		moduleRunInfo.put(moduleId, times);
-	}
 	public List<Date[]> getExeTime() {
 		return exeTime;
 	}

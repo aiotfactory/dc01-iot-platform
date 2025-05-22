@@ -47,7 +47,7 @@ public class CombinedOperateTm7705 implements CombinedOperate{
 			logger.info("OperateExecutor tm7705TestPin device "+deviceModel.getDeviceNo()+" pin "+pin+" error "+result.getErrorType()+" error msg "+result.getErrorString()+" response "+result.getHexContent());
 			return false;
 		}
-		logger.info("OperateExecutor tm7705TestPin device "+deviceModel.getDeviceNo()+" pin "+pin+" success");
+		//logger.info("OperateExecutor tm7705TestPin device "+deviceModel.getDeviceNo()+" pin "+pin+" success");
 		return true;
 	}
 	private boolean tm7705Busy(DeviceModel deviceModel,int pin,OperateRequest request)
@@ -118,16 +118,16 @@ public class CombinedOperateTm7705 implements CombinedOperate{
 			//if(tm7705SpiInit(deviceModel).getErrorType()<0) return new ResultType(-1,"init spi failed");//init spi
 			if((tm7705TestPin(deviceModel,1,request)==false)||(tm7705TestPin(deviceModel,1,request)==false))//test pin1 pin2
 				return new ResultType(-2,"test pin failed");
-			logger.info("OperateExecutor tm7705ReadPin device "+deviceModel.getDeviceNo()+" both pin1 and pin2 ready");
+			//logger.info("OperateExecutor tm7705ReadPin device "+deviceModel.getDeviceNo()+" both pin1 and pin2 ready");
 			if(tm7705SpiWriteReg(deviceModel,0x10,"0x64",request).getErrorType()<0) return new ResultType(-3,"config pin1 failed");//config pin1
 			if(tm7705SpiWriteReg(deviceModel,0x11,"0x64",request).getErrorType()<0) return new ResultType(-4,"config pin2 failed");//config pin2		
 			deviceModel.getLockInfoModel().setTm7705Status(1);//inited success
 			deviceModel.saveLockInfoModel();
 		}
 		pin1Value=tm7705ReadPin(deviceModel,1,request);
-		logger.info("OperateExecutor tm7705ReadPin device "+deviceModel.getDeviceNo()+" pin1 "+pin1Value);
+		//logger.info("OperateExecutor tm7705ReadPin device "+deviceModel.getDeviceNo()+" pin1 "+pin1Value);
 		pin2Value=tm7705ReadPin(deviceModel,1,request);
-		logger.info("OperateExecutor tm7705ReadPin device "+deviceModel.getDeviceNo()+" pin2 "+pin2Value);
+		//logger.info("OperateExecutor tm7705ReadPin device "+deviceModel.getDeviceNo()+" pin2 "+pin2Value);
 		if((pin1Value==-100)||(pin2Value==-100))
 		{
 			deviceModel.getLockInfoModel().setTm7705Status(0);

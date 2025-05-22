@@ -151,7 +151,8 @@ public class ModuleHandlerUltrasonic extends ModuleHandler {
     	
 		if(data.getLatest()<30000 && data.getLatest()>1) {
 			commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
-			deviceModel.incModuleRunInfo(getModuleTypeId());
+	    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
+			moduleInfoModel.incValidUploadTimes();
 		}
 		else
 			commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);

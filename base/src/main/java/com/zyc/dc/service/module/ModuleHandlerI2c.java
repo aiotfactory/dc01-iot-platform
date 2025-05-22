@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import com.zyc.dc.dao.DataCommModel;
 import com.zyc.dc.dao.DeviceModel;
+import com.zyc.dc.dao.ModuleInfoModel;
 import com.zyc.dc.pojo.MessageReq;
 import com.zyc.dc.service.MiscUtil;
 
@@ -51,6 +52,8 @@ public class ModuleHandlerI2c extends ModuleHandler {
     		Map<String,String> hexMap=new HashMap<>();
     		hexMap.put("hexContent", MiscUtil.bytesToHex(Arrays.copyOfRange(data, 1, data.length)));
     		commModel.setUpload(hexMap);
+    		ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
+			moduleInfoModel.incValidUploadTimes();
     	}else{
 			commModel.setInfo("wrong I2C operate resposne");
 			commModel.setErrorType(DataCommModel.DataCommErrorType.DEVICE_EXCEPTION);			

@@ -16,9 +16,19 @@ public class ModuleInfoModel {
 	private Date modifyTime;
 	private Date requestTime;
 	private Long requestTimes;
+	private Long validUploadTimes;
 	private Object upload;
 	
 
+	public Long getValidUploadTimes() {
+		return validUploadTimes;
+	}
+	public void incValidUploadTimes() {
+		if(validUploadTimes==null)
+			validUploadTimes=1L;
+		else
+			validUploadTimes=validUploadTimes+1;
+	}
 	public Object getUpload() {
 		return upload;
 	}

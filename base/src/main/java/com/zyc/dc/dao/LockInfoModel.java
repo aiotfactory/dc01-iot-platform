@@ -11,6 +11,7 @@ public class LockInfoModel {
 	private Long restartTimes;
 	private Integer tm7705Status;
 	private Integer sht30Status;
+	private Integer aht20Status;
 	private Date updateTime;
 	
 	public String getId() {
@@ -42,5 +43,11 @@ public class LockInfoModel {
 	}
 	public void setTm7705Status(Integer tm7705Status) {
 		this.tm7705Status = tm7705Status;
+	}
+	public Integer getAht20Status() {
+		return aht20Status;
+	}
+	public void setAht20Status(Integer aht20Status) {
+		this.aht20Status = aht20Status;
 	}
 }

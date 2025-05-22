@@ -181,11 +181,11 @@ public class ProjectBuildService {
 		if(projectBuildModel!=null)
 		{
 			if(projectBuildModel.getBinFile()!=null)
-				mongoDBService.fileDelById(projectBuildModel.getBinFile());
+				mongoDBService.fileDel("id",projectBuildModel.getBinFile());
 			if(projectBuildModel.getMapFile()!=null)
-				mongoDBService.fileDelById(projectBuildModel.getMapFile());
+				mongoDBService.fileDel("id",projectBuildModel.getMapFile());
 			if(projectBuildModel.getElfFile()!=null)
-				mongoDBService.fileDelById(projectBuildModel.getElfFile());
+				mongoDBService.fileDel("id",projectBuildModel.getElfFile());
 		}
 	}
     public boolean copyProject(String pathFolder,ProjectBuildModel projectBuildModel) throws IOException

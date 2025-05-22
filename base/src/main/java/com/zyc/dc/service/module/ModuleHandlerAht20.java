@@ -88,19 +88,17 @@ public class ModuleHandlerAht20 extends ModuleHandler {
 		dataAht20.setHumidityMin(MiscUtil.bytesToIntLittleEndian(Arrays.copyOfRange(data, idex,idex+4)));
 		idex+=4;
 		commModel.setErrorType(dataAht20.getFlag()==0?DataCommModel.DataCommErrorType.OK:DataCommModel.DataCommErrorType.DEVICE_EXCEPTION);
-		
+		ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
 		if(dataAht20.getFlag()!=0)
 			commModel.setErrorType(DataCommModel.DataCommErrorType.DEVICE_EXCEPTION);
 		else {
 			if(dataAht20.getTemperature()<9900 && dataAht20.getTemperature()>-4000 && dataAht20.getHumidity() >=0 && dataAht20.getHumidity()<=10000) {
 				commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
-				deviceModel.incModuleRunInfo(getModuleTypeId());
+				moduleInfoModel.incValidUploadTimes();
 			}
 			else
 				commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);
 		}
-		
-    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
     	moduleInfoModel.setUpload(dataAht20);
     	return null;
     }

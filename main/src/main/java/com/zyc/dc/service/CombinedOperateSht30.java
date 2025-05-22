@@ -56,7 +56,7 @@ public class CombinedOperateSht30  implements CombinedOperate{
 			deviceModel.saveLockInfoModel();
 			return new ResultType(-7,"sht30 failed read");
 		}
-		byte[] data=result.getResponseBytes();
+		byte[] data=MiscUtil.hexToBytes(result.getHexContent());
 		if(((int)data[0])==1)//data
 		{
 			data=Arrays.copyOfRange(data, 1, data.length);

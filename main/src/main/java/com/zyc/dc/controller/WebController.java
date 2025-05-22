@@ -72,6 +72,8 @@ import com.zyc.dc.dao.DataCacheModel;
 import com.zyc.dc.dao.DataCloudLog;
 import com.zyc.dc.dao.DeviceConfigElementModel;
 import com.zyc.dc.dao.DeviceModel;
+import com.zyc.dc.dao.DeviceTCPHostModel;
+import com.zyc.dc.dao.LockInfoModel;
 import com.zyc.dc.dao.Login;
 import com.zyc.dc.dao.ModuleInfoModel;
 import com.zyc.dc.dao.ModuleRuleLogModel;
@@ -83,6 +85,7 @@ import com.zyc.dc.dao.ProjectAccessModel.ProjectAccessType;
 import com.zyc.dc.dao.ProjectBuildModel;
 import com.zyc.dc.dao.ProjectFileModel;
 import com.zyc.dc.dao.ProjectInfoModel;
+import com.zyc.dc.dao.RebootInfoModel;
 import com.zyc.dc.dao.UserModel;
 import com.zyc.dc.dao.DataCommModel;
 import com.zyc.dc.pojo.MessageReq;
@@ -90,6 +93,7 @@ import com.zyc.dc.service.AIService;
 import com.zyc.dc.service.CommService;
 import com.zyc.dc.service.SimDWService;
 import com.zyc.dc.service.ConfigProperties;
+import com.zyc.dc.service.DataInitService;
 import com.zyc.dc.service.SenderService;
 import com.zyc.dc.service.MiscUtil;
 import com.zyc.dc.service.MongoDBService;
@@ -130,6 +134,9 @@ public class WebController {
 	private SimDWService simDWService;
 	@Autowired
 	private AIService aiService;
+	@Autowired
+	private DataInitService dataInitService;
+	
 	
     private final ErrorAttributes errorAttributes;
     public WebController(ErrorAttributes errorAttributes) {
@@ -223,7 +230,7 @@ public class WebController {
     @ResponseBody
     //safe_server_start|01|config_version|server_host|server_port|add|safe_server_end|kkxxx
     //safe_server_start|02|ota_server|ota_port|uri|ota_size|ota_add|add|safe_server_end|kkxxx
-    public String pubSafeServer(@RequestParam Map<String, Object> paramsReq,@RequestBody byte[] configData)
+    public String pubSafeServer(HttpServletRequest request,@RequestParam Map<String, Object> paramsReq,@RequestBody byte[] configData)
     {
     	//deviceType=%lu&firmwareVersion=%lu&deviceNo
     	Date now=new Date();
@@ -255,11 +262,14 @@ public class WebController {
     		
     	}
     	DeviceModel deviceModel=mongoDBService.findOneByField("deviceNo", deviceNo, DeviceModel.class);
-    	if(deviceModel==null) 
+    	if(deviceModel==null || deviceModel.getUserId()==null )
     	{
-    		logger.info("pubSafeServer not exist "+deviceNo);
-    		return "not exist device-"+ret;
+    		logger.info("pubSafeServer create device "+deviceNo);
+    		deviceModel=dataInitService.deviceCreate(deviceModel,null,request.getRemoteHost(),null,firmwareVersion,DeviceModel.DeviceType.getById(deviceType.intValue()),deviceNo);
     	}
+    	
+
+    	
 		deviceModel.setDeviceType(DeviceModel.DeviceType.getById(Long.valueOf(deviceType).intValue()));
 		deviceModel.setDeviceFirmWareVersion(firmwareVersion);
 		deviceModel.setUploadTime(now);
@@ -1940,7 +1950,7 @@ public class WebController {
             String firmWareName = login.getId() + "-" + MiscUtil.dateFormat(new Date(), "yyyyMMddHHmmss") + ".bin";
             String firmWareId = mongoDBService.fileSave(null,"application/octet-stream", firmWareName, fileData,"userId",login.getId());
             if (model.getFirmWareId() != null && model.getFirmWareId().length() > 0) {
-                mongoDBService.fileDelById(model.getFirmWareId());
+                mongoDBService.fileDel("id",model.getFirmWareId());
                 model.setFirmWareMd5(null);
                 model.setFirmWareSize(null);
                 model.setFirmwareTime(null);
@@ -2062,7 +2072,7 @@ public class WebController {
     private boolean webOTAListDel(Map<String, Object> paramsBody,Map<String,Object> result,OTARecordModel model)
     {
         if (model.getFirmWareId() != null && model.getFirmWareId().length() > 0) 
-            mongoDBService.fileDelById(model.getFirmWareId());
+            mongoDBService.fileDel("id",model.getFirmWareId());
 		mongoDBService.delete("id",model.getId(), OTARecordModel.class);
 		return true;
     }
@@ -2607,6 +2617,17 @@ public class WebController {
     }
     private void webDeviceListDel(DeviceModel deviceModel)
     {
+    	mongoDBService.delete("deviceId", deviceModel.getId(), DataCommModel.class);
+    	mongoDBService.delete("deviceId", deviceModel.getId(), DeviceConfigElementModel.class);
+    	mongoDBService.delete("id", deviceModel.getId(), DeviceTCPHostModel.class);
+    	mongoDBService.delete("id", deviceModel.getId(), LockInfoModel.class);
+    	mongoDBService.delete("deviceId", deviceModel.getId(), ModuleInfoModel.class);
+    	mongoDBService.delete("deviceId", deviceModel.getId(), ModuleRuleLogModel.class);
+    	mongoDBService.delete("deviceId", deviceModel.getId(), OTADownloadModel.class);
+    	mongoDBService.delete("deviceId", deviceModel.getId(), PostLogModel.class);
+    	mongoDBService.delete("deviceId", deviceModel.getId(), RebootInfoModel.class);
+    	mongoDBService.fileDel("deviceId", deviceModel.getId());
+    	
     	mongoDBService.retainFields(deviceModel, Arrays.asList("id", "deviceNo", "deviceToken"));
     }
     private boolean webDeviceListAdd(Map<String, Object> paramsBody,Map<String,Object> result)
@@ -3378,9 +3399,7 @@ public class WebController {
     		return null;
     	Date now=new Date();
         List<Map<String,Object>> result=new ArrayList<Map<String,Object>>();
-        Map<Integer,Integer> moduleRunInfo=deviceModel.getModuleRunInfo();
-        if(moduleRunInfo==null) moduleRunInfo=new HashMap<>();
-        
+      
     	for(ModuleInfoModel moduleInfoModel:moduleInfoMap.values())
     	{
     		Map<String,Object> row=new HashMap<String,Object>();
@@ -3391,7 +3410,7 @@ public class WebController {
     		row.put("modifyTime",MiscUtil.dateFormat(moduleInfoModel.getModifyTime(),"MM-dd HH:mm:ss"));
     		row.put("infoReqTime",MiscUtil.dateFormat(moduleInfoModel.getRequestTime(),"MM-dd HH:mm:ss"));
     		row.put("colorStatus",0);
-    		Integer successTimes=moduleRunInfo.get(moduleInfoModel.getModuleTypeId());
+    		Long successTimes=moduleInfoModel.getValidUploadTimes();
     		successTimes=successTimes==null?0:successTimes+1;
     		row.put("successTimes",successTimes);
     		Date uploadDate=MiscUtil.dateSelectNew(moduleInfoModel.getUploadTime(), moduleInfoModel.getUploadTime());
@@ -3474,7 +3493,7 @@ public class WebController {
     	//String moduleTypeId = MiscUtil.webParamsGet(paramsBody, "moduleTypeId", String.class, "");
     	String command = MiscUtil.webParamsGet(paramsBody, "command", String.class, "").trim();
         result.put("status", "ok");
-        logger.info("webDeviceCmdRefresh command "+command);
+       // logger.info("webDeviceCmdRefresh command "+command);
         String rspStr=miscUtil.utilLocal("exe_wrong") ;
         if(CacheUtil.threadlocallogin.get().getUserModel().getParentId()!=null)
         {

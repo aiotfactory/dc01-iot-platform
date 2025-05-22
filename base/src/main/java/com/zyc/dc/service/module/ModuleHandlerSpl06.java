@@ -91,7 +91,8 @@ public class ModuleHandlerSpl06 extends ModuleHandler {
 		else {
 			if(dataSPL06.getTemperature()<9900 && dataSPL06.getTemperature()>-4000 && dataSPL06.getPressure() >9082283 && dataSPL06.getPressure()<15282359) {
 				commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
-				deviceModel.incModuleRunInfo(getModuleTypeId());
+		    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
+				moduleInfoModel.incValidUploadTimes();
 			}
 			else
 				commModel.setErrorType(DataCommModel.DataCommErrorType.MODULE_DATA_ERROR);

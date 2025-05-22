@@ -86,6 +86,8 @@ public class ModuleHandlerSpi extends ModuleHandler {
 	        		dataResult.put("hexContent", MiscUtil.bytesToHex(Arrays.copyOfRange(data, 1, data.length)));
 		    		commModel.setUpload(dataResult);
 		    		commModel.setErrorType(DataCommModel.DataCommErrorType.OK);		
+			    	ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
+					moduleInfoModel.incValidUploadTimes();
 	        	}
 	    	}else{
 	    		commModel.setInfo("wrong SPI operate "+operate+" resposne");

@@ -110,6 +110,7 @@ public class ModuleHandlerCamera extends ModuleHandler {
     {  
     	DataCommModel.DataCommType commType=msgReq.getOperate()==null?DataCommModel.DataCommType.PERIOD_UPLOAD:DataCommModel.DataCommType.REQUEST_UPLOAD;
         byte[] data=msgReq.getData();
+		ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
     	if((data==null)||(data.length<100))
     	{
     		logger.info("recv image length 0");
@@ -118,9 +119,8 @@ public class ModuleHandlerCamera extends ModuleHandler {
 			commModel.setDataCommType(commType);
     	}else if((msgReq.getOperate()==null)||(msgReq.getOperate()==15))
     	{
-    		
         	String picName=deviceModel.getDeviceNo()+"-"+MiscUtil.dateFormat(new Date(),"yyyyMMddHHmmss")+".jpeg";
-        	String picId=getMongoDBService().fileSave(getConfigProperties().SENSOR_DATA_KEEP_DAYS()*3600*24,"image/jpeg",picName, data,"userId",deviceModel.getUserId());        	
+        	String picId=getMongoDBService().fileSave(getConfigProperties().SENSOR_DATA_KEEP_DAYS()*3600*24,"image/jpeg",picName, data,"userId",deviceModel.getUserId(),"metadata.deviceId",deviceModel.getId());        	
         	DataCamera dataCamera=new DataCamera();
         	dataCamera.setPicName(picName);
         	dataCamera.setPicSize(data.length);
@@ -128,7 +128,7 @@ public class ModuleHandlerCamera extends ModuleHandler {
         	commModel.setUpload(dataCamera);
 			commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
 			commModel.setDataCommType(commType);
-			deviceModel.incModuleRunInfo(getModuleTypeId());
+			moduleInfoModel.incValidUploadTimes();
     	}else if(msgReq.getOperate()==6)
     	{
         	Map<String,Object> dataResult=new HashMap<>();
@@ -136,7 +136,6 @@ public class ModuleHandlerCamera extends ModuleHandler {
         	commModel.setUpload(dataResult);
 			commModel.setErrorType(DataCommModel.DataCommErrorType.OK);
 			commModel.setDataCommType(DataCommModel.DataCommType.REQUEST_UPLOAD);
-			ModuleInfoModel moduleInfoModel=deviceModel.getModuleInfoModelMap().get(getModuleTypeId()); 
 			moduleInfoModel.setUpload(dataResult);
     	}
     	return null;

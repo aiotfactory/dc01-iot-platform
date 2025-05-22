@@ -86,11 +86,11 @@ public class DataInitService {
 			}
 		}
 	}
-	public DeviceModel deviceCreate(String deviceId,String ip,Integer csq,Long firmVersion,DeviceModel.DeviceType deviceType,String deviceNo)
+	public DeviceModel deviceCreate(DeviceModel deviceModel,String deviceId,String ip,Integer csq,Long firmVersion,DeviceModel.DeviceType deviceType,String deviceNo)
 	{
-		logger.info("a4.");
 		Date cur=new Date();
-		DeviceModel deviceModel=new DeviceModel();
+		if(deviceModel==null)
+			deviceModel=new DeviceModel();
 		if(deviceId!=null)
 			deviceModel.setId(deviceId);
 		deviceModel.setCreateTime(cur);
@@ -115,11 +115,8 @@ public class DataInitService {
 		deviceModel.setDeviceNo(deviceNo);
 		deviceModel.setDeviceStatus(DeviceModel.DeviceStatus.ENABLED);
 		deviceModel.setUserId(ADMIN_USER_MODEL().getId());
-		deviceModel.setModuleRunInfo(new HashMap<>());
-		logger.info("a5.");
 		mongoDBService.save("utilDeviceCreate", deviceModel);
 		setModuleToDevice(deviceModel);
-		logger.info("a6.");
 		return deviceModel;
 	}
 	public void init()
@@ -203,7 +200,7 @@ public class DataInitService {
 		String testDeviceNo="24587cd6ef0c";
 		DeviceModel deviceModel=mongoDBService.findOneByField("id", "67340ecab2707d5b339cb2cd", DeviceModel.class);
 		if(deviceModel==null)
-			deviceModel=deviceCreate("67340ecab2707d5b339cb2cd",null,null,null,DeviceModel.DeviceType.DC01,testDeviceNo);
+			deviceModel=deviceCreate(null,"67340ecab2707d5b339cb2cd",null,null,null,DeviceModel.DeviceType.DC01,testDeviceNo);
 		mongoDBService.save("initmodule",deviceModel);
 		setModuleToDevice(deviceModel);
 
@@ -214,7 +211,7 @@ public class DataInitService {
 			deviceModel=mongoDBService.findOneByField("deviceNo", deviceNo, DeviceModel.class);
 			if(deviceModel==null)
 			{
-				deviceModel=deviceCreate(null,null,null,null,DeviceModel.DeviceType.DC01,deviceNo);
+				deviceModel=deviceCreate(null,null,null,null,null,DeviceModel.DeviceType.DC01,deviceNo);
 				deviceModel.setDeviceToken("123456");
 				mongoDBService.save("init test", deviceModel);
 			}

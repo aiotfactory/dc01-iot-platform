@@ -89,7 +89,7 @@ public class AIAsyncService {
 	    	if(MiscUtil.isTimeNotCurrentDay(rule.getTriggerTime()))
 	    		rule.setTriggerTimesPerDay(0);
 	    	if(rule.getTriggerTimesPerDay()>=rule.getLimitTimesPerDay()) {
-	    		logger.info("exceed rule quotation");
+	    		//logger.info("exceed rule quotation");
 	    		continue;
 	    	}
     		AiCallModel callModel=new AiCallModel();

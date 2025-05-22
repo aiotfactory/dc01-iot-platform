@@ -85,7 +85,7 @@ public class OperateContent {
         return byteArray;
     }
     public static OperateContent parseOperateLine(String operateLine) {
-    	logger.info("parseOperateLine "+operateLine);
+    	//logger.info("parseOperateLine "+operateLine);
     	OperateContent operateContent=new OperateContent();
         String[] parts = operateLine.split(" (?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
         //String[] parts = operateLine.split(" ");//check if there is space splited string
