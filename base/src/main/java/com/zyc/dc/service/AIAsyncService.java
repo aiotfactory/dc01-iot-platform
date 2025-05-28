@@ -81,7 +81,7 @@ public class AIAsyncService {
     	}
     	List<AiRuleModel> ruleList=ruleFilter(deviceModel.getDeviceNo(), userModel.getId());
     	if(ruleList==null) {
-    		logger.info("no matched rules");
+    		//logger.info("no matched rules");
     		return;
     	}
     	for(AiRuleModel rule:ruleList)

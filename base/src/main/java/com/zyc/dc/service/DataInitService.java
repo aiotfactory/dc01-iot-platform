@@ -201,6 +201,8 @@ public class DataInitService {
 		DeviceModel deviceModel=mongoDBService.findOneByField("id", "67340ecab2707d5b339cb2cd", DeviceModel.class);
 		if(deviceModel==null)
 			deviceModel=deviceCreate(null,"67340ecab2707d5b339cb2cd",null,null,null,DeviceModel.DeviceType.DC01,testDeviceNo);
+		if(deviceModel.getDeviceType()==null)
+			deviceModel.setDeviceType(DeviceModel.DeviceType.DC01);
 		mongoDBService.save("initmodule",deviceModel);
 		setModuleToDevice(deviceModel);
 

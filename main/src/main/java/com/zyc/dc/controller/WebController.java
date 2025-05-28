@@ -2615,6 +2615,14 @@ public class WebController {
         });
         return "devicelist"; 
     }
+    @GetMapping("/web/devicemove")
+    public String webDeviceMove(@RequestParam Map<String, Object> paramsReq,Model model) {
+    	webDeviceListTransfer(paramsReq) ;
+    	utilBreadcrumb(model,new String[][]{
+            {miscUtil.utilLocal("menu_devices"), "devicelist"}
+        });
+    	return "devicelist"; 
+    }
     private void webDeviceListDel(DeviceModel deviceModel)
     {
     	mongoDBService.delete("deviceId", deviceModel.getId(), DataCommModel.class);
@@ -2668,7 +2676,6 @@ public class WebController {
     	mongoDBService.save("deviceadd",deviceModel);
     	return true;
     }
-
     @PostMapping("/web/devicelistrefresh")
     public ResponseEntity<Map<String,Object>> webDeviceListRefresh(@RequestBody Map<String, Object> paramsBody) {
     	Map<String,Object> result=new HashMap<String,Object>();
@@ -2706,6 +2713,30 @@ public class WebController {
     		result.put("deviceList",  webDeviceListDisplay(deviceList));
         return ResponseEntity.ok(result);
     }
+
+	private void webDeviceListTransfer(Map<String, Object> paramsBody) {
+		Login login=CacheUtil.threadlocallogin.get();
+    	UserModel userModelLogin=login.getUserModel();
+		boolean isAdmin=userModelLogin.getUserType()==UserModel.UserType.ADMIN?true:false;
+		if(isAdmin) 
+		{
+			String toUser = MiscUtil.webParamsGet(paramsBody, "toUser", String.class, "");
+			toUser=toUser.trim();
+			if(toUser!=null && toUser.length()>0)
+			{
+				UserModel toUserModel=mongoDBService.findOneByField("login", toUser, UserModel.class);
+				if(toUserModel!=null )
+				{
+					String deviceNo = MiscUtil.webParamsGet(paramsBody, "deviceNo", String.class, "");
+					DeviceModel deviceModel=mongoDBService.findOneByField("deviceNo", deviceNo.trim(), DeviceModel.class);
+					if(deviceModel!=null) {
+						deviceModel.setUserId(toUserModel.getId());
+						mongoDBService.save("deviceTransfer", deviceModel);
+					}
+				}
+			}
+		}
+	}
     private List<Object[]> webDeviceListAll(UserModel userModel)
     {
     	List<UserModel> childUserList=mongoDBService.findByField("parentId", userModel.getId(), UserModel.class);//child users
@@ -2764,30 +2795,6 @@ public class WebController {
     	if(result.size()==0)
     		return null;
     	return result;
-    }
-    @GetMapping("/web/camera2/{id}")
-    public ResponseEntity<InputStreamResource> webCamera2(@PathVariable String id) {
-    	GridFsResource fsResource=mongoDBService.imageReadStream(id);
-    	if(fsResource==null)
-    		return null;
-    	try {
-        	GridFSFile fileDetails = fsResource.getGridFSFile();
-            Document metadata = fileDetails.getMetadata();
-            if (metadata != null && metadata.containsKey("userId")) {
-                String userId = metadata.getString("userId");
-                String userIdIn = CacheUtil.threadlocallogin.get().getUserId();
-                if(userId==null || !userId.equals(userIdIn))
-                	return null;
-            } 
-	        return ResponseEntity.ok()
-	                .contentType(MediaType.IMAGE_JPEG) 
-	                .body(new InputStreamResource(fsResource.getInputStream()));
-    	}
-	    catch(Exception e)
-	    {
-	    	logger.error(e.getMessage(),e);
-	    }
-	    return null;
     }
     @GetMapping("/web/camera/{id}")
     public ResponseEntity<InputStreamResource> webCamera(@PathVariable String id,@RequestParam(value = "width", required = false) Integer width) {
@@ -3043,7 +3050,7 @@ public class WebController {
 		    			model.addAttribute("used", used);
 		    	}else
 		    	{
-		    		model.addAttribute("msg", miscUtil.utilLocal("sim_msg_not_provided_by_us"));
+		    		model.addAttribute("msg", miscUtil.utilLocal("sim_msg_wait"));
 		    	}
     		}else
     			model.addAttribute("msg", miscUtil.utilLocal("sim_msg_not_provided_by_us"));

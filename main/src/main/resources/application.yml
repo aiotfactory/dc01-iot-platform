@@ -94,9 +94,9 @@ tcp:
 
 sim:
   dw:
-    api-url: "you don't need it"  # Placeholder for SIM-related API (not used currently)
-    api-id: "you don't need it"
-    api-secret: "you don't need it"
+    api-url: "x"
+    api-id: "x"
+    api-secret: "x"
 
 llm:
   ali:
