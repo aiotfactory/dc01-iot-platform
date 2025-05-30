@@ -319,7 +319,8 @@ public class MongoDBService {
     }
     public <T> T findOneByField(String fieldName, Object value, Class<T> entityClass) {
         Query query = new Query();
-        query.addCriteria(Criteria.where(fieldName).is(value));
+        if(fieldName!=null)
+        	query.addCriteria(Criteria.where(fieldName).is(value));
         T ret=mongoTemplate.findOne(query, entityClass);
         if((ret!=null)&&(MiscUtil.objectHasMethod(ret, "getCopyObject")))
         {

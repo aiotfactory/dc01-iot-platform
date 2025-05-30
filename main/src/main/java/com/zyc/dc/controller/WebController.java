@@ -535,6 +535,19 @@ public class WebController {
     	//model.addAttribute("captchaShow",1);
         return "test"; 
     }
+    @GetMapping("/pub/healthcheck")
+    public @ResponseBody String pubHealthCheck(Model model) {
+    	UserModel user=null;
+    	try {
+    		user=mongoDBService.findOneByField(null, null, UserModel.class);
+    		if(user!=null)
+    			return "ok";
+    	}catch(Exception e)
+    	{
+    		logger.info(e.getMessage(),e);
+    	}
+    	return "failed";
+    }
     @GetMapping({"/", "/pub/login"})
     public String pubLogin(Model model,HttpServletRequest request, HttpServletResponse response) {
     	model.addAttribute("year",MiscUtil.dateFormat(new Date(), "yyyy"));
